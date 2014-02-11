@@ -15,4 +15,6 @@ protractor.conf.json
 node_modules/
 dist/
 .tmp/
+.vagrant/
+Berksfile.lock
 reports/
