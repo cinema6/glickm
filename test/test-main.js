@@ -76,6 +76,9 @@
                 },
                 app: {
                     deps: ['angular', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6log']
+                },
+                auth: {
+                    deps: ['app']
                 }
             },
 

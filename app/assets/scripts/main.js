@@ -116,7 +116,7 @@
                 if (Modernizr.touch) { c6.kModDeps.push('ngTouch'); }
 
                 loadScriptsInOrder(appScripts, function() {
-                    angular.bootstrap(document.documentElement, ['c6.stub']);
+                    angular.bootstrap(document.documentElement, ['c6.glickm']);
                 });
             }
         });
