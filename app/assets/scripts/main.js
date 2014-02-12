@@ -34,7 +34,9 @@
                 ];
             } else {
                 return [
-                    'scripts/app'
+                    'scripts/app',
+                    'scripts/auth',
+                    'scripts/login'
                 ];
             }
         }()),
@@ -46,8 +48,10 @@
                     libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular.min.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib.min.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6log.min.js')
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-route.min.js'),
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.min.js'),
+                    libUrl('c6ui/v2.3.0-0-gfe0bd78/c6uilib.min.js'),
+                    libUrl('c6ui/v2.3.0-0-gfe0bd78/c6log.min.js')
                 ];
             } else {
                 return [
@@ -56,8 +60,10 @@
                     libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6log.js')
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-route.js'),
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.js'),
+                    libUrl('c6ui/v2.3.0-0-gfe0bd78/c6uilib.js'),
+                    libUrl('c6ui/v2.3.0-0-gfe0bd78/c6log.js')
                 ];
             }
         }());
@@ -89,7 +95,7 @@
         dev: 'http://s3.amazonaws.com/c6.dev/media/src/stub',
         cdn: 'http://cdn1.cinema6.com/src/stub'
     };
-    c6.kModDeps = ['c6.ui', 'c6.log'];
+    c6.kModDeps = ['ngAnimate','ngRoute','c6.ui', 'c6.log', 'c6.glickm.services'];
 
     if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
         ga('create', 'UA-44457821-2', 'cinema6.com');
@@ -109,7 +115,7 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.js')
             ],
             nope: [
-                libUrl('c6ui/v2.2.1-0-g89204c8/css/c6uilib--hover.min.css'),
+                libUrl('c6ui/v2.3.0-0-gfe0bd78/css/c6uilib--hover.min.css'),
                 __C6_APP_BASE_URL__ + '/styles/main--hover.css'
             ],
             complete: function() {

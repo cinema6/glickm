@@ -7,7 +7,7 @@
             var $httpBackend, $timeout, c6Auth, successSpy, failureSpy;
 
             beforeEach(function(){
-                module('c6.glickm');
+                module('c6.glickm.services');
 
                 inject(['$injector',function($injector){
                     c6Auth       = $injector.get('c6Auth');
@@ -73,7 +73,7 @@
         describe('c6Auth Provider',function(){
             
             it('can configure the baseUrl', function(){
-                module('c6.glickm', ['c6AuthProvider', function(provider){
+                module('c6.glickm.services', ['c6AuthProvider', function(provider){
                     provider.baseUrl = 'hoho';
                 }]);
                 inject(['$httpBackend','c6Auth', function($httpBackend,c6Auth){ 
@@ -87,7 +87,7 @@
                 var timeoutSpy = jasmine.createSpy('$timeout');
                 timeoutSpy.cancel = jasmine.createSpy('$timeout.cancel');
 
-                module( 'c6.glickm', 
+                module( 'c6.glickm.services', 
                         ['c6AuthProvider', function(c6AuthProvider){ 
                             c6AuthProvider.timeout = 10; 
                         }],

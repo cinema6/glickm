@@ -1,0 +1,9 @@
+<form class="login-form" ng-submit="login()" ng-controller="LoginCtrl">
+    <span class="login-user" > Username </span>
+    <input type="text" name="username" ng-model="username">
+    <span class="login-pass"> Password </span> 
+    <input type="password" name="password" ng-model="password">
+    <input type="submit" class="login-submit" value="login">
+    <p>{{error}}</p>
+<form>
+

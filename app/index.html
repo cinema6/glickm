@@ -17,7 +17,8 @@
         </script>
     </head>
     <body>
-        <ng-include src="'assets/views/experience.html'"></ng-include>
+        <!--<ng-include src="'assets/views/experience.html'"></ng-include>-->
+        <ng-view></ng-view>
 
         <script>
             (function() {
@@ -71,7 +72,7 @@
                     return stylesheet;
                 }
                 body.appendChild(requireScript(requireJS, 'assets/scripts/main'));
-                head.appendChild(stylesheet(libUrl('c6ui/v2.2.1-0-g89204c8/css/c6uilib.min.css')));
+                head.appendChild(stylesheet(libUrl('c6ui/v2.3.0-0-gfe0bd78/css/c6uilib.min.css')));
             }());
         </script>
     </body>

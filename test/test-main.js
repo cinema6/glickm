@@ -22,7 +22,7 @@
         local: 'assets/media',
         cdn: 'http://foo.cinema6.com/media/app'
     };
-    c6.kModDeps = ['c6.ui', 'c6.log'];
+    c6.kModDeps = ['ngRoute','c6.ui', 'c6.log', 'c6.glickm.services'];
 
     packageRequest.onload = function(event) {
         var settings = JSON.parse(event.target.response),
@@ -42,19 +42,23 @@
 
             paths: {
                 angular: libUrl('angular/v1.2.12-0-g5cc5cc1/angular'),
+                angularRoute: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-route'),
                 angularMocks: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-mocks'),
                 jquery: libUrl('jquery/2.0.3-0-gf576d00/jquery'),
                 modernizr: libUrl('modernizr/modernizr.custom.71747'),
                 tweenmax: libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min'),
                 timelinemax: libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min'),
-                c6ui: libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib'),
-                c6log: libUrl('c6ui/v2.2.1-0-g89204c8/c6log'),
+                c6ui: libUrl('c6ui/v2.3.0-0-gfe0bd78/c6uilib'),
+                c6log: libUrl('c6ui/v2.3.0-0-gfe0bd78/c6log'),
                 templates: '/base/.tmp/templates'
             },
 
             shim: {
                 angular: {
                     deps: ['jquery']
+                },
+                angularRoute: {
+                    deps: ['angular']
                 },
                 angularMocks: {
                     deps: ['angular']
@@ -75,9 +79,12 @@
                     deps: ['app']
                 },
                 app: {
-                    deps: ['angular', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6log']
+                    deps: ['angular', 'angularRoute', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6log']
                 },
                 auth: {
+                    deps: ['app']
+                },
+                login: {
                     deps: ['app']
                 }
             },

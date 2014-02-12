@@ -2,7 +2,7 @@
     /* jshint -W106 */
     'use strict';
 
-    angular.module('c6.glickm')
+    angular.module('c6.glickm.services',[])
     .provider('c6Auth',function(){
 
         var config = {
@@ -50,7 +50,10 @@
                     $timeout.cancel(cancelTimeout);
                     deferred.resolve(data);
                 })
-                .error(function(data /*,status */){
+                .error(function(data){
+                    if (!data){
+                        data = 'Login failed';
+                    }
                     $timeout.cancel(cancelTimeout);
                     deferred.reject(data);
                 });
