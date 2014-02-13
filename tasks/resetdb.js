@@ -1,3 +1,4 @@
+'use strict'
 var mongodb = require('mongodb'), q = require('q');
 
 function resetCollection(collection,data,dbConfig){
@@ -42,25 +43,24 @@ function resetCollection(collection,data,dbConfig){
         });
 }
 
-var mockUser = {
-    id : "u-1234567890abcd",
-    created : new Date(),
-    username : "joe",
-    password : "$2a$10$XomlyDak6mGSgrC/g1L7FO.4kMRkj4UturtKSzy6mFeL8QWOBmIWq" // hash of 'password'
-};
+module.exports = function(grunt) {
+    grunt.registerMultiTask('resetdb', 're-initializes the test db', function() {
+        var done       = this.async(),
+            collection =  this.options().collection || this.target,
+            data       =  this.data ? this.data.data : undefined,
+            timeout    =  this.options().timeout || 5000;
 
-console.log('reset collection');
-resetCollection('users',mockUser,{
-    host : '33.33.33.20',
-    port :  27017,
-    db   : 'c6Db',
-    user : 'auth',
-    pass : 'password'
-})
-.then(function(){
-    console.log('update complete');
-})
-.catch(function(err){
-    console.log('update failed:',err);
-    process.exit(1);
-});
+        grunt.log.writelns('Reset collection: ',collection);
+        resetCollection(collection,this.data.data,this.options())
+        .timeout(timeout)
+        .then(function(){
+            var recs = data ? ( (data instanceof Array) ? data.length : 1) : 0;
+            grunt.log.ok(recs + ' records written.');
+            done(true);
+        })
+        .catch(function(err){
+            grunt.fail.fatal(err);
+            done(false);
+        });
+    });
+};
