@@ -37,6 +37,12 @@ Steps for bringing up the test server
 
     You should now have a test box running on 33.33.33.20 running mongodb and the web services used by glickm and other apps (vote/content/auth).
 
+    If you wish to log onto the box:
+
+    ```bash
+    $> vagrant ssh
+    ```
+
   4. There is a grunt task to seed the database.
 
     ```bash
