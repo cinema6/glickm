@@ -76,11 +76,13 @@
         .config(['c6AuthProvider', function(c6AuthProvider){
             c6AuthProvider.baseUrl = '';
         }])
-        .controller('AppController', ['$scope', '$log', 'cinema6', 'gsap',
-        function                     ( $scope ,  $log ,  cinema6 ,  gsap ) {
+        .controller('AppController', ['$scope', '$log', '$location', 'cinema6', 'gsap',
+        function                     ( $scope ,  $log , $location,  cinema6 ,  gsap ) {
             var self = this;
 
-            $log.info('AppCtlr loaded.');
+            $log = $log.context('AppCtrl');
+
+            $log.info('loaded.');
 
             cinema6.init({
                 setup: function(appData) {
@@ -89,6 +91,11 @@
 
                     gsap.TweenLite.ticker.useRAF(self.profile.raf);
                 }
+            });
+
+            $scope.$on('$locationChangeStart',function(evt,newUrl,oldUrl){
+                $log.info('$location origin: ',window.location.origin);
+                $log.info('locationChange: %1 ===> %2', oldUrl, newUrl);
             });
 
             $scope.AppCtrl = this;

@@ -4,6 +4,7 @@
     define(['app', 'templates'], function() {
         describe('AppController', function() {
             var $rootScope,
+                $log,
                 $scope,
                 AppCtrl;
 
@@ -56,10 +57,14 @@
 
                 inject(function($injector, $controller, c6EventEmitter) {
                     $rootScope = $injector.get('$rootScope');
+                    $log       = $injector.get('$log');
+                    
+                    $log.context = function(){ return $log; }
 
                     $scope = $rootScope.$new();
                     AppCtrl = $controller('AppController', {
-                        $scope: $scope
+                        $scope: $scope,
+                        $log: $log
                     });
 
                     cinema6Session = c6EventEmitter({});
