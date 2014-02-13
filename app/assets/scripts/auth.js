@@ -46,7 +46,7 @@
                     data         : body,
                     timeout      : deferredTimeout.promise
                 })
-                .success(function(data /*,status */){
+                .success(function(data ){
                     $timeout.cancel(cancelTimeout);
                     deferred.resolve(data);
                 })

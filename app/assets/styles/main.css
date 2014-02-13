@@ -1,2 +1,69 @@
 /* overall css stylesheet */
 html { height: 100%; width: 100%;}
+
+/* for centering things vertically */
+.valign-outer {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.valign-inner {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+
+/* for centering things vertically */
+.login-title {
+    width: 300px;
+    border: 1px solid #28f;
+    border-bottom: 0;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
+    background-color: #28f;
+    font: 22px arial;
+    padding: 10px;
+}
+
+.login-form {
+    border: 1px solid #28f;
+    width: 300px;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .login-form * {
+        display: block;
+        width: 280px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .login-input, .login-input:focus {
+        padding:5px; 
+        border:2px solid #28f; 
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .login-form [type=submit] {
+        border: 0px none;
+        height: 30px;
+        cursor: pointer;
+        background-color: #28f;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    .login-error {
+        height: 40px;
+        margin-bottom: 0px;
+        color: red;
+        text-align: center;
+    }

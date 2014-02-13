@@ -1,18 +1,27 @@
 (function() {
     'use strict';
     
-    var grunt = require('grunt');
+    var grunt        = require('grunt'),
+        proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
     module.exports = {
         options: {
-            hostname: '0.0.0.0'
+            port: '<%= settings.connectPort %>',
+            hostname: '0.0.0.0',
+            livereload: true
         },
+        proxies: [ 
+            {
+                context: '/api',
+                host: '33.33.33.20',
+                changeOrigin: true
+            } 
+        ],
         dev: {
             options: {
-                port: '<%= settings.connectPort %>',
                 middleware: function(connect,options) {
                     return [
-                        require('connect-livereload')(),
+                        proxySnippet,
                         connect.static(grunt.config.get('settings.appDir')),
                         connect.static('.tmp')
                     ];

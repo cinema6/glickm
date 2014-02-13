@@ -50,8 +50,8 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-route.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.min.js'),
-                    libUrl('c6ui/v2.3.0-0-gfe0bd78/c6uilib.min.js'),
-                    libUrl('c6ui/v2.3.0-0-gfe0bd78/c6log.min.js')
+                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6uilib.min.js'),
+                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6log.min.js')
                 ];
             } else {
                 return [
@@ -62,8 +62,8 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-route.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.js'),
-                    libUrl('c6ui/v2.3.0-0-gfe0bd78/c6uilib.js'),
-                    libUrl('c6ui/v2.3.0-0-gfe0bd78/c6log.js')
+                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6uilib.js'),
+                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6log.js')
                 ];
             }
         }());
@@ -115,7 +115,7 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.js')
             ],
             nope: [
-                libUrl('c6ui/v2.3.0-0-gfe0bd78/css/c6uilib--hover.min.css'),
+                libUrl('c6ui/v2.4.0-0-gb74a3dd/css/c6uilib--hover.min.css'),
                 __C6_APP_BASE_URL__ + '/styles/main--hover.css'
             ],
             complete: function() {

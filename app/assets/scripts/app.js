@@ -68,12 +68,13 @@
             .when('/experience',{
                 templateUrl     : c6UrlMakerProvider.makeUrl('views/experience.html')
             })
-            .otherwise(/*'/experience',*/{
+            .otherwise({
+                controller      : 'LoginCtrl',
                 templateUrl     : c6UrlMakerProvider.makeUrl('views/login.html')
             });
         }])
         .config(['c6AuthProvider', function(c6AuthProvider){
-            c6AuthProvider.baseUrl = 'http://33.33.33.20';
+            c6AuthProvider.baseUrl = '';
         }])
         .controller('AppController', ['$scope', '$log', 'cinema6', 'gsap',
         function                     ( $scope ,  $log ,  cinema6 ,  gsap ) {
