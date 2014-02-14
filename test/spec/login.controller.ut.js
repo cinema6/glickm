@@ -60,6 +60,46 @@
                     expect(c6Auth.login).toHaveBeenCalledWith('howard','foo');
                     expect($scope.loginError).toEqual('Failed to work');
                 });
+
+                it('does nothing if username is blank',function(){
+                    c6Auth.login.andReturn($q.when({}));
+                    $scope.username = '';
+                    $scope.password = 'abc';
+                    $scope.login();
+                    $scope.$digest();
+                    expect(c6Auth.login).not.toHaveBeenCalled();
+                    expect($scope.loginError).toEqual('Username and password required.');
+                });
+                
+                it('does nothing if username is blank with spaces',function(){
+                    c6Auth.login.andReturn($q.when({}));
+                    $scope.username = '   ';
+                    $scope.password = 'abc';
+                    $scope.login();
+                    $scope.$digest();
+                    expect(c6Auth.login).not.toHaveBeenCalled();
+                    expect($scope.loginError).toEqual('Username and password required.');
+                });
+                
+                it('does nothing if password is blank',function(){
+                    c6Auth.login.andReturn($q.when({}));
+                    $scope.username = 'xxyx';
+                    $scope.password = '';
+                    $scope.login();
+                    $scope.$digest();
+                    expect(c6Auth.login).not.toHaveBeenCalled();
+                    expect($scope.loginError).toEqual('Username and password required.');
+                });
+                
+                it('does nothing if password is blank with spaces',function(){
+                    c6Auth.login.andReturn($q.when({}));
+                    $scope.username = 'xxyx';
+                    $scope.password = ' ';
+                    $scope.login();
+                    $scope.$digest();
+                    expect(c6Auth.login).not.toHaveBeenCalled();
+                    expect($scope.loginError).toEqual('Username and password required.');
+                });
             });
 
             describe('logout method',function(){

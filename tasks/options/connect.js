@@ -14,6 +14,8 @@
             {
                 context: '/api',
                 host: '33.33.33.20',
+                port: 443,
+                https: true,
                 changeOrigin: true
             } 
         ],

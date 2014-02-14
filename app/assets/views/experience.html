@@ -1,4 +1,5 @@
-<p id="seatbelt">{{user.username}}, Buckle Your Seatbelt!</p>
+<p>{{user.username}}, you have been a user since {{user.created.toString()}}</p>
+<p>You have been a logged on since {{user.loggedIn.toString()}}</p>
 <div ng-controller="LoginCtrl">
-    <span ng-click="logout()">Logout</span>
+    <span class="logout-btn" ng-click="logout()">Logout</span>
 </div>

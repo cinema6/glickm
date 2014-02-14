@@ -12,6 +12,13 @@
 
         $scope.login = function(){
             $log.info('logging in %1', $scope.username);
+
+            if ( (!$scope.username) || (!$scope.password) ||
+                 ($scope.username.match(/^\s*$/)) || ($scope.password.match(/^\s*$/)) ){
+                $scope.loginError = 'Username and password required.';
+                return;
+            }
+
             c6Auth.login($scope.username,$scope.password)
             .then(function(data){
                 $log.info('success:',data);

@@ -18,7 +18,12 @@
                 cinema6Session;
 
             beforeEach(function() {
-                mockUser = { id: 1, username: 'howard' };
+                mockUser = {
+                    id: 1,
+                    username: 'howard',
+                    created:  '2013-02-03T12:23:24.345Z',
+                    loggedIn: '2014-02-14T09:30:30.123Z'
+                };
 
                 gsap = {
                     TweenLite: {
@@ -98,27 +103,53 @@
                 expect(AppCtrl).toBeDefined();
             });
 
-            describe('user', function(){
-                it('will be pulled from localstorage at initialization',function(){
-                    expect(localStorage.get).toHaveBeenCalledWith('user');
-                    expect($scope.user).toEqual(mockUser);
+            describe('$scope.user', function(){
+                describe('setting and unsetting',function(){
+                    it('will be pulled from localstorage at initialization',function(){
+                        expect(localStorage.get).toHaveBeenCalledWith('user');
+                        expect($scope.user).toEqual(mockUser);
+                        expect(mockUser.created instanceof Date).toEqual(true);
+                        expect(mockUser.created.toISOString()).toEqual('2013-02-03T12:23:24.345Z');
+                        expect(mockUser.loggedIn instanceof Date).toEqual(true);
+                        expect(mockUser.loggedIn.toISOString()).toEqual('2014-02-14T09:30:30.123Z');
+                    });
+
+                    it('will be updated when login succeeds',function(){
+                        var newUser = { 
+                            id : 2, 
+                            username: 'fudgey',
+                            created:  '2013-03-11T19:23:24.345Z' 
+                        };
+                        expect($scope.user).toEqual(mockUser);
+                        $scope.$emit('loginSuccess',newUser);
+                        expect($scope.user).toEqual(newUser);
+                        expect(newUser.created instanceof Date).toEqual(true);
+                        expect(newUser.created.toISOString()).toEqual('2013-03-11T19:23:24.345Z');
+                        expect(newUser.loggedIn instanceof Date).toEqual(true);
+                        expect(localStorage.set).toHaveBeenCalledWith('user',newUser);
+                        expect($location.path).toHaveBeenCalledWith('/experience');
+                    });
+
+                    it('will be cleared when logout occurs',function(){
+                        expect($scope.user).toEqual(mockUser);
+                        $scope.$emit('logout');
+                        expect($scope.user).toBeNull();
+                        expect(localStorage.remove).toHaveBeenCalledWith('user');
+                        expect($location.path).toHaveBeenCalledWith('/login');
+                    });
                 });
 
-                it('will be updated when login succeeds',function(){
-                    var newUser = { id : 2, username: 'fudegy' };
-                    expect($scope.user).toEqual(mockUser);
-                    $scope.$emit('loginSuccess',newUser);
-                    expect($scope.user).toEqual(newUser);
-                    expect(localStorage.set).toHaveBeenCalledWith('user',newUser);
-                    expect($location.path).toHaveBeenCalledWith('/experience');
-                });
+                describe('processUser',function(){
 
-                it('will be cleared when logout occurs',function(){
-                    expect($scope.user).toEqual(mockUser);
-                    $scope.$emit('logout');
-                    expect($scope.user).toBeNull();
-                    expect(localStorage.remove).toHaveBeenCalledWith('user');
-                    expect($location.path).toHaveBeenCalledWith('/login');
+                    it('will convert date strings into date objects',function(){
+                        var mockUser = {
+                            id : 'abc',
+                            created: '2013-01-02T12:23:22.123Z'
+                        };
+
+
+                    });
+
                 });
             });
 

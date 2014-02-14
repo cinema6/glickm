@@ -84,6 +84,14 @@
             $log = $log.context('AppCtrl');
 
             $log.info('loaded.');
+            
+            self.processUser = function(rec){
+                if (rec){
+                    if (rec.created) { rec.created  = new Date(rec.created);   }
+                    if (rec.loggedIn){ rec.loggedIn = new Date(rec.loggedIn); }
+                }
+                return rec;
+            };
 
             cinema6.init({
                 setup: function(appData) {
@@ -107,8 +115,9 @@
 
             $scope.$on('loginSuccess',function(evt,user){
                 $log.info('Login succeeded, new user:',user);
+                $scope.user = self.processUser(user);
+                user.loggedIn = new Date();
                 c6LocalStorage.set('user',user);
-                $scope.user = user;
                 $location.path('/experience').replace();
             });
 
@@ -119,7 +128,7 @@
                 $location.path('/login');
             });
                 
-            $scope.user = c6LocalStorage.get('user');
+            $scope.user = self.processUser(c6LocalStorage.get('user'));
 
         }]);
 }(window));
