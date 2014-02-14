@@ -7,31 +7,18 @@
                 $scope,
                 $log,
                 $q,
-                $location,
                 c6Auth,
-                c6LocalStorage,
                 LoginCtrl;
 
             beforeEach(function() {
 
                 c6Auth = {
-                    login : jasmine.createSpy('c6Auth.login')
+                    login  : jasmine.createSpy('c6Auth.login'),
+                    logout : jasmine.createSpy('c6Auth.logout')
                 };
-
-                c6LocalStorage = {
-                    set : jasmine.createSpy('c6LocalStorage.set')
-                };
-
-                $location = {
-                    path : jasmine.createSpy('$location.path')
-                };
-
-                $location.path.andReturn ( { replace : function(){} });
 
                 module('c6.glickm', function($provide) {
                     $provide.value('c6Auth', c6Auth);
-                    $provide.value('c6LocalStorage', c6LocalStorage);
-                    $provide.value('$location', $location);
                 });
 
                 inject(function($injector, $controller, c6EventEmitter) {
@@ -52,16 +39,16 @@
 
 
             describe('login method',function(){
-                it('will attempt to redirect to experience upon success',function(){
-                    var mockUser = { id : 'x' };
+                it('will emit loginSuccess upon success',function(){
+                    var mockUser = { user : { id : 'x' } };
                     c6Auth.login.andReturn($q.when(mockUser));
+                    $scope.$emit = jasmine.createSpy('$scope.$emit');
                     $scope.username = 'howard';
                     $scope.password = 'foo';
                     $scope.login();
                     $scope.$digest();
                     expect(c6Auth.login).toHaveBeenCalledWith('howard','foo');
-                    expect(c6LocalStorage.set).toHaveBeenCalledWith('user',mockUser);
-                    expect($location.path).toHaveBeenCalledWith('/experience');
+                    expect($scope.$emit).toHaveBeenCalledWith('loginSuccess',mockUser.user);
                 });
 
                 it('will set loginError property with error if it fails',function(){
@@ -72,6 +59,26 @@
                     $scope.$digest();
                     expect(c6Auth.login).toHaveBeenCalledWith('howard','foo');
                     expect($scope.loginError).toEqual('Failed to work');
+                });
+            });
+
+            describe('logout method',function(){
+                it('will emit logout event upon success',function(){
+                    c6Auth.logout.andReturn($q.when('Success'));
+                    $scope.$emit = jasmine.createSpy('$scope.$emit');
+                    $scope.logout();
+                    $scope.$digest();
+                    expect(c6Auth.logout).toHaveBeenCalled();
+                    expect($scope.$emit).toHaveBeenCalledWith('logout');
+                });
+
+                it('will emit logout event up success',function(){
+                    c6Auth.logout.andReturn($q.reject('Failure'));
+                    $scope.$emit = jasmine.createSpy('$scope.$emit');
+                    $scope.logout();
+                    $scope.$digest();
+                    expect(c6Auth.logout).toHaveBeenCalled();
+                    expect($scope.$emit).toHaveBeenCalledWith('logout');
                 });
             });
         });

@@ -5,16 +5,21 @@
         describe('AppController', function() {
             var $rootScope,
                 $log,
+                $location,
                 $scope,
                 AppCtrl;
 
             var cinema6,
+                localStorage,
+                mockUser,
                 gsap,
                 googleAnalytics,
                 appData,
                 cinema6Session;
 
             beforeEach(function() {
+                mockUser = { id: 1, username: 'howard' };
+
                 gsap = {
                     TweenLite: {
                         ticker: {
@@ -37,16 +42,34 @@
                 module('c6.ui', function($provide) {
                     $provide.factory('cinema6', function($q) {
                         cinema6 = {
-                            init: jasmine.createSpy('cinema6.init()'),
-                            getSession: jasmine.createSpy('cinema6.getSiteSession()').andCallFake(function() {
-                                return cinema6._.getSessionResult.promise;
-                            }),
+                            init:       jasmine.createSpy('cinema6.init()'),
+                            getSession: jasmine.createSpy('cinema6.getSiteSession()')
+                                .andCallFake(function() {
+                                    return cinema6._.getSessionResult.promise;
+                                }),
                             _: {
                                 getSessionResult: $q.defer()
                             }
                         };
-
                         return cinema6;
+                    });
+
+                    $provide.factory('c6LocalStorage', function(){
+                        localStorage = {
+                            set : jasmine.createSpy('localStorage.set'),
+                            get : jasmine.createSpy('localStorage.get').andReturn(mockUser),
+                            remove : jasmine.createSpy('localStorage.remove')
+                        };
+                        return localStorage;
+                    });
+
+                    $provide.factory('$location',function(){
+                        $location = {
+                            path : jasmine.createSpy('$location.path')
+                                .andReturn( { replace : function(){} })
+                        };
+
+                        return $location;
                     });
                 });
 
@@ -75,8 +98,28 @@
                 expect(AppCtrl).toBeDefined();
             });
 
-            it('should publish itself to the $scope', function() {
-                expect($scope.AppCtrl).toBe(AppCtrl);
+            describe('user', function(){
+                it('will be pulled from localstorage at initialization',function(){
+                    expect(localStorage.get).toHaveBeenCalledWith('user');
+                    expect($scope.user).toEqual(mockUser);
+                });
+
+                it('will be updated when login succeeds',function(){
+                    var newUser = { id : 2, username: 'fudegy' };
+                    expect($scope.user).toEqual(mockUser);
+                    $scope.$emit('loginSuccess',newUser);
+                    expect($scope.user).toEqual(newUser);
+                    expect(localStorage.set).toHaveBeenCalledWith('user',newUser);
+                    expect($location.path).toHaveBeenCalledWith('/experience');
+                });
+
+                it('will be cleared when logout occurs',function(){
+                    expect($scope.user).toEqual(mockUser);
+                    $scope.$emit('logout');
+                    expect($scope.user).toBeNull();
+                    expect(localStorage.remove).toHaveBeenCalledWith('user');
+                    expect($location.path).toHaveBeenCalledWith('/login');
+                });
             });
 
             describe('cinema6 integration', function() {

@@ -67,8 +67,34 @@
             };
 
             service.logout = function(){
+                var deferred = $q.defer(), deferredTimeout = $q.defer(), cancelTimeout;
+                
+                $http({
+                    method       : 'POST',
+                    url          : config.baseUrl + '/api/auth/logout',
+                    timeout      : deferredTimeout.promise
+                })
+                .success(function(data ){
+                    $timeout.cancel(cancelTimeout);
+                    deferred.resolve(data);
+                })
+                .error(function(data){
+                    if (!data){
+                        data = 'Logout failed';
+                    } else
+                    if (data.error) {
+                        data = data.error;
+                    }
+                    $timeout.cancel(cancelTimeout);
+                    deferred.reject(data);
+                });
 
+                cancelTimeout = $timeout(function(){
+                    deferredTimeout.resolve();
+                    deferred.reject('Request timed out.');
+                },config.timeout);
 
+                return deferred.promise;
             };
 
             return service;

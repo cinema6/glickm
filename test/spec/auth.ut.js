@@ -63,11 +63,33 @@
                     spyOn($timeout,'cancel');
                 });
                 
+                it('will resolve promise if successfull',function(){
+                    $httpBackend.expectPOST('/api/auth/logout').respond(200,"Success");
+                    c6Auth.logout().then(successSpy,failureSpy);
+                    $httpBackend.flush();
+                    expect(successSpy).toHaveBeenCalledWith("Success");
+                    expect(failureSpy).not.toHaveBeenCalled();
+                    expect($timeout.cancel).toHaveBeenCalled();
+                });
 
+                it('will reject promise if not successfull',function(){
+                    var mockErr = { error : 'Error processing logout' };
+                    $httpBackend.expectPOST('/api/auth/logout').respond(500,mockErr);
+                    c6Auth.logout().then(successSpy,failureSpy);
+                    $httpBackend.flush();
+                    expect(successSpy).not.toHaveBeenCalled();
+                    expect(failureSpy).toHaveBeenCalledWith(mockErr.error);
+                    expect($timeout.cancel).toHaveBeenCalled();
+                });
 
-
+                it('will reject promise if times out',function(){
+                    $httpBackend.expectPOST('/api/auth/logout').respond(200,{});
+                    c6Auth.logout().then(successSpy,failureSpy);
+                    $timeout.flush(60000);
+                    expect(successSpy).not.toHaveBeenCalled();
+                    expect(failureSpy).toHaveBeenCalledWith('Request timed out.');
+                });
             });
-
         });
 
         describe('c6Auth Provider',function(){

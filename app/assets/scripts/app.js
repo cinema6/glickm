@@ -76,8 +76,9 @@
         .config(['c6AuthProvider', function(c6AuthProvider){
             c6AuthProvider.baseUrl = '';
         }])
-        .controller('AppController', ['$scope', '$log', '$location', 'cinema6', 'gsap',
-        function                     ( $scope ,  $log , $location,  cinema6 ,  gsap ) {
+        .controller('AppController',
+            ['$scope', '$log', '$location', '$timeout','cinema6', 'gsap', 'c6LocalStorage',
+            function ( $scope ,  $log , $location,  $timeout, cinema6 ,  gsap, c6LocalStorage ) {
             var self = this;
 
             $log = $log.context('AppCtrl');
@@ -96,8 +97,29 @@
             $scope.$on('$locationChangeStart',function(evt,newUrl,oldUrl){
                 $log.info('$location origin: ',window.location.origin);
                 $log.info('locationChange: %1 ===> %2', oldUrl, newUrl);
+                if ((!newUrl.match(/\/login/)) && (!$scope.user)){
+                    evt.preventDefault();
+                    $timeout(function(){
+                        $location.path('/login').replace();
+                    });
+                }
             });
 
-            $scope.AppCtrl = this;
+            $scope.$on('loginSuccess',function(evt,user){
+                $log.info('Login succeeded, new user:',user);
+                c6LocalStorage.set('user',user);
+                $scope.user = user;
+                $location.path('/experience').replace();
+            });
+
+            $scope.$on('logout',function(){
+                $log.info('Logout user:',$scope.user);
+                $scope.user = null;
+                c6LocalStorage.remove('user');
+                $location.path('/login');
+            });
+                
+            $scope.user = c6LocalStorage.get('user');
+
         }]);
 }(window));
