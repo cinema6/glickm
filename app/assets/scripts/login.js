@@ -22,7 +22,7 @@
             c6Auth.login($scope.username,$scope.password)
             .then(function(data){
                 $log.info('success:',data);
-                $scope.$emit('loginSuccess',data.user);
+                $scope.$emit('loginSuccess',data);
             })
             .catch(function(err){
                 $log.error('error:',err);

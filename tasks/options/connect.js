@@ -13,7 +13,7 @@
         proxies: [ 
             {
                 context: '/api',
-                host: '33.33.33.20',
+                host: 'staging.cinema6.com',
                 port: 443,
                 https: true,
                 changeOrigin: true
