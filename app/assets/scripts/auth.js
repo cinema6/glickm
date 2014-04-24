@@ -6,7 +6,7 @@
     .provider('c6Auth',function(){
 
         var config = {
-            baseUrl : '',
+            baseUrl : '/api',
             timeout : 10000
         };
 
@@ -42,7 +42,7 @@
 
                 $http({
                     method       : 'POST',
-                    url          : config.baseUrl + '/api/auth/login',
+                    url          : config.baseUrl + '/auth/login',
                     data         : body,
                     timeout      : deferredTimeout.promise
                 })
@@ -71,7 +71,7 @@
                 
                 $http({
                     method       : 'POST',
-                    url          : config.baseUrl + '/api/auth/logout',
+                    url          : config.baseUrl + '/auth/logout',
                     timeout      : deferredTimeout.promise
                 })
                 .success(function(data ){

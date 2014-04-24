@@ -16,6 +16,7 @@
     c6.kBaseUrl = 'assets';
     c6.kLocal = true;
     c6.kDebug = true;
+    c6.kApi   = '/api';
     c6.kHasKarma = true;
     c6.kLogLevels = ['error','warn','log','info'];
     c6.kVideoUrls = {

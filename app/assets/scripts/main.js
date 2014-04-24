@@ -4,28 +4,14 @@
 
     var __C6_BUILD_VERSION__ = window.__C6_BUILD_VERSION__ = undefined,
         __C6_APP_BASE_URL__ = window.__C6_APP_BASE_URL__ = __C6_BUILD_VERSION__ || 'assets',
-        c6 = window.c6;
+        c6 = window.c6 = (window.c6 || {});
 
     require.config({
         baseUrl:  __C6_APP_BASE_URL__
     });
 
     var libUrl = function(url) {
-            var libBase = (function() {
-                switch (c6.kEnv) {
-                case 'dev':
-                case 'staging':
-                    return c6.kLibUrls.dev;
-                case 'release':
-                    return c6.kLibUrls.release;
-                }
-            }());
-
-            libUrl = function(url) {
-                return libBase + url;
-            };
-
-            return libUrl(url);
+            return 'http://lib.cinema6.com/' + url;
         },
         appScripts = (function() {
             if (__C6_BUILD_VERSION__) {
@@ -85,24 +71,26 @@
     }
 
     c6.kBaseUrl = __C6_APP_BASE_URL__;
-    c6.kLocal = (c6.kBaseUrl === 'assets');
-    c6.kDebug = (c6.kEnv === 'dev' || c6.kEnv === 'staging');
+    c6.kApiUrl = window.location.protocol + '://' + window.location.host;
+    
+    if ((window.location.host === 'portal.cinema6.com') ||
+        (window.location.host === 'cinema6.com')) {
+        c6.kDebug = false;
+        ga('create', 'UA-44457821-2', 'cinema6.com');
+    } else
+    if (window.location.host === 'staging.cinema6.com')  {
+        c6.kDebug = true;
+        ga('create', 'UA-44457821-2', 'staging.cinema6.com');
+    } else {
+        c6.kDebug = true;
+        ga('create', 'UA-44457821-1', { 'cookieDomain' : 'none' });
+        c6.kApiUrl = '';
+    }
+   
     c6.kHasKarma = false;
     c6.kLogFormats = c6.kDebug;
     c6.kLogLevels = (c6.kDebug) ? ['error','warn','log','info'] : [];
-    c6.kVideoUrls = {
-        local: c6.kBaseUrl + '/media',
-        dev: 'http://s3.amazonaws.com/c6.dev/media/src/stub',
-        cdn: 'http://cdn1.cinema6.com/src/stub'
-    };
     c6.kModDeps = ['ngAnimate','ngRoute','c6.ui', 'c6.log', 'c6.glickm.services'];
-
-    if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
-        ga('create', 'UA-44457821-2', 'cinema6.com');
-    } else {
-        ga('create', 'UA-44457821-1', { 'cookieDomain' : 'none' });
-    }
-
 
     loadScriptsInOrder(libScripts, function() {
         var Modernizr = window.Modernizr;

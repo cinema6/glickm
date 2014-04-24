@@ -16,6 +16,14 @@
                     login  : jasmine.createSpy('c6Auth.login'),
                     logout : jasmine.createSpy('c6Auth.logout')
                 };
+                
+                module('c6.ui', ['$provide', function($provide) {
+                    $provide.provider('c6UrlMaker', function(){
+                        this.location = jasmine.createSpy('urlMaker.location');
+                        this.makeUrl  = jasmine.createSpy('urlMaker.makeUrl');
+                        this.$get = jasmine.createSpy('urlMaker.get');
+                    });
+                }]);
 
                 module('c6.glickm', function($provide) {
                     $provide.value('c6Auth', c6Auth);
@@ -48,7 +56,8 @@
                     $scope.login();
                     $scope.$digest();
                     expect(c6Auth.login).toHaveBeenCalledWith('howard','foo');
-                    expect($scope.$emit).toHaveBeenCalledWith('loginSuccess',mockUser.user);
+                    expect($scope.$emit).toHaveBeenCalledWith('loginSuccess',
+                        { user : mockUser.user });
                 });
 
                 it('will set loginError property with error if it fails',function(){

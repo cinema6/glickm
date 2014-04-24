@@ -44,7 +44,7 @@
                     }
                 };
 
-                module('c6.ui', function($provide) {
+                module('c6.ui', ['$provide', function($provide) {
                     $provide.factory('cinema6', function($q) {
                         cinema6 = {
                             init:       jasmine.createSpy('cinema6.init()'),
@@ -57,6 +57,12 @@
                             }
                         };
                         return cinema6;
+                    });
+
+                    $provide.provider('c6UrlMaker', function(){
+                        this.location = jasmine.createSpy('urlMaker.location');
+                        this.makeUrl  = jasmine.createSpy('urlMaker.makeUrl');
+                        this.$get = jasmine.createSpy('urlMaker.get');
                     });
 
                     $provide.factory('c6LocalStorage', function(){
@@ -76,7 +82,7 @@
 
                         return $location;
                     });
-                });
+                }]);
 
                 module('c6.glickm', function($provide) {
                     $provide.value('gsap', gsap);

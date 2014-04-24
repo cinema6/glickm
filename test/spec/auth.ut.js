@@ -99,7 +99,7 @@
                     provider.baseUrl = 'hoho';
                 }]);
                 inject(['$httpBackend','c6Auth', function($httpBackend,c6Auth){ 
-                    $httpBackend.expectPOST('hoho/api/auth/login').respond(200,{});
+                    $httpBackend.expectPOST('hoho/auth/login').respond(200,{});
                     c6Auth.login('userX','foobar');
                     $httpBackend.flush();
                 }]);

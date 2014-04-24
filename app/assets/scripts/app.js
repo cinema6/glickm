@@ -58,9 +58,8 @@
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
-            c6UrlMakerProvider.location(c6Defines.kVideoUrls[(function() {
-                return 'local';
-            }())] ,'video');
+            c6UrlMakerProvider.location(c6Defines.kCollateralUrl,'collateral');
+            c6UrlMakerProvider.location(c6Defines.kApiUrl,'api');
         }])
         .config(['$routeProvider','c6UrlMakerProvider',
         function($routeProvider,c6UrlMakerProvider){
@@ -73,8 +72,9 @@
                 templateUrl     : c6UrlMakerProvider.makeUrl('views/login.html')
             });
         }])
-        .config(['c6AuthProvider', function(c6AuthProvider){
-            c6AuthProvider.baseUrl = '';
+        .config(['c6AuthProvider', 'c6UrlMakerProvider',
+        function(c6AuthProvider, c6UrlMakerProvider){
+            c6AuthProvider.baseUrl = c6UrlMakerProvider.makeUrl('api','api');
         }])
         .controller('AppController',
             ['$scope', '$log', '$location', '$timeout','cinema6', 'gsap', 'c6LocalStorage',

@@ -18,6 +18,7 @@
                     cwd: '<%= settings.appDir %>/assets',
                     src: [
                         '**',
+                        '!views/**',
                         '!**/*.{js,css,html}'
                     ],
                     dest: '<%= _versionDir %>'

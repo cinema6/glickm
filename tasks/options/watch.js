@@ -19,15 +19,13 @@
             ],
             tasks: []
         },
-        js:  {
-            options: {
-                atBegin: true
-            },
+        unit: {
             files: [
                 '<%= settings.appDir %>/assets/scripts/**/*.js',
+                '<%= settings.appDir %>/assets/views/**/*.html',
                 'test/spec/**/*.js'
             ],
-            tasks: ['jshint:all', 'ngtemplates:test', 'karma:debug:run']
+            tasks: ['jshint', 'ngtemplates:test', 'karma:debug:run']
         }
 //,
 //        e2e: {
