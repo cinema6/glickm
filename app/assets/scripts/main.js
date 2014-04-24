@@ -71,9 +71,7 @@
     }
 
     c6.kBaseUrl = __C6_APP_BASE_URL__;
-    c6.kApiUrl = window.location.protocol + '://' + window.location.host;
-    window.console.log('url:',c6.kApiUrl);
-    window.console.log('location:',window.location);
+    c6.kApiUrl = window.location.origin; //window.location.protocol + '://' + window.location.host;
 
     if ((window.location.host === 'portal.cinema6.com') ||
         (window.location.host === 'cinema6.com')) {
