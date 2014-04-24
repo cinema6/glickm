@@ -34,7 +34,6 @@
             var service = {};
 
             service.login = function(username,password){
-                window.console.log('config.baseUrl: ', config.baseUrl);
                 var deferred = $q.defer(), deferredTimeout = $q.defer(), cancelTimeout,
                     body = {
                         username : username,
