@@ -66,6 +66,34 @@
                 return deferred.promise;
             };
 
+            service.checkStatus = function() {
+                var deferred = $q.defer(), deferredTimeout = $q.defer(), cancelTimeout;
+
+                $http({
+                    method       : 'GET',
+                    url          : config.baseUrl + '/auth/status',
+                    timeout      : deferredTimeout.promise
+                })
+                .success(function(data ){
+                    $timeout.cancel(cancelTimeout);
+                    deferred.resolve(data);
+                })
+                .error(function(data, status){
+                    if (!data){
+                        data = status;
+                    }
+                    $timeout.cancel(cancelTimeout);
+                    deferred.reject(data);
+                });
+
+                cancelTimeout = $timeout(function(){
+                    deferredTimeout.resolve();
+                    deferred.reject('Request timed out.');
+                },config.timeout);
+
+                return deferred.promise;
+            };
+
             service.logout = function(){
                 var deferred = $q.defer(), deferredTimeout = $q.defer(), cancelTimeout;
                 

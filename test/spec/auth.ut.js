@@ -35,7 +35,7 @@
                     expect($timeout.cancel).toHaveBeenCalled();
                 });
 
-                it('will reject promise if not successfull',function(){
+                it('will reject promise if not successful',function(){
                     $httpBackend.expectPOST('/api/auth/login')
                         .respond(404,'Unable to find user.');
                     c6Auth.login('userX','foobar').then(successSpy,failureSpy);
@@ -55,6 +55,42 @@
             
             });
 
+            describe('checkStatus method', function(){
+                beforeEach(function(){
+                    successSpy = jasmine.createSpy('checkStatus.success');
+                    failureSpy = jasmine.createSpy('checkStatus.failure');
+                    spyOn($timeout,'cancel');
+                });
+                
+                it('will resolve promise if successfull',function(){
+                    var mockUser = { id: 'userX' };
+                    $httpBackend.expectGET('/api/auth/status').respond(200,mockUser);
+                    c6Auth.checkStatus().then(successSpy,failureSpy);
+                    $httpBackend.flush();
+                    expect(successSpy).toHaveBeenCalledWith(mockUser);
+                    expect(failureSpy).not.toHaveBeenCalled();
+                    expect($timeout.cancel).toHaveBeenCalled();
+                });
+
+                it('will reject promise if not successful',function(){
+                    $httpBackend.expectGET('/api/auth/status')
+                        .respond(404,'Unable to find user.');
+                    c6Auth.checkStatus().then(successSpy,failureSpy);
+                    $httpBackend.flush();
+                    expect(successSpy).not.toHaveBeenCalled();
+                    expect(failureSpy).toHaveBeenCalledWith('Unable to find user.');
+                    expect($timeout.cancel).toHaveBeenCalled();
+                });
+
+                it('will reject promise if times out',function(){
+                    $httpBackend.expectGET('/api/auth/status').respond(200,{});
+                    c6Auth.checkStatus().then(successSpy,failureSpy);
+                    $timeout.flush(60000);
+                    expect(successSpy).not.toHaveBeenCalled();
+                    expect(failureSpy).toHaveBeenCalledWith('Request timed out.');
+                });
+
+            });
 
             describe('logout', function(){
                 beforeEach(function(){

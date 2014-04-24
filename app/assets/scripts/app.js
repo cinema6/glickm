@@ -77,8 +77,8 @@
             c6AuthProvider.baseUrl = c6UrlMakerProvider.makeUrl('api','api');
         }])
         .controller('AppController',
-            ['$scope', '$log', '$location', '$timeout','cinema6', 'gsap', 'c6LocalStorage',
-            function ( $scope ,  $log , $location,  $timeout, cinema6 ,  gsap, c6LocalStorage ) {
+            ['$scope', '$log', '$location', '$timeout','cinema6', 'gsap', 'c6LocalStorage', 'c6Auth',
+            function ( $scope ,  $log , $location,  $timeout, cinema6 ,  gsap, c6LocalStorage, c6Auth ) {
             var self = this;
 
             $log = $log.context('AppCtrl');
@@ -87,7 +87,6 @@
             
             self.processUser = function(rec){
                 if (rec){
-                    if (rec.created) { rec.created  = new Date(rec.created);   }
                     if (rec.loggedIn){ rec.loggedIn = new Date(rec.loggedIn); }
                 }
                 return rec;
@@ -129,6 +128,22 @@
             });
                 
             $scope.user = self.processUser(c6LocalStorage.get('user'));
+
+            if ($scope.user){
+                c6Auth.checkStatus()
+                .then(function(user){
+                    $log.info('auth check passed: ',user);
+                    user.loggedIn  = $scope.user.loggedIn;
+                    c6LocalStorage.set('user',user);
+                    $scope.user = user;
+                },
+                function(err){
+                    $log.info('auth check failed: ',err);
+                    $scope.user = null;
+                    c6LocalStorage.remove('user');
+                    $location.path('/login');
+                });
+            }
 
         }]);
 }(window));
