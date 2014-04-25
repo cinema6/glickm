@@ -23,7 +23,7 @@
         local: 'assets/media',
         cdn: 'http://foo.cinema6.com/media/app'
     };
-    c6.kModDeps = ['ngRoute','c6.ui', 'c6.log', 'c6.glickm.services'];
+    c6.kModDeps = ['ngRoute','c6.ui', 'c6.log'];
 
     packageRequest.onload = function(event) {
         var settings = JSON.parse(event.target.response),

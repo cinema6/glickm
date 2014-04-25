@@ -5,22 +5,23 @@
         describe('AppController', function() {
             var $rootScope,
                 $log,
+                $q,
                 $location,
                 $scope,
+                auth,
                 AppCtrl;
 
-            var cinema6,
-                localStorage,
+            var localStorage,
                 mockUser,
                 gsap,
                 googleAnalytics,
-                appData,
-                cinema6Session;
+                appData;
 
             beforeEach(function() {
                 mockUser = {
                     id: 1,
                     username: 'howard',
+                    applications: ['e1'],
                     created:  '2013-02-03T12:23:24.345Z',
                     loggedIn: '2014-02-14T09:30:30.123Z'
                 };
@@ -45,25 +46,13 @@
                 };
 
                 module('c6.ui', ['$provide', function($provide) {
-                    $provide.factory('cinema6', function($q) {
-                        cinema6 = {
-                            init:       jasmine.createSpy('cinema6.init()'),
-                            getSession: jasmine.createSpy('cinema6.getSiteSession()')
-                                .andCallFake(function() {
-                                    return cinema6._.getSessionResult.promise;
-                                }),
-                            _: {
-                                getSessionResult: $q.defer()
-                            }
-                        };
-                        return cinema6;
-                    });
-
+                    /*
                     $provide.provider('c6UrlMaker', function(){
                         this.location = jasmine.createSpy('urlMaker.location');
                         this.makeUrl  = jasmine.createSpy('urlMaker.makeUrl');
                         this.$get = jasmine.createSpy('urlMaker.get');
                     });
+                    */
 
                     $provide.factory('c6LocalStorage', function(){
                         localStorage = {
@@ -92,16 +81,25 @@
                 inject(function($injector, $controller, c6EventEmitter) {
                     $rootScope = $injector.get('$rootScope');
                     $log       = $injector.get('$log');
+                    $q         = $injector.get('$q');
                     
                     $log.context = function(){ return $log; }
+                    auth = {
+                        login       : jasmine.createSpy('auth.login'),
+                        logout      : jasmine.createSpy('auth.logout'),
+                        checkStatus : jasmine.createSpy('auth.checkStatus'),
+                        promise     : $q.defer().promise
+                    };
+
+                    auth.checkStatus.andReturn(auth.promise);
 
                     $scope = $rootScope.$new();
                     AppCtrl = $controller('AppController', {
                         $scope: $scope,
-                        $log: $log
+                        $log: $log,
+                        auth: auth
                     });
 
-                    cinema6Session = c6EventEmitter({});
                 });
             });
 
@@ -121,6 +119,7 @@
                     it('will be updated when login succeeds',function(){
                         var newUser = { 
                             id : 2, 
+                            applications: ['e2'],
                             username: 'fudgey',
                             created:  '2013-03-11T19:23:24.345Z' 
                         };
@@ -155,24 +154,6 @@
                 });
             });
 
-            describe('cinema6 integration', function() {
-                beforeEach(function() {
-                    cinema6.init.mostRecentCall.args[0].setup(appData);
-                });
-
-                it('should initialize a session with cinema6', function() {
-                    expect(cinema6.init).toHaveBeenCalled();
-                });
-
-                it('should setup the session', function() {
-                    expect(AppCtrl.experience).toBe(appData.experience);
-                    expect(AppCtrl.profile).toBe(appData.profile);
-                });
-
-                it('should configure gsap', function() {
-                    expect(gsap.TweenLite.ticker.useRAF).toHaveBeenCalledWith(appData.profile.raf);
-                });
-            });
         });
     });
 }());

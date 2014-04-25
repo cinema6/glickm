@@ -3,16 +3,27 @@
 
     define(['auth'], function() {
 
-        describe('c6Auth', function() {
-            var $httpBackend, $timeout, c6Auth, successSpy, failureSpy;
+        describe('auth', function() {
+            var $httpBackend, $timeout, auth, successSpy, failureSpy,
+                c6UrlMaker;
 
             beforeEach(function(){
-                module('c6.glickm.services');
+                module('c6.ui', ['$provide', function($provide) {
+                    $provide.provider('c6UrlMaker', function(){
+                        this.location = jasmine.createSpy('urlMaker.location');
+                        this.makeUrl  = jasmine.createSpy('urlMaker.makeUrl');
+                        this.$get     = function(){
+                            return jasmine.createSpy('urlMaker.get');
+                        };
+                    });
+                }]);
+                module('c6.glickm');
 
                 inject(['$injector',function($injector){
-                    c6Auth       = $injector.get('c6Auth');
+                    auth         = $injector.get('auth');
                     $timeout     = $injector.get('$timeout');
                     $httpBackend = $injector.get('$httpBackend');
+                    c6UrlMaker   = $injector.get('c6UrlMaker');
                 }]);
                 
             });
@@ -23,12 +34,13 @@
                     successSpy = jasmine.createSpy('login.success');
                     failureSpy = jasmine.createSpy('login.failure');
                     spyOn($timeout,'cancel');
+                    c6UrlMaker.andReturn('/api/auth/login'); 
                 });
                 
                 it('will resolve promise if successfull',function(){
                     var mockUser = { id: 'userX' };
                     $httpBackend.expectPOST('/api/auth/login').respond(200,mockUser);
-                    c6Auth.login('userX','foobar').then(successSpy,failureSpy);
+                    auth.login('userX','foobar').then(successSpy,failureSpy);
                     $httpBackend.flush();
                     expect(successSpy).toHaveBeenCalledWith(mockUser);
                     expect(failureSpy).not.toHaveBeenCalled();
@@ -38,7 +50,7 @@
                 it('will reject promise if not successful',function(){
                     $httpBackend.expectPOST('/api/auth/login')
                         .respond(404,'Unable to find user.');
-                    c6Auth.login('userX','foobar').then(successSpy,failureSpy);
+                    auth.login('userX','foobar').then(successSpy,failureSpy);
                     $httpBackend.flush();
                     expect(successSpy).not.toHaveBeenCalled();
                     expect(failureSpy).toHaveBeenCalledWith('Unable to find user.');
@@ -47,7 +59,7 @@
 
                 it('will reject promise if times out',function(){
                     $httpBackend.expectPOST('/api/auth/login').respond(200,{});
-                    c6Auth.login('userX','foobar').then(successSpy,failureSpy);
+                    auth.login('userX','foobar').then(successSpy,failureSpy);
                     $timeout.flush(60000);
                     expect(successSpy).not.toHaveBeenCalled();
                     expect(failureSpy).toHaveBeenCalledWith('Request timed out.');
@@ -60,12 +72,13 @@
                     successSpy = jasmine.createSpy('checkStatus.success');
                     failureSpy = jasmine.createSpy('checkStatus.failure');
                     spyOn($timeout,'cancel');
+                    c6UrlMaker.andReturn('/api/auth/status'); 
                 });
                 
                 it('will resolve promise if successfull',function(){
                     var mockUser = { id: 'userX' };
                     $httpBackend.expectGET('/api/auth/status').respond(200,mockUser);
-                    c6Auth.checkStatus().then(successSpy,failureSpy);
+                    auth.checkStatus().then(successSpy,failureSpy);
                     $httpBackend.flush();
                     expect(successSpy).toHaveBeenCalledWith(mockUser);
                     expect(failureSpy).not.toHaveBeenCalled();
@@ -75,7 +88,7 @@
                 it('will reject promise if not successful',function(){
                     $httpBackend.expectGET('/api/auth/status')
                         .respond(404,'Unable to find user.');
-                    c6Auth.checkStatus().then(successSpy,failureSpy);
+                    auth.checkStatus().then(successSpy,failureSpy);
                     $httpBackend.flush();
                     expect(successSpy).not.toHaveBeenCalled();
                     expect(failureSpy).toHaveBeenCalledWith('Unable to find user.');
@@ -84,7 +97,7 @@
 
                 it('will reject promise if times out',function(){
                     $httpBackend.expectGET('/api/auth/status').respond(200,{});
-                    c6Auth.checkStatus().then(successSpy,failureSpy);
+                    auth.checkStatus().then(successSpy,failureSpy);
                     $timeout.flush(60000);
                     expect(successSpy).not.toHaveBeenCalled();
                     expect(failureSpy).toHaveBeenCalledWith('Request timed out.');
@@ -97,11 +110,12 @@
                     successSpy = jasmine.createSpy('logout.success');
                     failureSpy = jasmine.createSpy('logout.failure');
                     spyOn($timeout,'cancel');
+                    c6UrlMaker.andReturn('/api/auth/logout'); 
                 });
                 
                 it('will resolve promise if successfull',function(){
                     $httpBackend.expectPOST('/api/auth/logout').respond(200,"Success");
-                    c6Auth.logout().then(successSpy,failureSpy);
+                    auth.logout().then(successSpy,failureSpy);
                     $httpBackend.flush();
                     expect(successSpy).toHaveBeenCalledWith("Success");
                     expect(failureSpy).not.toHaveBeenCalled();
@@ -111,7 +125,7 @@
                 it('will reject promise if not successfull',function(){
                     var mockErr = { error : 'Error processing logout' };
                     $httpBackend.expectPOST('/api/auth/logout').respond(500,mockErr);
-                    c6Auth.logout().then(successSpy,failureSpy);
+                    auth.logout().then(successSpy,failureSpy);
                     $httpBackend.flush();
                     expect(successSpy).not.toHaveBeenCalled();
                     expect(failureSpy).toHaveBeenCalledWith(mockErr.error);
@@ -120,7 +134,7 @@
 
                 it('will reject promise if times out',function(){
                     $httpBackend.expectPOST('/api/auth/logout').respond(200,{});
-                    c6Auth.logout().then(successSpy,failureSpy);
+                    auth.logout().then(successSpy,failureSpy);
                     $timeout.flush(60000);
                     expect(successSpy).not.toHaveBeenCalled();
                     expect(failureSpy).toHaveBeenCalledWith('Request timed out.');
@@ -128,40 +142,6 @@
             });
         });
 
-        describe('c6Auth Provider',function(){
-            
-            it('can configure the baseUrl', function(){
-                module('c6.glickm.services', ['c6AuthProvider', function(provider){
-                    provider.baseUrl = 'hoho';
-                }]);
-                inject(['$httpBackend','c6Auth', function($httpBackend,c6Auth){ 
-                    $httpBackend.expectPOST('hoho/auth/login').respond(200,{});
-                    c6Auth.login('userX','foobar');
-                    $httpBackend.flush();
-                }]);
-            });
-             
-            it('can configure the timeout', function(){
-                var timeoutSpy = jasmine.createSpy('$timeout');
-                timeoutSpy.cancel = jasmine.createSpy('$timeout.cancel');
-
-                module( 'c6.glickm.services', 
-                        ['c6AuthProvider', function(c6AuthProvider){ 
-                            c6AuthProvider.timeout = 10; 
-                        }],
-                        ['$provide',function($provide){
-                            $provide.decorator('$timeout', function() { 
-                                return timeoutSpy; 
-                            });
-                        }]
-                );
-                
-                inject(['c6Auth', function(c6Auth){ 
-                    c6Auth.login('userX','foobar');
-                    expect(timeoutSpy.mostRecentCall.args[1]).toEqual(10);
-                }]);
-            });
-        });
     });
 }());
 

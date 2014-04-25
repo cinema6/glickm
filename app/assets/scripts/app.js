@@ -68,6 +68,7 @@
         function($routeProvider,c6UrlMakerProvider){
             $routeProvider
             .when('/experience',{
+                controller      : 'ExperienceCtrl',
                 templateUrl     : c6UrlMakerProvider.makeUrl('views/experience.html')
             })
             .otherwise({
@@ -75,15 +76,11 @@
                 templateUrl     : c6UrlMakerProvider.makeUrl('views/login.html')
             });
         }])
-        .config(['c6AuthProvider', 'c6UrlMakerProvider',
-        function(c6AuthProvider, c6UrlMakerProvider){
-            c6AuthProvider.baseUrl = c6UrlMakerProvider.makeUrl('api','api');
-        }])
         .controller('AppController',
-            ['$scope', '$log', '$location', '$timeout','cinema6', 'gsap',
-                'c6LocalStorage', 'c6Auth',
-            function ( $scope ,  $log , $location,  $timeout, cinema6 , gsap,
-                c6LocalStorage, c6Auth ) {
+            ['$scope', '$log', '$location', '$timeout',
+                'c6LocalStorage', 'auth', 'content',
+            function ( $scope ,  $log , $location,  $timeout,
+                c6LocalStorage, auth, content ) {
             var self = this;
 
             $log = $log.context('AppCtrl');
@@ -93,18 +90,12 @@
             self.processUser = function(rec){
                 if (rec){
                     if (rec.loggedIn){ rec.loggedIn = new Date(rec.loggedIn); }
+                    if (rec.applications.length === 1){
+                        rec.currentApp = rec.applications[0];
+                    }
                 }
                 return rec;
             };
-
-            cinema6.init({
-                setup: function(appData) {
-                    self.experience = appData.experience;
-                    self.profile = appData.profile;
-
-                    gsap.TweenLite.ticker.useRAF(self.profile.raf);
-                }
-            });
 
             $scope.$on('$locationChangeStart',function(evt,newUrl,oldUrl){
                 $log.info('$location origin: ',window.location.origin);
@@ -115,11 +106,14 @@
                     $timeout(function(){
                         $location.path('/login').replace();
                     });
-                } else
-                if (isLogin && $scope.user){
-                    evt.preventDefault();
-                    $timeout(function(){
-                        $location.path('/experience').replace();
+                    return;
+                }
+                if ($scope.user && !$scope.application){
+                    $log.info('need to get exp');
+                    content.getExperience($scope.user.currentApp)
+                    .then(function(exp){
+                        $log.info('got exp:',exp);
+                        $scope.application = exp;
                     });
                 }
             });
@@ -142,12 +136,12 @@
             $scope.user = self.processUser(c6LocalStorage.get('user'));
 
             if ($scope.user){
-                c6Auth.checkStatus()
+                auth.checkStatus()
                 .then(function(user){
-                    $log.info('auth check passed: ',JSON.stringify(user,null,3));
+                    $log.info('auth check passed: ',user);
                     user.loggedIn  = $scope.user.loggedIn;
                     c6LocalStorage.set('user',user);
-                    $scope.user = user;
+                    $scope.user = self.processUser(user);
                     $location.path('/experience').replace();
                 },
                 function(err){

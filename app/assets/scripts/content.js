@@ -7,7 +7,7 @@
         function(c6UrlMaker,$http,$q,$timeout){
         this.getExperience = function(experienceId){
             var deferred = $q.defer(), deferredTimeout = $q.defer(), cancelTimeout,
-                expUrl = c6UrlMaker('/content/experience' + experienceId,'api');
+                expUrl = c6UrlMaker('content/experience/' + experienceId,'api');
 
             $http({
                 method       : 'GET',

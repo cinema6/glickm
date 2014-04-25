@@ -23,6 +23,7 @@
                     'scripts/app',
                     'scripts/auth',
                     'scripts/content',
+                    'scripts/experience',
                     'scripts/login',
                     'scripts/mockHttp',
                     'scripts/mockHttpDefs'
@@ -87,13 +88,13 @@
     } else {
         c6.kDebug = true;
         ga('create', 'UA-44457821-1', { 'cookieDomain' : 'none' });
-        c6.kApiUrl = '';
+        c6.kApiUrl = '/api';
     }
    
     c6.kHasKarma = false;
     c6.kLogFormats = c6.kDebug;
     c6.kLogLevels = (c6.kDebug) ? ['error','warn','log','info'] : [];
-    c6.kModDeps = ['ngAnimate','ngRoute','c6.ui', 'c6.log', 'c6.glickm.services'];
+    c6.kModDeps = ['ngAnimate','ngRoute','c6.ui', 'c6.log'];
 
     loadScriptsInOrder(libScripts, function() {
         var Modernizr = window.Modernizr;
