@@ -76,7 +76,7 @@
             .when('/experience',{
                 controller   : 'ExperienceCtrl',
                 controllerAs : 'ExperienceCtrl',
-                templateUrl  : c6UrlMakerProvider.makeUrl('views/experience.html'),
+                template     : '<c6-experience experience="experience"></c6-experience>',
                 resolve      : {
                     experience  :  getExperience
                 }
