@@ -1,6 +1,14 @@
 /* overall css stylesheet */
 html { height: 100%; width: 100%;}
 
+body {
+    height: 100%;
+}
+
+iframe {
+    border: 0px;
+}
+
 /* for centering things vertically */
 .valign-outer {
     display: table;
@@ -60,10 +68,13 @@ html { height: 100%; width: 100%;}
     }
 
 .logout-btn {
+    position: absolute;
+    right: 0px;
     padding: 12px;
     padding-left: 18px;
     padding-right: 18px;
-    margin: 8px;
+    margin-right: 28px;
+    margin-top: 12px;
     border: 0px none;
     height: 30px;
     cursor: pointer;

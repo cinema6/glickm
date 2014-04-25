@@ -21,7 +21,6 @@
         });
 
         this.registerExperience = function(experience, expWindow) {
-            $log.info('EXPWINDOW:',expWindow);
             var session = postMessage.createSession(expWindow);
 
             $log.info('SESSION:',session);
@@ -62,7 +61,7 @@
 
             $log.info('experience url:',url);
             var $iframe = angular.element(
-                '<iframe src="' + url + '" width="100%" height="800"></iframe>'
+                '<iframe src="' + url + '"width="100%" height="100%"></iframe>'
             );
             $iframe.on('load',function(){
                 $log.info('experiences is loaded!');
