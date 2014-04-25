@@ -75,7 +75,7 @@
     }
 
     c6.kBaseUrl = __C6_APP_BASE_URL__;
-    c6.kApiUrl = window.location.origin; //window.location.protocol + '://' + window.location.host;
+    c6.kApiUrl = window.location.origin;
 
     if ((window.location.host === 'portal.cinema6.com') ||
         (window.location.host === 'cinema6.com')) {
@@ -88,7 +88,7 @@
     } else {
         c6.kDebug = true;
         ga('create', 'UA-44457821-1', { 'cookieDomain' : 'none' });
-        c6.kApiUrl = '/api';
+        c6.kApiUrl = '';
     }
    
     c6.kHasKarma = false;
