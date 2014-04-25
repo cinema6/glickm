@@ -53,8 +53,8 @@
                 }
             });
 
-            if (window$.__c6MockHttp){
-                $provide.decorator('$http', ['$delegate', window$.__c6MockHttp]);
+            if (window$.c6HttpDecorator){
+                $provide.decorator('$http', ['$delegate', window$.c6HttpDecorator]);
             }
         
         }])

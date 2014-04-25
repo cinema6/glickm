@@ -20,11 +20,11 @@
                 ];
             } else {
                 return [
-                    'scripts/mockHttp',
-                    'scripts/mockHttpDefs',
                     'scripts/app',
                     'scripts/auth',
-                    'scripts/login'
+                    'scripts/login',
+                    'scripts/mockHttp',
+                    'scripts/mockHttpDefs'
                 ];
             }
         }()),

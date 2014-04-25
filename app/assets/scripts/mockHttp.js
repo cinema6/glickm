@@ -96,6 +96,7 @@
     var httpMock = new HttpMock();
 
     function httpDecorator($delegate) {
+        window$.console.warn('Using c6HttpDecorator!');
         var service = $delegate;
         $delegate = function(){
             var args = Array.prototype.slice.call(arguments,0);
@@ -107,6 +108,6 @@
         return $delegate;
     }
 
-    window$.__c6HttpMock = httpMock;
-    window$.__c6MockHttp = httpDecorator;
+    window$.c6HttpMocks         = httpMock;
+    window$.c6HttpDecorator     = httpDecorator;
 }(window));
