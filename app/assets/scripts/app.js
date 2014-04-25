@@ -62,7 +62,8 @@
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
             c6UrlMakerProvider.location(c6Defines.kCollateralUrl,'collateral');
-            c6UrlMakerProvider.location(c6Defines.kApiUrl + '/api','api');
+            c6UrlMakerProvider.location(c6Defines.kApiUrl ,'api');
+            c6UrlMakerProvider.location(c6Defines.kExpUrl ,'exp');
         }])
         .config(['$routeProvider','c6UrlMakerProvider',
         function($routeProvider,c6UrlMakerProvider){
@@ -74,6 +75,7 @@
             $routeProvider
             .when('/experience',{
                 controller   : 'ExperienceCtrl',
+                controllerAs : 'ExperienceCtrl',
                 templateUrl  : c6UrlMakerProvider.makeUrl('views/experience.html'),
                 resolve      : {
                     experience  :  getExperience

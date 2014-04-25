@@ -75,8 +75,8 @@
     }
 
     c6.kBaseUrl = __C6_APP_BASE_URL__;
-    c6.kApiUrl = window.location.origin;
-
+    c6.kApiUrl = window.location.origin + '/api';
+    c6.kExpUrl =  window.location.origin + '/experiences';
     if ((window.location.host === 'portal.cinema6.com') ||
         (window.location.host === 'cinema6.com')) {
         c6.kDebug = false;
@@ -88,9 +88,9 @@
     } else {
         c6.kDebug = true;
         ga('create', 'UA-44457821-1', { 'cookieDomain' : 'none' });
-        c6.kApiUrl = '';
+        c6.kApiUrl = '/api';
+        c6.kExpUrl = c6.kBaseUrl + '/experiences';
     }
-   
     c6.kHasKarma = false;
     c6.kLogFormats = c6.kDebug;
     c6.kLogLevels = (c6.kDebug) ? ['error','warn','log','info'] : [];
