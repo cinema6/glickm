@@ -66,34 +66,47 @@
         }])
         .config(['$routeProvider','c6UrlMakerProvider',
         function($routeProvider,c6UrlMakerProvider){
+            var getExperience = function(appData,content){
+                return content.getExperience(appData.app);
+            };
+            getExperience.$inject = ['appData','content'];
+
             $routeProvider
             .when('/experience',{
-                controller      : 'ExperienceCtrl',
-                templateUrl     : c6UrlMakerProvider.makeUrl('views/experience.html')
+                controller   : 'ExperienceCtrl',
+                templateUrl  : c6UrlMakerProvider.makeUrl('views/experience.html'),
+                resolve      : {
+                    experience  :  getExperience
+                }
             })
             .otherwise({
-                controller      : 'LoginCtrl',
-                templateUrl     : c6UrlMakerProvider.makeUrl('views/login.html')
+                controller   : 'LoginCtrl',
+                templateUrl  : c6UrlMakerProvider.makeUrl('views/login.html')
             });
         }])
+        .value('appData',{ user : null, app : null})
         .controller('AppController',
             ['$scope', '$log', '$location', '$timeout',
-                'c6LocalStorage', 'auth', 'content',
+                'c6LocalStorage', 'auth', 'content', 'appData',
             function ( $scope ,  $log , $location,  $timeout,
-                c6LocalStorage, auth, content ) {
+                c6LocalStorage, auth, content, appData) {
             var self = this;
-
             $log = $log.context('AppCtrl');
-
             $log.info('loaded.');
             
-            self.processUser = function(rec){
+            self.updateUser = function(rec, skipStore){
                 if (rec){
-                    if (rec.loggedIn){ rec.loggedIn = new Date(rec.loggedIn); }
                     if (rec.applications.length === 1){
                         rec.currentApp = rec.applications[0];
                     }
+                    if (!skipStore){
+                        c6LocalStorage.set('user',rec);
+                    }
+                } else {
+                    c6LocalStorage.remove('user');
                 }
+                appData.user = $scope.user = rec;
+                appData.app  = (rec) ? rec.currentApp : null;
                 return rec;
             };
 
@@ -108,46 +121,31 @@
                     });
                     return;
                 }
-                if ($scope.user && !$scope.application){
-                    $log.info('need to get exp');
-                    content.getExperience($scope.user.currentApp)
-                    .then(function(exp){
-                        $log.info('got exp:',exp);
-                        $scope.application = exp;
-                    });
-                }
             });
 
             $scope.$on('loginSuccess',function(evt,user){
                 $log.info('Login succeeded, new user:',user);
-                $scope.user = self.processUser(user);
-                user.loggedIn = new Date();
-                c6LocalStorage.set('user',user);
+                self.updateUser(user);
                 $location.path('/experience').replace();
             });
 
             $scope.$on('logout',function(){
                 $log.info('Logout user:',$scope.user);
-                $scope.user = null;
-                c6LocalStorage.remove('user');
+                self.updateUser(null);
                 $location.path('/login');
             });
                 
-            $scope.user = self.processUser(c6LocalStorage.get('user'));
-
+            self.updateUser(c6LocalStorage.get('user'),true);
             if ($scope.user){
                 auth.checkStatus()
                 .then(function(user){
                     $log.info('auth check passed: ',user);
-                    user.loggedIn  = $scope.user.loggedIn;
-                    c6LocalStorage.set('user',user);
-                    $scope.user = self.processUser(user);
+                    self.updateUser(user);
                     $location.path('/experience').replace();
                 },
                 function(err){
                     $log.info('auth check failed: ',err);
-                    $scope.user = null;
-                    c6LocalStorage.remove('user');
+                    self.updateUser(null);
                     $location.path('/login');
                 });
             }

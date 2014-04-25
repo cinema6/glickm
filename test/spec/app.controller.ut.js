@@ -21,9 +21,7 @@
                 mockUser = {
                     id: 1,
                     username: 'howard',
-                    applications: ['e1'],
-                    created:  '2013-02-03T12:23:24.345Z',
-                    loggedIn: '2014-02-14T09:30:30.123Z'
+                    applications: ['e1']
                 };
 
                 gsap = {
@@ -46,14 +44,6 @@
                 };
 
                 module('c6.ui', ['$provide', function($provide) {
-                    /*
-                    $provide.provider('c6UrlMaker', function(){
-                        this.location = jasmine.createSpy('urlMaker.location');
-                        this.makeUrl  = jasmine.createSpy('urlMaker.makeUrl');
-                        this.$get = jasmine.createSpy('urlMaker.get');
-                    });
-                    */
-
                     $provide.factory('c6LocalStorage', function(){
                         localStorage = {
                             set : jasmine.createSpy('localStorage.set'),
@@ -112,8 +102,6 @@
                     it('will be pulled from localstorage at initialization',function(){
                         expect(localStorage.get).toHaveBeenCalledWith('user');
                         expect($scope.user).toEqual(mockUser);
-                        expect(mockUser.loggedIn instanceof Date).toEqual(true);
-                        expect(mockUser.loggedIn.toISOString()).toEqual('2014-02-14T09:30:30.123Z');
                     });
 
                     it('will be updated when login succeeds',function(){
@@ -126,7 +114,6 @@
                         expect($scope.user).toEqual(mockUser);
                         $scope.$emit('loginSuccess',newUser);
                         expect($scope.user).toEqual(newUser);
-                        expect(newUser.loggedIn instanceof Date).toEqual(true);
                         expect(localStorage.set).toHaveBeenCalledWith('user',newUser);
                         expect($location.path).toHaveBeenCalledWith('/experience');
                     });
