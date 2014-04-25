@@ -22,6 +22,7 @@
                 return [
                     'scripts/app',
                     'scripts/auth',
+                    'scripts/content',
                     'scripts/login',
                     'scripts/mockHttp',
                     'scripts/mockHttpDefs'
