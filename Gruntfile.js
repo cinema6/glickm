@@ -44,6 +44,7 @@ module.exports = function(grunt) {
      *********************************************************************************************/
 
     grunt.registerTask('server', 'start a development server', [
+        'fixtures',
         'configureProxies:dev',
         'connect:dev',
         'open:server',

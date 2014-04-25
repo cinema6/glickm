@@ -4,8 +4,7 @@
 
     angular.module('c6.glickm', window$.c6.kModDeps)
         .constant('c6Defines', window$.c6)
-        .config(['$provide',
-        function( $provide ) {
+        .config(['$provide', function( $provide ) {
             var config = {
                 modernizr: 'Modernizr',
                 gsap: [
@@ -35,8 +34,7 @@
                     'SlowMo',
                     'SteppedEase',
                     'Strong'
-                ],
-                googleAnalytics: 'ga'
+                ]
             };
 
             angular.forEach(config, function(value, key) {
@@ -54,6 +52,11 @@
                     });
                 }
             });
+
+            if (window$.__c6MockHttp){
+                $provide.decorator('$http', ['$delegate', window$.__c6MockHttp]);
+            }
+        
         }])
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
@@ -77,8 +80,10 @@
             c6AuthProvider.baseUrl = c6UrlMakerProvider.makeUrl('api','api');
         }])
         .controller('AppController',
-            ['$scope', '$log', '$location', '$timeout','cinema6', 'gsap', 'c6LocalStorage', 'c6Auth',
-            function ( $scope ,  $log , $location,  $timeout, cinema6 ,  gsap, c6LocalStorage, c6Auth ) {
+            ['$scope', '$log', '$location', '$timeout','cinema6', 'gsap',
+                'c6LocalStorage', 'c6Auth',
+            function ( $scope ,  $log , $location,  $timeout, cinema6 , gsap,
+                c6LocalStorage, c6Auth ) {
             var self = this;
 
             $log = $log.context('AppCtrl');
@@ -104,10 +109,17 @@
             $scope.$on('$locationChangeStart',function(evt,newUrl,oldUrl){
                 $log.info('$location origin: ',window.location.origin);
                 $log.info('locationChange: %1 ===> %2', oldUrl, newUrl);
-                if ((!newUrl.match(/\/login/)) && (!$scope.user)){
+                var isLogin = !!newUrl.match(/\/login/);
+                if ((!isLogin) && (!$scope.user)){
                     evt.preventDefault();
                     $timeout(function(){
                         $location.path('/login').replace();
+                    });
+                } else
+                if (isLogin && $scope.user){
+                    evt.preventDefault();
+                    $timeout(function(){
+                        $location.path('/experience').replace();
                     });
                 }
             });
@@ -132,10 +144,11 @@
             if ($scope.user){
                 c6Auth.checkStatus()
                 .then(function(user){
-                    $log.info('auth check passed: ',user);
+                    $log.info('auth check passed: ',JSON.stringify(user,null,3));
                     user.loggedIn  = $scope.user.loggedIn;
                     c6LocalStorage.set('user',user);
                     $scope.user = user;
+                    $location.path('/experience').replace();
                 },
                 function(err){
                     $log.info('auth check failed: ',err);
