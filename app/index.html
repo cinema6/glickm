@@ -36,7 +36,7 @@
                     <div class="userPane__display">
                         Welcome, <a href="#" class="userPane__userName" title="elitedaily">elitedaily</a>
                     </div>
-                    <a href="#" class="userPane__avatar"><img src="http://lorempixel.com/44/44/" alt="elitedaily"></a>
+                    <div class="userPane__avatar">&nbsp;</div>
                     <nav class="userNav__group">
                         <button  type="button" 
                         class="userPane__settings ui__gear sprite--alpha">
@@ -45,10 +45,10 @@
                         
                         <ul class="userNav__child">
                             <li class="userNav__item">
-                                <button title="Account Settings">Account Settings</button>
+                                <button title="Account Settings" class="userNav__btn">Account Settings</button>
                             </li>
                             <li class="userNav__item">
-                                <button ng-click="logout()" title="Log Out">Log Out</button>
+                                <button ng-click="logout()" title="Log Out" class="userNav__btn">Log Out</button>
                             </li>
                         </ul>
                     </nav>
