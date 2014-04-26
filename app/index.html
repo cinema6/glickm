@@ -7,8 +7,9 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <link rel="stylesheet" href="assets/styles/main.css">
-
+        <link rel="stylesheet" href="assets/styles/c6chrome__main.css">
+        <script type="text/javascript" src="//use.typekit.net/xuz8gem.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
         <script type="text/javascript">
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -17,10 +18,54 @@
         </script>
     </head>
     <body>
-        <div ng-show="user" ng-controller="LoginCtrl">
-            <span class="logout-btn" ng-click="logout()">Logout</span>
+        <div class="mast__group">
+            <header class="mast container clearfix">
+                <nav class="mainNav">
+                    <ul class="mainNav__list clearfix">
+                        <li class="mainNav__item mainNav__c6BrandItem">
+                            <button c6-sref="manager" class="mainNav__c6Brand sprite--alpha">
+                                <span class="ir">Cinema6</span>
+                            </button>
+                        </li>
+                        <li class="mainNav__item">
+                            <a c6-sref="manager" class="mainNav__link" title="Dashboard">Dashboard</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="userPane__group clearfix" ng-show="user" ng-controller="LoginCtrl">
+                    <div class="userPane__display">
+                        Welcome, <a href="#" class="userPane__userName" title="elitedaily">elitedaily</a>
+                    </div>
+                    <a href="#" class="userPane__avatar"><img src="http://lorempixel.com/44/44/" alt="elitedaily"></a>
+                    <nav class="userNav__group">
+                        <button  type="button" 
+                        class="userPane__settings ui__gear sprite--alpha">
+                            <span class="ir">Settings</span>
+                        </button>
+                        
+                        <ul class="userNav__child">
+                            <li class="userNav__item">
+                                <button title="Account Settings">Account Settings</button>
+                            </li>
+                            <li class="userNav__item">
+                                <button ng-click="logout()" title="Log Out">Log Out</button>
+                            </li>
+                        </ul>
+                    </nav>
+                        
+                </div>
+            </header>
         </div>
-        <ng-view></ng-view>
+        
+        <div class="ui__frameHolder">
+            <ng-view></ng-view>
+        </div>
+        
+        <div class="footer__group">
+            <footer class="footer__main container">
+                &copy; Copyright 2014 Cinema6. All Rights Reserved.
+            </footer>
+        </div>
 
         <script data-main="assets/scripts/main" src="http://lib.cinema6.com/require/2.1.5/require.min.js"> </script>
     </body>
