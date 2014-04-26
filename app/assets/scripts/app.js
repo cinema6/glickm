@@ -66,12 +66,9 @@
             $log = $log.context('AppCtrl');
             $log.info('instantiated, scope=%1',$scope.$id);
 
-            $log.info('Initialize tracker with:',c6Defines.kTracker);
-            tracker.create(c6Defines.kTracker.accountId,c6Defines.kTracker.config);
-            
             self.updateUser = function(rec, skipStore){
                 if (rec){
-                    if (rec.applications.length === 1){
+                    if (rec.applications.length >= 1){
                         rec.currentApp = rec.applications[0];
                     }
                     if (!skipStore){
@@ -80,7 +77,7 @@
                 } else {
                     c6LocalStorage.remove('user');
                 }
-                appData.user = $scope.user = rec;
+                appData.user = $scope.user = (rec || null);
                 appData.app  = (rec) ? rec.currentApp : null;
                 return rec;
             };
@@ -91,7 +88,7 @@
                 if ((!isLogin) && (!$scope.user)){
                     evt.preventDefault();
                     $timeout(function(){
-                        $location.path('/login').replace();
+                        $location.path('/login');
                     });
                     return;
                 }
@@ -100,7 +97,7 @@
             $scope.$on('loginSuccess',function(evt,user){
                 $log.info('Login succeeded, new user:',user);
                 self.updateUser(user);
-                $location.path('/experience').replace();
+                $location.path('/experience');
             });
 
             $scope.$on('logout',function(){
@@ -112,11 +109,12 @@
             self.updateUser(c6LocalStorage.get('user'),true);
 
             if ($scope.user){
+                $log.info('checking authStatus');
                 auth.checkStatus()
                 .then(function(user){
                     $log.info('auth check passed: ',user);
                     self.updateUser(user);
-                    $location.path('/experience').replace();
+                    $location.path('/experience');
                 },
                 function(err){
                     $log.info('auth check failed: ',err);
@@ -124,6 +122,8 @@
                     $location.path('/login');
                 });
             }
-
+            
+            $log.info('Initialize tracker with:',c6Defines.kTracker);
+            tracker.create(c6Defines.kTracker.accountId,c6Defines.kTracker.config);
         }]);
 }(window));

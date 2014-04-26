@@ -3,25 +3,31 @@
 
     define(['app', 'templates'], function() {
         describe('AppController', function() {
-            var $rootScope,
+            var $location,
                 $log,
                 $q,
-                $location,
+                $rootScope,
                 $scope,
+                $timeout,
+                AppCtrl,
+                appData,
                 auth,
-                tracker,
                 c6Defines,
-                AppCtrl;
-
-            var localStorage,
+                createAppCtrl,
+                localStorage,
                 mockUser,
-                appData;
+                tracker;
 
             beforeEach(function() {
-                mockUser = {
-                    id: 1,
-                    username: 'howard',
-                    applications: ['e1']
+                appData = {
+                    user : null,
+                    app  : null
+                };
+
+                auth = {
+                    login       : jasmine.createSpy('auth.login'),
+                    logout      : jasmine.createSpy('auth.logout'),
+                    checkStatus : jasmine.createSpy('auth.checkStatus')
                 };
 
                 c6Defines = {
@@ -29,120 +35,280 @@
                         accountId : 'account1',
                         config    : 'auto'
                     }
-                },
-
-                appData = {
-                    experience: {
-                        img: {}
-                    },
-                    profile: {
-                        raf: {}
-                    }
                 };
 
-                module('c6.ui', ['$provide', function($provide) {
-                    $provide.factory('c6LocalStorage', function(){
-                        localStorage = {
-                            set : jasmine.createSpy('localStorage.set'),
-                            get : jasmine.createSpy('localStorage.get').andReturn(mockUser),
-                            remove : jasmine.createSpy('localStorage.remove')
-                        };
-                        return localStorage;
-                    });
+                localStorage = {
+                    set : jasmine.createSpy('localStorage.set'),
+                    get : jasmine.createSpy('localStorage.get'),
+                    remove : jasmine.createSpy('localStorage.remove')
+                };
 
-                    $provide.factory('$location',function(){
-                        $location = {
-                            path : jasmine.createSpy('$location.path')
-                                .andReturn( { replace : function(){} })
-                        };
-
-                        return $location;
-                    });
-                }]);
+                $location = {
+                    path : jasmine.createSpy('$location.path')
+                };
+                
+                tracker = {
+                    create   :  jasmine.createSpy('tracker.create'),
+                    send     :  jasmine.createSpy('tracker.send'),
+                    pageview :  jasmine.createSpy('tracker.pageview')
+                };
+                
 
                 module('c6.glickm');
 
                 inject(function($injector, $controller, c6EventEmitter) {
-                    $rootScope = $injector.get('$rootScope');
                     $log       = $injector.get('$log');
                     $q         = $injector.get('$q');
+                    $rootScope = $injector.get('$rootScope');
+                    $timeout   = $injector.get('$timeout');
                   
-                    tracker = {
-                        create   :  jasmine.createSpy('tracker.create'),
-                        send     :  jasmine.createSpy('tracker.send'),
-                        pageview :  jasmine.createSpy('tracker.pageview')
-                    };
+                    auth.deferred = $q.defer();
+                    auth.checkStatus.andReturn(auth.deferred.promise);
 
                     $log.context = function(){ return $log; }
-                    auth = {
-                        login       : jasmine.createSpy('auth.login'),
-                        logout      : jasmine.createSpy('auth.logout'),
-                        checkStatus : jasmine.createSpy('auth.checkStatus'),
-                        promise     : $q.defer().promise
-                    };
-
-                    auth.checkStatus.andReturn(auth.promise);
 
                     $scope = $rootScope.$new();
-                    AppCtrl = $controller('AppController', {
-                        $scope: $scope,
-                        $log: $log,
-                        auth: auth,
-                        tracker: tracker,
-                        c6Defines : c6Defines
+                    spyOn($scope,'$on').andCallFake(function(e,h){
+                        if (!$scope._on){
+                            $scope._on = {};
+                        }
+                        $scope._on[e] = h;
                     });
 
+                    createAppCtrl = function(){
+                        AppCtrl = $controller('AppController', {
+                            $location      : $location,
+                            $log           : $log,
+                            $scope         : $scope,
+                            appData        : appData,
+                            auth           : auth,
+                            c6Defines      : c6Defines,
+                            c6LocalStorage : localStorage,
+                            tracker        : tracker
+                        });
+                    };
                 });
             });
 
-            it('should exist',function() {
-                expect(AppCtrl).toBeDefined();
-            });
+            describe('initialization',function(){
 
-            describe('$scope.user', function(){
-                describe('setting and unsetting',function(){
-                    it('will be pulled from localstorage at initialization',function(){
-                        expect(localStorage.get).toHaveBeenCalledWith('user');
-                        expect($scope.user).toEqual(mockUser);
+                it('should exist',function() {
+                    createAppCtrl();
+                    expect(AppCtrl).toBeDefined();
+                });
+
+                it('should attempt to get a user from local storage',function(){
+                    createAppCtrl();
+                    expect(localStorage.get).toHaveBeenCalledWith('user'); 
+                });
+
+                it('should create the tracker',function(){
+                    createAppCtrl();
+                    expect(tracker.create).toHaveBeenCalled(); 
+                });
+
+                describe('checkAuthStatus',function(){
+                    beforeEach(function(){
+                        mockUser = {
+                            id : 'user1',
+                            applications : ['app1','app2','app3']
+                        }
+                        localStorage.get.andReturn(mockUser);
+                        createAppCtrl();
                     });
 
-                    it('will be updated when login succeeds',function(){
-                        var newUser = { 
-                            id : 2, 
-                            applications: ['e2'],
-                            username: 'fudgey',
-                            created:  '2013-03-11T19:23:24.345Z' 
-                        };
-                        expect($scope.user).toEqual(mockUser);
-                        $scope.$emit('loginSuccess',newUser);
-                        expect($scope.user).toEqual(newUser);
-                        expect(localStorage.set).toHaveBeenCalledWith('user',newUser);
+                    it('should be checked if a user is found in storage',function(){
+                        expect($scope.user).toBe(mockUser);
+                        expect(appData.user).toBe(mockUser);
+                        expect(auth.checkStatus).toHaveBeenCalled();
+                    });
+
+                    it('success should update user and move to experience',function(){
+                        var newUser = { id : 'new'};
+                        spyOn(AppCtrl,'updateUser');
+                        auth.deferred.resolve(newUser);
+                        $scope.$apply();
+                        expect(AppCtrl.updateUser).toHaveBeenCalledWith(newUser);
                         expect($location.path).toHaveBeenCalledWith('/experience');
                     });
 
-                    it('will be cleared when logout occurs',function(){
-                        expect($scope.user).toEqual(mockUser);
-                        $scope.$emit('logout');
-                        expect($scope.user).toBeNull();
-                        expect(localStorage.remove).toHaveBeenCalledWith('user');
+                    it('failure should update user to null and move to login',function(){
+                        spyOn(AppCtrl,'updateUser');
+                        auth.deferred.reject({});
+                        $scope.$apply();
+                        expect(AppCtrl.updateUser).toHaveBeenCalledWith(null);
                         expect($location.path).toHaveBeenCalledWith('/login');
                     });
                 });
+            });
 
-                describe('processUser',function(){
 
-                    it('will convert date strings into date objects',function(){
-                        var mockUser = {
-                            id : 'abc',
-                            created: '2013-01-02T12:23:22.123Z'
+            describe('updateUser',function(){
+                beforeEach(function(){
+                    createAppCtrl();
+                });
+
+                describe('with user === null',function(){
+                    it('will remove user from localstorage',function(){
+                        AppCtrl.updateUser(null);
+                        expect(localStorage.remove).toHaveBeenCalledWith('user');
+                    });
+                    
+                    it('will set $scope.user = null',function(){
+                        AppCtrl.updateUser(null);
+                        expect($scope.user).toBeNull();
+                    });
+                    
+                    it('will set appData.user = null, appData.app = null',function(){
+                        AppCtrl.updateUser(null);
+                        expect(appData.user).toBeNull();
+                        expect(appData.app).toBeNull();
+                    });
+                });
+                
+                describe('with user === undefined',function(){
+                    it('will remove user from localstorage',function(){
+                        AppCtrl.updateUser(undefined);
+                        expect(localStorage.remove).toHaveBeenCalledWith('user');
+                    });
+                    
+                    it('will set $scope.user = null',function(){
+                        AppCtrl.updateUser(undefined);
+                        expect($scope.user).toBeNull();
+                    });
+                    
+                    it('will set appData.user = null, appData.app = null',function(){
+                        AppCtrl.updateUser(undefined);
+                        expect(appData.user).toBeNull();
+                        expect(appData.app).toBeNull();
+                    });
+                });
+
+                describe('with user === user', function(){
+                    beforeEach(function(){
+                        mockUser = {
+                            id           : 'howard1',
+                            applications : [ 'e1' ]
                         };
+                    });
 
+                    it('will add user to localstorage',function(){
+                        AppCtrl.updateUser(mockUser);
+                        expect(localStorage.set).toHaveBeenCalledWith('user',mockUser);
+                    });
 
+                    it('will set $scope.user to new user',function(){
+                        $scope.user = null;
+                        AppCtrl.updateUser(mockUser);
+                        expect($scope.user).toBe(mockUser);
+                    });
+
+                    it('will set currentApp with first app if it has any',function(){
+                        mockUser.applications = ['app1','app2'];
+                        AppCtrl.updateUser(mockUser);
+                        expect(mockUser.currentApp).toEqual('app1');
+                    });
+
+                    it('will set userData based on user settings',function(){
+                        appData.user = null;
+                        appData.app = null;
+                        AppCtrl.updateUser(mockUser);
+                        expect(appData.user).toBe(mockUser);
+                        expect(appData.app).toEqual('e1');
                     });
 
                 });
             });
 
+            describe('$scope.$on($locationChangeStart)',function(){
+                var mockEvent, $locationChangeStart;
+                beforeEach(function(){
+                    mockUser = {
+                        id : 'user',
+                        applications : [ 'app1' ]
+                    };
+                    mockEvent = {
+                        preventDefault : jasmine.createSpy('event.preventDefault')
+                    };
+
+                    createAppCtrl();
+
+                    $locationChangeStart = $scope._on['$locationChangeStart'];
+                });
+
+                it('should have a listener',function(){
+                    expect($locationChangeStart).toBeDefined();
+                });
+
+                it('url === /experience with $scope.users set',function(){
+                    $scope.user = mockUser;
+                    $locationChangeStart(mockEvent,'/experience',null);
+                    expect(mockEvent.preventDefault).not.toHaveBeenCalled();
+                });
+
+                it('url === /experience with $scope.users not set',function(){
+                    $scope.user = null;
+                    $locationChangeStart(mockEvent,'/experience',null);
+                    $timeout.flush();
+                    expect(mockEvent.preventDefault).toHaveBeenCalled();
+                    expect($location.path).toHaveBeenCalledWith('/login');
+                });
+
+            });
+            
+            describe('$scope.$on(loginSuccess)',function(){
+                var mockEvent, loginSuccess;
+                beforeEach(function(){
+                    mockUser = {
+                        id : 'user',
+                        applications : [ 'app1' ]
+                    };
+                    mockEvent = {
+                        preventDefault : jasmine.createSpy('event.preventDefault')
+                    };
+
+                    createAppCtrl();
+
+                    spyOn(AppCtrl,'updateUser');
+
+                    loginSuccess = $scope._on['loginSuccess'];
+                });
+
+                it('should have a listener',function(){
+                    expect(loginSuccess).toBeDefined();
+                });
+
+                it('should trigger a user update',function(){
+                    loginSuccess(mockEvent,mockUser);
+                    expect(AppCtrl.updateUser).toHaveBeenCalledWith(mockUser);
+                    expect($location.path).toHaveBeenCalledWith('/experience');
+                });
+            });
+            
+            describe('$scope.$on(logout)',function(){
+                var mockEvent, logout;
+                beforeEach(function(){
+                    mockEvent = {
+                        preventDefault : jasmine.createSpy('event.preventDefault')
+                    };
+
+                    createAppCtrl();
+
+                    spyOn(AppCtrl,'updateUser');
+
+                    logout = $scope._on['logout'];
+                });
+
+                it('should have a listener',function(){
+                    expect(logout).toBeDefined();
+                });
+
+                it('should trigger a user update',function(){
+                    logout(mockEvent);
+                    expect(AppCtrl.updateUser).toHaveBeenCalledWith(null);
+                    expect($location.path).toHaveBeenCalledWith('/login');
+                });
+            });
         });
     });
 }());
