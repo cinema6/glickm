@@ -4,7 +4,7 @@
     body {
         font-family: 'museo-sans', Arial, Helvetica, sans-serif; 
         font-size: 100%; font-weight:300; line-height: 1.5;
-        background:#fff; margin:0; color:#646464;
+        background:#eee; margin:0; color:#646464;
     }
     ::-moz-selection {
         background: #e900a4; text-shadow: none; color:#fff;
