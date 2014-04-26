@@ -268,28 +268,3 @@
         width:100%;
         position:absolute; bottom:0; z-index:1;
     }
-    
-    .login-input, .login-input:focus {
-        padding:5px; 
-        border:2px solid #28f; 
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
-        margin-bottom: 10px;
-    }
-
-    .login-form [type=submit] {
-        border: 0px none;
-        height: 30px;
-        width: 100px;
-        cursor: pointer;
-        background-color: #28f;
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
-    }
-
-    .login-error {
-        height: 40px;
-        margin-bottom: 0px;
-        color: red;
-        text-align: center;
-    }
