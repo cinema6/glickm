@@ -18,3 +18,4 @@ dist/
 .vagrant/
 Berksfile.lock
 reports/
+app/assets/mock/experiences
