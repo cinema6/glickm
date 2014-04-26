@@ -5,7 +5,7 @@
     angular.module('c6.glickm')
     .controller('LoginCtrl',['$log','$scope','auth', function($log,$scope,auth){
         $log = $log.context('LoginCtrl');
-        $log.info('instantiated');
+        $log.info('instantiated, scope=%1',$scope.$id);
         $scope.username = '';
         $scope.password = '';
         $scope.loginError    = '';

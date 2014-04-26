@@ -9,12 +9,12 @@
                 $location,
                 $scope,
                 auth,
+                tracker,
+                c6Defines,
                 AppCtrl;
 
             var localStorage,
                 mockUser,
-                gsap,
-                googleAnalytics,
                 appData;
 
             beforeEach(function() {
@@ -24,15 +24,12 @@
                     applications: ['e1']
                 };
 
-                gsap = {
-                    TweenLite: {
-                        ticker: {
-                            useRAF: jasmine.createSpy('gsap.TweenLite.ticker.useRAF()')
-                        }
+                c6Defines = {
+                    kTracker : {
+                        accountId : 'account1',
+                        config    : 'auto'
                     }
-                };
-
-                googleAnalytics = jasmine.createSpy('googleAnalytics');
+                },
 
                 appData = {
                     experience: {
@@ -63,16 +60,19 @@
                     });
                 }]);
 
-                module('c6.glickm', function($provide) {
-                    $provide.value('gsap', gsap);
-                    $provide.value('googleAnalytics', googleAnalytics);
-                });
+                module('c6.glickm');
 
                 inject(function($injector, $controller, c6EventEmitter) {
                     $rootScope = $injector.get('$rootScope');
                     $log       = $injector.get('$log');
                     $q         = $injector.get('$q');
-                    
+                  
+                    tracker = {
+                        create   :  jasmine.createSpy('tracker.create'),
+                        send     :  jasmine.createSpy('tracker.send'),
+                        pageview :  jasmine.createSpy('tracker.pageview')
+                    };
+
                     $log.context = function(){ return $log; }
                     auth = {
                         login       : jasmine.createSpy('auth.login'),
@@ -87,7 +87,9 @@
                     AppCtrl = $controller('AppController', {
                         $scope: $scope,
                         $log: $log,
-                        auth: auth
+                        auth: auth,
+                        tracker: tracker,
+                        c6Defines : c6Defines
                     });
 
                 });

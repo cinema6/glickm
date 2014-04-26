@@ -2,19 +2,43 @@
     /*jshint -W080 */
     'use strict';
 
-    var __C6_BUILD_VERSION__ = window.__C6_BUILD_VERSION__ = undefined,
-        __C6_APP_BASE_URL__ = window.__C6_APP_BASE_URL__ = __C6_BUILD_VERSION__ || 'assets',
-        c6 = window.c6 = (window.c6 || {});
+    var c6 = window.c6;
+    
+    c6.kApiUrl   = window.location.origin + '/api';          // rest api
+    c6.kExpUrl   = window.location.origin + '/experiences';  // apss to set in exp iframe
+    c6.kDebug    = false;
+    c6.kTracker  = {
+        accountId : 'UA-44457821-2',
+        config    : 'auto'
+    };
+
+    if ((window.location.host === 'portal.cinema6.com') ||
+        (window.location.host === 'cinema6.com')) {
+        // This is production
+    } else
+    if (window.location.host === 'staging.cinema6.com')  {
+        c6.kDebug = true; // Keep logging turned on
+    } else {
+        c6.kDebug = true;
+        c6.kTracker.accountId = 'UA-44457821-1';
+        c6.kTracker.config    = { 'cookieDomain' : 'none' };
+        c6.kApiUrl = '/api';
+        c6.kExpUrl = c6.kBaseUrl + '/experiences';
+    }
+    c6.kHasKarma   = false;
+    c6.kLogFormats = c6.kDebug;
+    c6.kLogLevels  = c6.kDebug ? ['error','warn','log','info'] : [];
+    c6.kModDeps    = ['ngAnimate','ngRoute','c6.ui', 'c6.log'];
 
     require.config({
-        baseUrl:  __C6_APP_BASE_URL__
+        baseUrl:  c6.kBaseUrl
     });
 
     var libUrl = function(url) {
             return 'http://lib.cinema6.com/' + url;
         },
         appScripts = (function() {
-            if (__C6_BUILD_VERSION__) {
+            if (c6.kIsBuild) {
                 return [
                     'scripts/c6app.min'
                 ];
@@ -25,18 +49,17 @@
                     'scripts/content',
                     'scripts/experience',
                     'scripts/login',
+                    'scripts/tracker',
                     'scripts/mockHttp',
                     'scripts/mockHttpDefs'
                 ];
             }
         }()),
         libScripts = (function() {
-            if (__C6_BUILD_VERSION__) {
+            if (c6.kIsBuild) {
                 return [
                     libUrl('modernizr/modernizr.custom.71747.js'),
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.min.js'),
-                    libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
-                    libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-route.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.min.js'),
@@ -47,8 +70,6 @@
                 return [
                     libUrl('modernizr/modernizr.custom.71747.js'),
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.js'),
-                    libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
-                    libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-route.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.js'),
@@ -74,42 +95,17 @@
         done();
     }
 
-    c6.kBaseUrl = __C6_APP_BASE_URL__;
-    c6.kApiUrl = window.location.origin + '/api';
-    c6.kExpUrl =  window.location.origin + '/experiences';
-    if ((window.location.host === 'portal.cinema6.com') ||
-        (window.location.host === 'cinema6.com')) {
-        c6.kDebug = false;
-        ga('create', 'UA-44457821-2', 'cinema6.com');
-    } else
-    if (window.location.host === 'staging.cinema6.com')  {
-        c6.kDebug = true;
-        ga('create', 'UA-44457821-2', 'staging.cinema6.com');
-    } else {
-        c6.kDebug = true;
-        ga('create', 'UA-44457821-1', { 'cookieDomain' : 'none' });
-        c6.kApiUrl = '/api';
-        c6.kExpUrl = c6.kBaseUrl + '/experiences';
-    }
-    c6.kHasKarma = false;
-    c6.kLogFormats = c6.kDebug;
-    c6.kLogLevels = (c6.kDebug) ? ['error','warn','log','info'] : [];
-    c6.kModDeps = ['ngAnimate','ngRoute','c6.ui', 'c6.log'];
-
     loadScriptsInOrder(libScripts, function() {
         var Modernizr = window.Modernizr;
 
         Modernizr.load({
             test: Modernizr.touch,
             yep: [
-                __C6_BUILD_VERSION__ ?
+                c6.kIsBuild ?
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.min.js') :
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.js')
             ],
-            nope: [
-                libUrl('c6ui/v2.4.0-0-gb74a3dd/css/c6uilib--hover.min.css'),
-                __C6_APP_BASE_URL__ + '/styles/main--hover.css'
-            ],
+            //nope: [ ],
             complete: function() {
                 if (Modernizr.touch) { c6.kModDeps.push('ngTouch'); }
 

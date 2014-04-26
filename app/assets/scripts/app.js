@@ -6,48 +6,18 @@
         .constant('c6Defines', window$.c6)
         .config(['$provide', function( $provide ) {
             var config = {
-                modernizr: 'Modernizr',
-                gsap: [
-                    'TimelineLite',
-                    'TimelineMax',
-                    'TweenLite',
-                    'TweenMax',
-                    'Back',
-                    'Bounce',
-                    'Circ',
-                    'Cubic',
-                    'Ease',
-                    'EaseLookup',
-                    'Elastic',
-                    'Expo',
-                    'Linear',
-                    'Power0',
-                    'Power1',
-                    'Power2',
-                    'Power3',
-                    'Power4',
-                    'Quad',
-                    'Quart',
-                    'Quint',
-                    'RoughEase',
-                    'Sine',
-                    'SlowMo',
-                    'SteppedEase',
-                    'Strong'
-                ]
+                modernizr: 'Modernizr'
             };
 
             angular.forEach(config, function(value, key) {
                 if (angular.isString(value)) {
-                    $provide.value(key, window[value]);
+                    $provide.value(key, window$[value]);
                 } else if (angular.isArray(value)) {
                     $provide.factory(key, function() {
                         var service = {};
-
                         angular.forEach(value, function(global) {
-                            service[global] = window[global];
+                            service[global] = window$[global];
                         });
-
                         return service;
                     });
                 }
@@ -60,10 +30,9 @@
         }])
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
-            c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
-            c6UrlMakerProvider.location(c6Defines.kCollateralUrl,'collateral');
-            c6UrlMakerProvider.location(c6Defines.kApiUrl ,'api');
-            c6UrlMakerProvider.location(c6Defines.kExpUrl ,'exp');
+            c6UrlMakerProvider.location(c6Defines.kBaseUrl,         'default');
+            c6UrlMakerProvider.location(c6Defines.kApiUrl,          'api');
+            c6UrlMakerProvider.location(c6Defines.kExpUrl,          'exp');
         }])
         .config(['$routeProvider','c6UrlMakerProvider',
         function($routeProvider,c6UrlMakerProvider){
@@ -88,13 +57,17 @@
         }])
         .value('appData',{ user : null, app : null})
         .controller('AppController',
-            ['$scope', '$log', '$location', '$timeout',
-                'c6LocalStorage', 'auth', 'content', 'appData',
-            function ( $scope ,  $log , $location,  $timeout,
-                c6LocalStorage, auth, content, appData) {
+            [   '$scope', '$log', '$location', '$timeout',
+                'c6Defines','c6LocalStorage', 'auth', 'content', 'appData', 'tracker',
+            function (  $scope ,  $log , $location,  $timeout,
+                        c6Defines,c6LocalStorage, auth, content, appData, tracker) {
+
             var self = this;
             $log = $log.context('AppCtrl');
-            $log.info('loaded.');
+            $log.info('instantiated, scope=%1',$scope.$id);
+
+            $log.info('Initialize tracker with:',c6Defines.kTracker);
+            tracker.create(c6Defines.kTracker.accountId,c6Defines.kTracker.config);
             
             self.updateUser = function(rec, skipStore){
                 if (rec){
@@ -113,7 +86,6 @@
             };
 
             $scope.$on('$locationChangeStart',function(evt,newUrl,oldUrl){
-                $log.info('$location origin: ',window.location.origin);
                 $log.info('locationChange: %1 ===> %2', oldUrl, newUrl);
                 var isLogin = !!newUrl.match(/\/login/);
                 if ((!isLogin) && (!$scope.user)){
@@ -138,6 +110,7 @@
             });
                 
             self.updateUser(c6LocalStorage.get('user'),true);
+
             if ($scope.user){
                 auth.checkStatus()
                 .then(function(user){

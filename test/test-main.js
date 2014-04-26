@@ -90,6 +90,9 @@
                 },
                 login: {
                     deps: ['app']
+                },
+                tracker: {
+                    deps: ['app']
                 }
             },
 
