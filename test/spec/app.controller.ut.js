@@ -56,14 +56,16 @@
 
                 module('c6.glickm');
 
-                inject(function($injector, $controller, c6EventEmitter) {
+                inject(function($injector, $controller ) {
                     $log       = $injector.get('$log');
                     $q         = $injector.get('$q');
                     $rootScope = $injector.get('$rootScope');
                     $timeout   = $injector.get('$timeout');
                   
-                    auth.deferred = $q.defer();
-                    auth.checkStatus.andReturn(auth.deferred.promise);
+                    auth.checkStatus.deferred = $q.defer();
+                    auth.checkStatus.andReturn(auth.checkStatus.deferred.promise);
+                    auth.logout.deferred = $q.defer();
+                    auth.logout.andReturn(auth.logout.deferred.promise);
 
                     $log.context = function(){ return $log; }
 
@@ -97,6 +99,11 @@
                     expect(AppCtrl).toBeDefined();
                 });
 
+                it('should be on the scope',function(){
+                    createAppCtrl();
+                    expect($scope.AppCtrl).toBe(AppCtrl);
+                });
+
                 it('should attempt to get a user from local storage',function(){
                     createAppCtrl();
                     expect(localStorage.get).toHaveBeenCalledWith('user'); 
@@ -126,7 +133,7 @@
                     it('success should update user and move to experience',function(){
                         var newUser = { id : 'new'};
                         spyOn(AppCtrl,'updateUser');
-                        auth.deferred.resolve(newUser);
+                        auth.checkStatus.deferred.resolve(newUser);
                         $scope.$apply();
                         expect(AppCtrl.updateUser).toHaveBeenCalledWith(newUser);
                         expect($location.path).toHaveBeenCalledWith('/experience');
@@ -134,7 +141,7 @@
 
                     it('failure should update user to null and move to login',function(){
                         spyOn(AppCtrl,'updateUser');
-                        auth.deferred.reject({});
+                        auth.checkStatus.deferred.reject({});
                         $scope.$apply();
                         expect(AppCtrl.updateUser).toHaveBeenCalledWith(null);
                         expect($location.path).toHaveBeenCalledWith('/login');
@@ -183,7 +190,7 @@
                         expect(appData.app).toBeNull();
                     });
                 });
-
+                
                 describe('with user === user', function(){
                     beforeEach(function(){
                         mockUser = {
@@ -217,6 +224,31 @@
                         expect(appData.app).toEqual('e1');
                     });
 
+                });
+            });
+
+            describe('logout',function(){
+                var mockEvent, logout;
+                beforeEach(function(){
+                    createAppCtrl();
+
+                    spyOn(AppCtrl,'updateUser');
+                });
+
+                it('should trigger a user update and route to /login if resolves',function(){
+                    AppCtrl.logout();
+                    auth.logout.deferred.resolve();
+                    $scope.$apply();
+                    expect(AppCtrl.updateUser).toHaveBeenCalledWith(null);
+                    expect($location.path).toHaveBeenCalledWith('/login');
+                });
+                
+                it('should trigger a user update and route to /login if rejects',function(){
+                    AppCtrl.logout();
+                    auth.logout.deferred.reject();
+                    $scope.$apply();
+                    expect(AppCtrl.updateUser).toHaveBeenCalledWith(null);
+                    expect($location.path).toHaveBeenCalledWith('/login');
                 });
             });
 
@@ -285,30 +317,6 @@
                 });
             });
             
-            describe('$scope.$on(logout)',function(){
-                var mockEvent, logout;
-                beforeEach(function(){
-                    mockEvent = {
-                        preventDefault : jasmine.createSpy('event.preventDefault')
-                    };
-
-                    createAppCtrl();
-
-                    spyOn(AppCtrl,'updateUser');
-
-                    logout = $scope._on['logout'];
-                });
-
-                it('should have a listener',function(){
-                    expect(logout).toBeDefined();
-                });
-
-                it('should trigger a user update',function(){
-                    logout(mockEvent);
-                    expect(AppCtrl.updateUser).toHaveBeenCalledWith(null);
-                    expect($location.path).toHaveBeenCalledWith('/login');
-                });
-            });
         });
     });
 }());

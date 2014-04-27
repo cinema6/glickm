@@ -32,7 +32,7 @@
                         </li>
                     </ul>
                 </nav>
-                <div class="userPane__group clearfix" ng-show="user" ng-controller="LoginCtrl">
+                <div class="userPane__group clearfix" ng-show="user" >
                     <div class="userPane__display">
                         Welcome, <a href="#" class="userPane__userName" title="elitedaily">elitedaily</a>
                     </div>
@@ -48,7 +48,7 @@
                                 <button title="Account Settings" class="userNav__btn">Account Settings</button>
                             </li>
                             <li class="userNav__item">
-                                <button ng-click="logout()" title="Log Out" class="userNav__btn">Log Out</button>
+                                <button ng-click="AppCtrl.logout()" title="Log Out" class="userNav__btn">Log Out</button>
                             </li>
                         </ul>
                     </nav>

@@ -91,6 +91,9 @@
                 login: {
                     deps: ['app']
                 },
+                experience: {
+                    deps: ['app']
+                },
                 tracker: {
                     deps: ['app']
                 }

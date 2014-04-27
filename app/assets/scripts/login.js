@@ -3,7 +3,8 @@
     'use strict';
 
     angular.module('c6.glickm')
-    .controller('LoginCtrl',['$log','$scope','auth', function($log,$scope,auth){
+    .controller('LoginCtrl',['$log','$scope','auth', 'tracker',
+        function($log,$scope,auth,tracker){
         $log = $log.context('LoginCtrl');
         $log.info('instantiated, scope=%1',$scope.$id);
         $scope.username = '';
@@ -30,18 +31,8 @@
             });
         };
 
-        $scope.logout = function(){
-            $log.info('logging out');
-            auth.logout()
-            .then(function(data){
-                $log.info('success:',data);
-                $scope.$emit('logout');
-            })
-            .catch(function(err){
-                $log.error('error:',err);
-                $scope.$emit('logout');
-            });
-        };
+        tracker.pageview('/login','Cinema6 Portal');
+
     }]);
 }());
 

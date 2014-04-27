@@ -45,7 +45,7 @@
             .when('/experience',{
                 controller   : 'ExperienceCtrl',
                 controllerAs : 'ExperienceCtrl',
-                template     : '<c6-experience experience="experience"></c6-experience>',
+                template     : '<c6-experience></c6-experience>',
                 resolve      : {
                     experience  :  getExperience
                 }
@@ -66,6 +66,11 @@
             $log = $log.context('AppCtrl');
             $log.info('instantiated, scope=%1',$scope.$id);
 
+            $scope.AppCtrl = this;
+
+            /**
+             * Controller methods
+             */
             self.updateUser = function(rec, skipStore){
                 if (rec){
                     if (rec.applications.length >= 1){
@@ -81,7 +86,41 @@
                 appData.app  = (rec) ? rec.currentApp : null;
                 return rec;
             };
+            
+            self.logout = function(){
+                $log.info('logging out');
+                auth.logout()
+                ['finally'](function(result){
+                    $log.info('log out returns:',result);
+                    $log.info('Logout user:',$scope.user);
+                    self.updateUser(null);
+                    $location.path('/login');
+                });
+            };
 
+            /**
+             * Setup
+             */
+            self.updateUser(c6LocalStorage.get('user'),true);
+
+            if ($scope.user){
+                $log.info('checking authStatus');
+                auth.checkStatus()
+                .then(function(user){
+                    $log.info('auth check passed: ',user);
+                    self.updateUser(user);
+                    $location.path('/experience');
+                },
+                function(err){
+                    $log.info('auth check failed: ',err);
+                    self.updateUser(null);
+                    $location.path('/login');
+                });
+            }
+            
+            /**
+             * Event listeners
+             */
             $scope.$on('$locationChangeStart',function(evt,newUrl,oldUrl){
                 $log.info('locationChange: %1 ===> %2', oldUrl, newUrl);
                 var isLogin = !!newUrl.match(/\/login/);
@@ -100,29 +139,10 @@
                 $location.path('/experience');
             });
 
-            $scope.$on('logout',function(){
-                $log.info('Logout user:',$scope.user);
-                self.updateUser(null);
-                $location.path('/login');
-            });
-                
-            self.updateUser(c6LocalStorage.get('user'),true);
-
-            if ($scope.user){
-                $log.info('checking authStatus');
-                auth.checkStatus()
-                .then(function(user){
-                    $log.info('auth check passed: ',user);
-                    self.updateUser(user);
-                    $location.path('/experience');
-                },
-                function(err){
-                    $log.info('auth check failed: ',err);
-                    self.updateUser(null);
-                    $location.path('/login');
-                });
-            }
             
+            /**
+             * Setup our tracking
+             */
             $log.info('Initialize tracker with:',c6Defines.kTracker);
             tracker.create(c6Defines.kTracker.accountId,c6Defines.kTracker.config);
         }]);

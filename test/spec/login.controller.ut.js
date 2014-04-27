@@ -8,13 +8,17 @@
                 $log,
                 $q,
                 auth,
+                tracker,
                 LoginCtrl;
 
             beforeEach(function() {
 
                 auth = {
-                    login  : jasmine.createSpy('auth.login'),
-                    logout : jasmine.createSpy('auth.logout')
+                    login  : jasmine.createSpy('auth.login')
+                };
+                
+                tracker = {
+                    pageview :  jasmine.createSpy('tracker.pageview')
                 };
                 
                 module('c6.ui', ['$provide', function($provide) {
@@ -29,7 +33,7 @@
                     $provide.value('auth', auth);
                 });
 
-                inject(function($injector, $controller, c6EventEmitter) {
+                inject(function($injector, $controller ) {
                     $q          = $injector.get('$q');
                     $log        = $injector.get('$log');
                     $rootScope  = $injector.get('$rootScope');
@@ -40,11 +44,18 @@
                     LoginCtrl = $controller('LoginCtrl', {
                         $scope  : $scope,
                         $log    : $log,
-                        auth  : auth
+                        auth    : auth,
+                        tracker : tracker
                     });
                 });
             });
 
+            describe('tracking',function(){
+
+                it('will send a pageview when it loads',function(){
+                    expect(tracker.pageview).toHaveBeenCalledWith('/login','Cinema6 Portal');
+                });
+            });
 
             describe('login method',function(){
                 it('will emit loginSuccess upon success',function(){
@@ -108,26 +119,6 @@
                     $scope.$digest();
                     expect(auth.login).not.toHaveBeenCalled();
                     expect($scope.loginError).toEqual('Username and password required.');
-                });
-            });
-
-            describe('logout method',function(){
-                it('will emit logout event upon success',function(){
-                    auth.logout.andReturn($q.when('Success'));
-                    $scope.$emit = jasmine.createSpy('$scope.$emit');
-                    $scope.logout();
-                    $scope.$digest();
-                    expect(auth.logout).toHaveBeenCalled();
-                    expect($scope.$emit).toHaveBeenCalledWith('logout');
-                });
-
-                it('will emit logout event up success',function(){
-                    auth.logout.andReturn($q.reject('Failure'));
-                    $scope.$emit = jasmine.createSpy('$scope.$emit');
-                    $scope.logout();
-                    $scope.$digest();
-                    expect(auth.logout).toHaveBeenCalled();
-                    expect($scope.$emit).toHaveBeenCalledWith('logout');
                 });
             });
         });
