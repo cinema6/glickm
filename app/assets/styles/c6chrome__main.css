@@ -203,6 +203,60 @@
                         background:#eff9ff;
                     }
 
+/*  ==========================================================================
+    login styles
+    ========================================================================== */
+    .login__group {
+        position:absolute; top:50%; left:50%;
+        margin:-6.875em 0 0 -12.1875em;
+    }
+        .login__title {
+            font-size:0.875em; font-weight:300; text-align: center;
+            color:#949494;
+            margin:0 0 0.5em 0;
+        }
+        .login__form {
+            border:3px solid #ccc;
+            -webkit-border-radius: 5px; border-radius: 5px;
+            width: 21em; display: block;
+            padding: 1.5em;
+            background:white;
+        }
+            .login__label {
+                width:6rem; display: inline-block;
+                font-size:0.875em;
+            }
+            .login__input {
+                width:14em;
+                padding:0.25em; border:2px solid #b0b0b0;
+                -webkit-border-radius: 0.25em; border-radius: 0.25em;
+                font-size:1em;
+                background:#f4f4f4;
+                margin:0 0 0.5em;
+                -webkit-transition:all 0.5s; transition:all 0.5s;
+            }
+                .login__input:focus {
+                    border:2px solid #4a9cd1;
+                    background:#eff9ff;
+                }
+        .login__error {
+            text-align: left;
+            font-size:0.875em; font-weight:700;
+            margin:0 0 1rem 6.25rem;
+            color:#d61212;
+        }
+        .login__submitBtn {
+            margin:0 0 0 6.25rem; padding:0.6875rem 1.5rem 0.625rem 1.5rem; 
+            border:0; border-radius:0.25em;
+            font-size:1.125em; color:#fff; font-weight:700; line-height: 1;
+            background:#4a9cd1;
+            cursor:pointer;
+            -webkit-transition: background 0.5s; transition: background 0.5s;
+        }
+            .login__submitBtn:hover {
+                background:#13a2ff;
+            }
+
 
 /*  ==========================================================================
     footer
@@ -213,48 +267,4 @@
         background:#262626;
         width:100%;
         position:absolute; bottom:0; z-index:1;
-    }
-
-
-.login-form {
-    border: 1px solid #28f;
-    -webkit-border-radius: 20px;
-    border-radius: 20px;
-    width: 240px;
-    padding: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    background:white;
-}
-
-    .login-form * {
-        display: block;
-        width: 220px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .login-input, .login-input:focus {
-        padding:5px; 
-        border:2px solid #28f; 
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
-        margin-bottom: 10px;
-    }
-
-    .login-form [type=submit] {
-        border: 0px none;
-        height: 30px;
-        width: 100px;
-        cursor: pointer;
-        background-color: #28f;
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
-    }
-
-    .login-error {
-        height: 40px;
-        margin-bottom: 0px;
-        color: red;
-        text-align: center;
     }
