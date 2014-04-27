@@ -36,29 +36,6 @@
                 }
             ]
         },
-        'collateral-test': {
-            options: {
-                bucket: '<%= settings.s3.test.bucket %>'
-            },
-            upload: [
-                {
-                    src: '.tmp/collateral/**',
-                    rel: '.tmp/collateral/',
-                    dest: '<%= settings.s3.test.collateral %>',
-                    options: {
-                        CacheControl: 'max-age=31556926'
-                    }
-                },
-                {
-                    src: '<%= settings.collateralDir %>/**',
-                    rel: '<%= settings.collateralDir %>/',
-                    dest: '<%= settings.s3.test.collateral %>',
-                    options: {
-                        CacheControl: 'max-age=0'
-                    }
-                }
-            ]
-        },
         production: {
             options: {
                 bucket: '<%= settings.s3.production.bucket %>'
@@ -87,29 +64,7 @@
                     }
                 }
             ]
-        },
-        'collateral-production': {
-            options: {
-                bucket: '<%= settings.s3.production.bucket %>'
-            },
-            upload: [
-                {
-                    src: '.tmp/collateral/**',
-                    rel: '.tmp/collateral/',
-                    dest: '<%= settings.s3.production.collateral %>',
-                    options: {
-                        CacheControl: 'max-age=31556926'
-                    }
-                },
-                {
-                    src: '<%= settings.collateralDir %>/**',
-                    rel: '<%= settings.collateralDir %>/',
-                    dest: '<%= settings.s3.production.collateral %>',
-                    options: {
-                        CacheControl: 'max-age=0'
-                    }
-                }
-            ]
         }
+        
     };
 }());
