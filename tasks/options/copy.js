@@ -18,6 +18,8 @@
                     cwd: '<%= settings.appDir %>/assets',
                     src: [
                         '**',
+                        '!mocks/**',
+                        '!experiences/**',
                         '!views/**',
                         '!**/*.{js,css,html}'
                     ],

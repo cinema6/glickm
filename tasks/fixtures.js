@@ -9,7 +9,7 @@ module.exports = function(grunt) {
             exps.forEach(function(experience){
                 grunt.log.writelns('Write experience: ' + experience.id);
                 experience.appUriPrefix = 'app/index.html';
-                grunt.file.write('app/assets/mock/experiences/' +
+                grunt.file.write('app/assets/mocks/experiences/' +
                     experience.id + '.json',JSON.stringify(experience,null,3));
             });
         });
