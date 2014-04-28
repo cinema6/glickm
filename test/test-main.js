@@ -91,6 +91,9 @@
                 login: {
                     deps: ['app']
                 },
+                error: {
+                    deps: ['app']
+                },
                 experience: {
                     deps: ['app']
                 },
