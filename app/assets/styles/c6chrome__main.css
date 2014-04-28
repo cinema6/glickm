@@ -117,9 +117,6 @@
         background:#282b2c; color:#fff;
         position:absolute; z-index:1; top:0;
     }
-        .mast {
-            position: relative;
-        }
         .mainNav {
             float:left;
         }
@@ -143,21 +140,24 @@
                     border:0; padding:0;
                     cursor:pointer;
                 }
-        .mast__title {
-            font-size:1em; font-weight:300; text-align: center;
-            width:100%;
-            position:absolute; z-index: -1;
-            margin:1.1875em 0 0 0;
+        .mast__titleBox {
+            position: relative;
         }
-    @media screen and (max-width:620px) {
+            .mast__title {
+                font-size:1em; font-weight:300; text-align: center;
+                width:100%;
+                position:absolute; z-index: -1;
+                margin:1.1875em 0 0 0;
+            }
+    @media screen and (max-width:42em) {
         .mast__group {
             min-height:4.5em;
         }
         .mast__title {
-            margin:7px 0 0 0;
+            margin:0.4375em 0 0 0;
         }
         .mainNav__c6BrandItem {
-            padding:19px 0 0 0;
+            padding:1.1875em 0 0 0;
         }
     }
 
@@ -211,7 +211,7 @@
                 .userNav__btn {
                     background:white;
                     margin:0; padding:0.75rem 0.5rem; border:0;
-                    -webkit-transition: all 0.625s; transition: all 0.5s;
+                    -webkit-transition: all 0.5s; transition: all 0.5s;
                     width:9rem; 
                     font-size:0.875rem; line-height:1;
                     cursor:pointer;
@@ -219,12 +219,12 @@
                     .userNav__btn:hover {
                         background:#eff9ff;
                     }
-        @media screen and (max-width:620px) {
+        @media screen and (max-width:42em) {
             .userPane__display {
-                margin:31px 0 0 0;
+                margin:1.9375em 0 0 0;
             }
             .userNav__group {
-                margin:30px 0 0 0;
+                margin:1.875em 0 0 0;
             }
         }
 
@@ -281,6 +281,46 @@
             .login__submitBtn:hover {
                 background:#13a2ff;
             }
+
+
+/*  ==========================================================================
+    error styles
+    ========================================================================== */
+    .error__group {
+        margin:7.5em 0 0 0;
+    }
+        .error__copy {
+            float:left; width:32%;
+        }
+            .error__title {
+                margin:0;
+                font-size:3em; font-weight:100; color:#d51212;
+            }
+        .error__videoBox {
+            float:right; width:66%;
+        }
+            .error__videoBox p {
+                margin:0.5em 0;
+                font-size:0.875em;
+            }
+        .error__player {
+            width:100%; height:0;
+            position:relative;
+            padding:0 0 66.66% 0;
+        }
+            .error__iframe {
+                position: absolute;
+                width:100%; height:100%;
+            }
+    @media screen and (max-width:42em) {
+        .userPane__display {
+            margin:1.9375em 0 0 0;
+        }
+        .userNav__group {
+            margin:1.875em 0 0 0;
+        }
+    }
+
 
 
 /*  ==========================================================================
