@@ -62,18 +62,27 @@
 
         tracker.pageview('/' + experience.uri, (experience.title || experience.uri));
     }])
-    .directive('c6Experience',['$log','$timeout','c6UrlMaker',
-        function($log,$timeout,c6UrlMaker){
+    .directive('c6Experience',['$log','$timeout','c6UrlMaker','c6Defines',
+        function($log,$timeout,c6UrlMaker,c6Defines){
         $log = $log.context('c6Experience');
         function fnLink(scope,element){
-            var url = c6UrlMaker(
+            var $iframe, params = [], url = c6UrlMaker(
                 scope.experience.appUri + '/' +
                 scope.experience.appUriPrefix, 'exp');
 
             $log.info('experience url:',url);
-            var $iframe = angular.element(
-                '<iframe src="' + url +
-                '"width="100%" height="100%" class="ui__viewFrame"></iframe>'
+            if (c6Defines.kEnv !== 'production'){
+                params.push('kEnv=' + c6Defines.kEnv);
+            }
+            if (c6Defines.kDebug){
+                params.push('kDebug=1');
+            }
+            params.push('kTracker=' + c6Defines.kTracker.accountId + (
+                (c6Defines.kTracker.config.cookieDomain === 'none') ? ':none' : ''));
+            
+            $iframe = angular.element(
+                '<iframe src="' + url + '?' + params.join('&') +
+                '" width="100%" height="100%" class="ui__viewFrame"></iframe>'
             );
             $iframe.on('load',function(){
                 $log.info('experience is loaded!');
