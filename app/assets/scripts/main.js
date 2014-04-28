@@ -6,6 +6,7 @@
     
     c6.kApiUrl   = window.location.origin + '/api';          // rest api
     c6.kExpUrl   = window.location.origin + '/experiences';  // apss to set in exp iframe
+    c6.kEnv      = 'production';
     c6.kDebug    = false;
     c6.kTracker  = {
         accountId : 'UA-44457821-2',
@@ -18,7 +19,9 @@
     } else
     if (window.location.host === 'staging.cinema6.com')  {
         c6.kDebug = true; // Keep logging turned on
+        c6.kEnv   = 'staging';
     } else {
+        c6.kEnv   = 'dev';
         c6.kDebug = true;
         c6.kTracker.accountId = 'UA-44457821-1';
         c6.kTracker.config    = { 'cookieDomain' : 'none' };
