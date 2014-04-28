@@ -117,6 +117,9 @@
         background:#282b2c; color:#fff;
         position:absolute; z-index:1; top:0;
     }
+        .mast {
+            position: relative;
+        }
         .mainNav {
             float:left;
         }
@@ -146,11 +149,17 @@
             position:absolute; z-index: -1;
             margin:1.1875em 0 0 0;
         }
-            @media screen and (max-width:620px) {
-                .mast__title {
-                    margin:7px 0 0 0;
-                }
-            }
+    @media screen and (max-width:620px) {
+        .mast__group {
+            min-height:4.5em;
+        }
+        .mast__title {
+            margin:7px 0 0 0;
+        }
+        .mainNav__c6BrandItem {
+            padding:19px 0 0 0;
+        }
+    }
 
 /*  ==========================================================================
     userPane__group
@@ -210,6 +219,14 @@
                     .userNav__btn:hover {
                         background:#eff9ff;
                     }
+        @media screen and (max-width:620px) {
+            .userPane__display {
+                margin:31px 0 0 0;
+            }
+            .userNav__group {
+                margin:30px 0 0 0;
+            }
+        }
 
 /*  ==========================================================================
     login styles
