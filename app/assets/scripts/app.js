@@ -50,9 +50,21 @@
                     experience  :  getExperience
                 }
             })
-            .otherwise({
+            .when('/login',{
                 controller   : 'LoginCtrl',
+                controllerAs : 'LoginCtrl',
                 templateUrl  : c6UrlMakerProvider.makeUrl('views/login.html')
+            })
+            .when('/error',{
+                controller   : 'ErrorCtrl',
+                controllerAs : 'ErrorCtrl',
+                templateUrl  : c6UrlMakerProvider.makeUrl('views/error.html')
+            })
+            .when('/',{
+                redirectTo   : '/login'
+            })
+            .otherwise({
+                redirectTo   : '/error'
             });
         }])
         .value('appData',{ user : null, app : null})
