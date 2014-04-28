@@ -50,6 +50,7 @@
                     'scripts/app',
                     'scripts/auth',
                     'scripts/content',
+                    'scripts/error',
                     'scripts/experience',
                     'scripts/login',
                     'scripts/tracker',
