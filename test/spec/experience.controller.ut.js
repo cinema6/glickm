@@ -180,12 +180,15 @@
                 });
 
                 it('respond to handshakes',function(){
-                    var responder = jasmine.createSpy('respond');
+                    var responder = jasmine.createSpy('respond'),
+                        user = { id : 'u1' };
+                    $scope.user = user;
                     onceHandshake(null,responder);
                     expect(responder).toHaveBeenCalledWith({
                         success: true,
                         appData: {
                             experience  : experience,
+                            user        : user,
                             profile     : c6BrowserInfo.profile
                         }
                     });

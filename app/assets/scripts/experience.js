@@ -38,6 +38,7 @@
                     success: true,
                     appData: {
                         experience  : experience,
+                        user        : $scope.user,
                         profile     : c6BrowserInfo.profile
                     }
                 });
