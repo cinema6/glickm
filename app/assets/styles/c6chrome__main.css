@@ -113,10 +113,13 @@
     masthead navigation
     ========================================================================== */
     .mast__group {
-        min-height:4.5em; width:100%;
+        min-height:3.75em; width:100%;
         background:#282b2c; color:#fff;
         position:absolute; z-index:1; top:0;
     }
+        .mast {
+            position: relative;
+        }
         .mainNav {
             float:left;
         }
@@ -126,15 +129,12 @@
             .mainNav__item {
                 padding:1.5em 0 0 0; margin:0 2em 0 0; float:left;
             }
-                .mainNav__item:last-child {
-                    margin:0;
-                }
             .mainNav__link {
                 color:#fff;
             }
             
             .mainNav__c6BrandItem {
-                padding:0.75em 0 0 0; margin-right:3em;
+                padding:0.4375em 0 0 0; margin-right:3em;
             }
                 .mainNav__c6Brand {
                     width:11em; height:2.75em; display: block;
@@ -143,6 +143,23 @@
                     border:0; padding:0;
                     cursor:pointer;
                 }
+        .mast__title {
+            font-size:1em; font-weight:300; text-align: center;
+            width:100%;
+            position:absolute; z-index: -1;
+            margin:1.1875em 0 0 0;
+        }
+    @media screen and (max-width:620px) {
+        .mast__group {
+            min-height:4.5em;
+        }
+        .mast__title {
+            margin:7px 0 0 0;
+        }
+        .mainNav__c6BrandItem {
+            padding:19px 0 0 0;
+        }
+    }
 
 /*  ==========================================================================
     userPane__group
@@ -151,7 +168,7 @@
         float:right;
     }
         .userPane__display {
-            float:left; margin:1.5625em 0.625em 0 0;
+            float:left; margin:1.1875em 0 0 0;
         }
         .userPane__avatar {
             float:left; margin:0.875em 0;
@@ -168,7 +185,7 @@
         ========================================================================== */
         .userNav__group {
             float:left; position:relative;
-            margin:1.5em 0 0; padding-left:0.75em;
+            margin:1.125em 0 0; padding-left:0.75em;
         }
             .userNav__group:hover {
                 padding:0 0 0.5em 0.75em;
@@ -202,6 +219,14 @@
                     .userNav__btn:hover {
                         background:#eff9ff;
                     }
+        @media screen and (max-width:620px) {
+            .userPane__display {
+                margin:31px 0 0 0;
+            }
+            .userNav__group {
+                margin:30px 0 0 0;
+            }
+        }
 
 /*  ==========================================================================
     login styles
