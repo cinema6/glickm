@@ -138,7 +138,6 @@
                     font-size:1em;
                     background-position:0 0;
                     border:0; padding:0;
-                    cursor:pointer;
                 }
         .mast__titleBox {
             position: relative;
@@ -287,8 +286,11 @@
     error styles
     ========================================================================== */
     .error__group {
-        margin:7.5em 0 0 0;
+        margin:5em 0 0 0;
     }
+        .error__return {
+            margin:0 0 1em 0;
+        }
         .error__copy {
             float:left; width:32%;
         }
@@ -314,11 +316,11 @@
                 width:100%; height:100%;
             }
     @media screen and (max-width:42em) {
-        .userPane__display {
-            margin:1.9375em 0 0 0;
+        .error__copy, .error__videoBox {
+            width:100%;
         }
-        .userNav__group {
-            margin:1.875em 0 0 0;
+        .error__group {
+            margin:5.5em 0 0 0;
         }
     }
 
