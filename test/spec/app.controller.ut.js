@@ -137,7 +137,17 @@
                         expect(auth.checkStatus).toHaveBeenCalled();
                     });
 
-                    it('success should update user and move to experience',function(){
+                    it('success should update user and move to entryPath if set',function(){
+                        var newUser = { id : 'new'};
+                        AppCtrl.entryPath = '/foo';
+                        spyOn(AppCtrl,'updateUser');
+                        auth.checkStatus.deferred.resolve(newUser);
+                        $scope.$apply();
+                        expect(AppCtrl.updateUser).toHaveBeenCalledWith(newUser);
+                        expect($location.path).toHaveBeenCalledWith('/foo');
+                    });
+
+                    it('success should update user and move to /apps if no entryPath',function(){
                         var newUser = { id : 'new'};
                         spyOn(AppCtrl,'updateUser');
                         auth.checkStatus.deferred.resolve(newUser);

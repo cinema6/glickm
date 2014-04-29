@@ -50,6 +50,11 @@
                     experience  :  getExperience
                 }
             })
+            .when('/account',{
+                controller   : 'AccountCtrl',
+                controllerAs : 'AcctCtrl',
+                templateUrl  : c6UrlMakerProvider.makeUrl('views/account.html')
+            })
             .when('/login',{
                 controller   : 'LoginCtrl',
                 controllerAs : 'LoginCtrl',
@@ -61,7 +66,7 @@
                 templateUrl  : c6UrlMakerProvider.makeUrl('views/error.html')
             })
             .when('/',{
-                redirectTo   : '/login'
+                redirectTo   : '/apps'
             })
             .otherwise({
                 redirectTo   : '/error'
@@ -77,16 +82,16 @@
                         lastError) {
 
             var self = this;
+            self.entryPath = $location.path();
             $log = $log.context('AppCtrl');
-            $log.info('instantiated, scope=%1',$scope.$id);
-
+            $log.info('instantiated, scope=%1, entry=%2',$scope.$id, self.entryPath);
             $scope.AppCtrl = this;
-
             /**
              * Controller methods
              */
 
             self.goto = function(path){
+                $log.info('goto request:',path);
                 if ((path !== '/error') && (lastError.getCount())) {
                     $location.path('/error');
                     return;
@@ -137,7 +142,7 @@
                 .then(function(user){
                     $log.info('auth check passed: ',user);
                     self.updateUser(user);
-                    self.goto('/apps');
+                    self.goto(self.entryPath || '/apps');
                 },
                 function(err){
                     $log.info('auth check failed: ',err);
