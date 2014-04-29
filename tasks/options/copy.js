@@ -19,7 +19,7 @@
                     src: [
                         '**',
                         '!mocks/**',
-                        '!experiences/**',
+                        '!apps/**',
                         '!views/**',
                         '!**/*.{js,css,html}'
                     ],
