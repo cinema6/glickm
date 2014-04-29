@@ -26,7 +26,7 @@
                     src: [
                         '**/*.html',
                         '!mocks/**/*.html',
-                        '!experiences/**/*.html',
+                        '!apps/**/*.html',
                         '!views/**/*.html'
                     ],
                     dest: '<%= _versionDir %>'

@@ -136,7 +136,7 @@
                         auth.checkStatus.deferred.resolve(newUser);
                         $scope.$apply();
                         expect(AppCtrl.updateUser).toHaveBeenCalledWith(newUser);
-                        expect($location.path).toHaveBeenCalledWith('/experience');
+                        expect($location.path).toHaveBeenCalledWith('/apps');
                     });
 
                     it('failure should update user to null and move to login',function(){
@@ -272,15 +272,15 @@
                     expect($locationChangeStart).toBeDefined();
                 });
 
-                it('url === /experience with $scope.users set',function(){
+                it('url === /apps with $scope.users set',function(){
                     $scope.user = mockUser;
-                    $locationChangeStart(mockEvent,'/experience',null);
+                    $locationChangeStart(mockEvent,'/apps',null);
                     expect(mockEvent.preventDefault).not.toHaveBeenCalled();
                 });
 
-                it('url === /experience with $scope.users not set',function(){
+                it('url === /apps with $scope.users not set',function(){
                     $scope.user = null;
-                    $locationChangeStart(mockEvent,'/experience',null);
+                    $locationChangeStart(mockEvent,'/apps',null);
                     $timeout.flush();
                     expect(mockEvent.preventDefault).toHaveBeenCalled();
                     expect($location.path).toHaveBeenCalledWith('/login');
@@ -313,7 +313,7 @@
                 it('should trigger a user update',function(){
                     loginSuccess(mockEvent,mockUser);
                     expect(AppCtrl.updateUser).toHaveBeenCalledWith(mockUser);
-                    expect($location.path).toHaveBeenCalledWith('/experience');
+                    expect($location.path).toHaveBeenCalledWith('/apps');
                 });
             });
             

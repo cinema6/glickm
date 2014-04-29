@@ -42,7 +42,7 @@
             getExperience.$inject = ['appData','content'];
 
             $routeProvider
-            .when('/experience',{
+            .when('/apps',{
                 controller   : 'ExperienceCtrl',
                 controllerAs : 'ExperienceCtrl',
                 template     : '<c6-experience></c6-experience>',
@@ -121,7 +121,7 @@
                 .then(function(user){
                     $log.info('auth check passed: ',user);
                     self.updateUser(user);
-                    $location.path('/experience');
+                    $location.path('/apps');
                 },
                 function(err){
                     $log.info('auth check failed: ',err);
@@ -148,7 +148,7 @@
             $scope.$on('loginSuccess',function(evt,user){
                 $log.info('Login succeeded, new user:',user);
                 self.updateUser(user);
-                $location.path('/experience');
+                $location.path('/apps');
             });
 
             

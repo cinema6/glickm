@@ -12,12 +12,12 @@
     "defaultE2EEnv": "browserstack",
     "s3": {
         "test": {
-            "bucket": "staging.cinema6.com-api",
-            "app": "experiences/<%= package.name %>/"
+            "bucket": "com.cinema6.staging",
+            "app": "apps/<%= package.name %>/"
         },
         "production": {
-            "bucket": "cinema6.com-api",
-            "app": "experiences/<%= package.name %>/"
+            "bucket": "com.cinema6.portal",
+            "app": "apps/<%= package.name %>/"
         }
     }
 }

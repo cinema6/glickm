@@ -4,12 +4,12 @@
 
     var c6 = window.c6;
     
-    c6.kApiUrl   = window.location.origin + '/api';          // rest api
-    c6.kExpUrl   = window.location.origin + '/experiences';  // apss to set in exp iframe
+    c6.kApiUrl   = '/api';   // rest api
+    c6.kExpUrl   = '/apps';  // apss to set in exp iframe
     c6.kEnv      = 'production';
     c6.kDebug    = false;
     c6.kTracker  = {
-        accountId : 'UA-44457821-2',
+        accountId : 'UA-44457821-1',
         config    : 'auto'
     };
 
@@ -23,12 +23,9 @@
     } else {
         c6.kEnv   = 'dev';
         c6.kDebug = true;
-        c6.kTracker.accountId = 'UA-44457821-1';
         c6.kTracker.config    = { 'cookieDomain' : 'none' };
-        c6.kApiUrl = '/api';
-        c6.kExpUrl = c6.kBaseUrl + '/experiences';
+        c6.kExpUrl = c6.kBaseUrl + '/apps';
     }
-    c6.kHasKarma   = false;
     c6.kLogFormats = c6.kDebug;
     c6.kLogLevels  = c6.kDebug ? ['error','warn','log','info'] : [];
     c6.kModDeps    = ['ngAnimate','ngRoute','c6.ui', 'c6.log'];

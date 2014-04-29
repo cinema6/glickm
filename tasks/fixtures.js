@@ -3,7 +3,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('fixtures', 'Create a fixtures file based on plugin experience.json',
         function() {
-        var files = grunt.file.expand('app/assets/experiences/**/experiences.json');
+        var files = grunt.file.expand('app/assets/apps/**/experiences.json');
         files.forEach(function(file){
             var exps = grunt.file.readJSON(file);
             exps.forEach(function(experience){
