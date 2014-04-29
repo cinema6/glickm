@@ -32,13 +32,14 @@
                         </li>
                     </ul>
                 </nav>
-                <div class="userPane__group clearfix" ng-show="user" >
+                <div ng-class="{'userPane__group--show':user}" 
+                    class="userPane__group clearfix" ng-show="user" >
                     <div class="userPane__display">
-                        <a href="#" class="userPane__userName" title="{{user.username}}">{{user.username}}</a>
+                        <a href="#" class="userPane__userName" title="{{user.username}}" ng-bind="user.username"></a>
                     </div>
-                    <nav class="userNav__group">
+                    <nav class="userNav__group" >
                         <button  type="button" 
-                        class="userPane__settings ui__gear sprite--alpha">
+                            class="userPane__settings ui__gear sprite--alpha">
                             <span class="ir">Settings</span>
                         </button>
                         
