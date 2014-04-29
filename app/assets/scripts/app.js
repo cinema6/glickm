@@ -71,8 +71,10 @@
         .controller('AppController',
             [   '$scope', '$log', '$location', '$timeout',
                 'c6Defines','c6LocalStorage', 'auth', 'content', 'appData', 'tracker',
+                'lastError',
             function (  $scope ,  $log , $location,  $timeout,
-                        c6Defines,c6LocalStorage, auth, content, appData, tracker) {
+                        c6Defines,c6LocalStorage, auth, content, appData, tracker,
+                        lastError) {
 
             var self = this;
             $log = $log.context('AppCtrl');
@@ -83,10 +85,24 @@
             /**
              * Controller methods
              */
+
+            self.goto = function(path){
+                if ((path !== '/error') && (lastError.getCount())) {
+                    $location.path('/error');
+                    return;
+                }
+                $location.path(path);
+            };
+
             self.updateUser = function(rec, skipStore){
                 if (rec){
+                    if (rec.applications === undefined){
+                        rec.applications = [];
+                    }
                     if (rec.applications.length >= 1){
                         rec.currentApp = rec.applications[0];
+                    } else {
+                        lastError.set('No applications for user: ' + rec.username,500);
                     }
                     if (!skipStore){
                         c6LocalStorage.set('user',rec);
@@ -106,7 +122,7 @@
                     $log.info('log out returns:',result);
                     $log.info('Logout user:',$scope.user);
                     self.updateUser(null);
-                    $location.path('/login');
+                    self.goto('/login');
                 });
             };
 
@@ -121,12 +137,12 @@
                 .then(function(user){
                     $log.info('auth check passed: ',user);
                     self.updateUser(user);
-                    $location.path('/apps');
+                    self.goto('/apps');
                 },
                 function(err){
                     $log.info('auth check failed: ',err);
                     self.updateUser(null);
-                    $location.path('/login');
+                    self.goto('/login');
                 });
             }
             
@@ -139,7 +155,7 @@
                 if ((!isLogin) && (!$scope.user)){
                     evt.preventDefault();
                     $timeout(function(){
-                        $location.path('/login');
+                        self.goto('/login');
                     });
                     return;
                 }
@@ -148,7 +164,7 @@
             $scope.$on('loginSuccess',function(evt,user){
                 $log.info('Login succeeded, new user:',user);
                 self.updateUser(user);
-                $location.path('/apps');
+                self.goto('/apps');
             });
 
             

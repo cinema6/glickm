@@ -12,6 +12,7 @@
                 AppCtrl,
                 appData,
                 auth,
+                lastError,
                 c6Defines,
                 createAppCtrl,
                 localStorage,
@@ -28,6 +29,11 @@
                     login       : jasmine.createSpy('auth.login'),
                     logout      : jasmine.createSpy('auth.logout'),
                     checkStatus : jasmine.createSpy('auth.checkStatus')
+                };
+
+                lastError = {
+                    set         : jasmine.createSpy('lastError.set'),
+                    getCount    : jasmine.createSpy('lastError.getCount').andReturn(0)
                 };
 
                 c6Defines = {
@@ -86,7 +92,8 @@
                             auth           : auth,
                             c6Defines      : c6Defines,
                             c6LocalStorage : localStorage,
-                            tracker        : tracker
+                            tracker        : tracker,
+                            lastError      : lastError
                         });
                     };
                 });
@@ -149,6 +156,23 @@
                 });
             });
 
+            describe('goto',function(){
+                beforeEach(function(){
+                    createAppCtrl();
+                });
+
+                it('will call $location.path with path if no errors',function(){
+                    AppCtrl.goto('/monkey');
+                    expect($location.path).toHaveBeenCalledWith('/monkey');
+                });
+
+                it('will call $location.path /error if errors',function(){
+                    lastError.getCount.andReturn(1);
+                    AppCtrl.goto('/monkey');
+                    expect($location.path).toHaveBeenCalledWith('/error');
+                });
+
+            });
 
             describe('updateUser',function(){
                 beforeEach(function(){
@@ -224,6 +248,28 @@
                         expect(appData.app).toEqual('e1');
                     });
 
+                });
+
+                describe('user with no applications', function(){
+                    beforeEach(function(){
+                        mockUser = {
+                            id           : 'howard1',
+                            username     : 'u2'
+                        };
+                    });
+
+                    it('will set lastError and redirect to error page if missing',function(){
+                        AppCtrl.updateUser(mockUser);
+                        expect(lastError.set)
+                            .toHaveBeenCalledWith('No applications for user: u2',500 );
+                    });
+                    
+                    it('will set lastError and redirect to error page if empty',function(){
+                        mockUser.applications = [];
+                        AppCtrl.updateUser(mockUser);
+                        expect(lastError.set)
+                            .toHaveBeenCalledWith('No applications for user: u2',500 );
+                    });
                 });
             });
 

@@ -73,9 +73,15 @@
                 };
             });
 
-            it('should form a url with appUri/appUriPrefix from experience',function(){
+            it('should form a url with appUri/appUriPrefix if c6Defines.kEnv == dev',function(){
+                c6Defines.kEnv = 'dev';
                 createDirective();
                 expect(c6UrlMaker).toHaveBeenCalledWith('appUri1/appUriPrefix','exp');
+            });
+       
+            it('should form a url with appUri/ if c6Defines.kEnv !== dev',function(){
+                createDirective();
+                expect(c6UrlMaker).toHaveBeenCalledWith('appUri1/','exp');
             });
        
             it('should attempt to create an <iframe> with production config',function(){

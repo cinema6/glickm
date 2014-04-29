@@ -69,7 +69,8 @@
         function fnLink(scope,element){
             var $iframe, params = [], url = c6UrlMaker(
                 scope.experience.appUri + '/' +
-                scope.experience.appUriPrefix, 'exp');
+                (c6Defines.kEnv === 'dev' ? scope.experience.appUriPrefix : ''),
+                'exp');
 
             $log.info('experience url:',url);
             if (c6Defines.kEnv !== 'production'){
