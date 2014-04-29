@@ -18,13 +18,12 @@
         // This is production
     } else
     if (window.location.host === 'staging.cinema6.com')  {
-        c6.kDebug = true; // Keep logging turned on
         c6.kEnv   = 'staging';
+        c6.kDebug = true; // Keep logging turned on
     } else {
         c6.kEnv   = 'dev';
         c6.kDebug = true;
         c6.kTracker.config    = { 'cookieDomain' : 'none' };
-        c6.kExpUrl = c6.kBaseUrl + '/apps';
     }
     c6.kLogFormats = c6.kDebug;
     c6.kLogLevels  = c6.kDebug ? ['error','warn','log','info'] : [];
