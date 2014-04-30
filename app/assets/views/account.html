@@ -1,17 +1,28 @@
-<div style="margin-top:20%" ng-init="currentView = 'email'" >
-    <ul style="display: inline-block;">
-        <li ng-click="currentView='email'"><span>Change Email</span></li>
-        <li ng-click="currentView='password'"><span>Change Password</span></li>
-    </ul>
-    <ul style="margin-left:40px; display:inline-block;">
-        <li ng-if="currentView === ('email')">
-            <change-email    email="{{user.email}}"></change-email>
-        </li>
-        <li ng-if="currentView === 'password'">
-            <change-password email="{{user.email}}"></change-password>
-        </li>
-    </ul>
-    <div>
-        <a href="#/"> Done </a>
+<div class="container" ng-init="currentView = 'password'" >
+    <div class="breadcrumbNav">&lsaquo; <a href="#/" title="Dashboard">Back to the Dashboard</a></div>
+    <h1 class="pageTitle">Account Settings</h1>
+    <div class="clearfix">
+        <div class="sidebar__group">
+            <nav class="sidebar__nav">
+                <ul>
+                    <li ng-click="currentView='password'"
+                        class="sideNav__item"
+                        ng-class="{'sideNav__item--active' : currentView === 'password'}"
+                        >Change Password</li>
+                    <li ng-click="currentView='email'" 
+                        class="sideNav__item"
+                        ng-class="{'sideNav__item--active' : currentView === 'email'}"
+                        >Change Email</li>
+                </ul>
+            </nav>
+        </div>
+        <div class="mainContent__group">
+            <section ng-if="currentView === ('email')">
+                <change-email    email="{{user.email}}"></change-email>
+            </section>
+            <section ng-if="currentView === 'password'">
+                <change-password email="{{user.email}}"></change-password>
+            </section>
+        </div>
     </div>
 </div>

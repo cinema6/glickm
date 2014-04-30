@@ -1,19 +1,27 @@
-<form name="theForm" id="change_email" ng-submit="submit()">
-    <p>Change your email ({{origEmail}}) </p>
-    <label for="change_email_addr" > email </label>
-    <input id="change_email_addr"  type="text" name="email" ng-model="email" autocomplete="off" ng-trim="false" ng-minlength="4" ng-maxlength="128" ng-pattern="emailPattern" required>
-    <span class="error" ng-show="theForm.email.$error.required"> Required </span>
-    <span class="error" ng-show="theForm.email.$error.minlength"> Too short </span>
-    <span class="error" ng-show="theForm.email.$error.maxlength"> Too long </span>
-    <span class="error" ng-show="theForm.email.$error.pattern"> Invalid email </span>
-    <br>
-    <label for="change_email_password" > Password </label>
-    <input id="change_email_password" type="password" name="password" ng-model="password" autocomplete="off" required ng-minlength="1" ng-maxlength="128" ng-trim="false">
-    <span class="error" ng-show="theForm.password.$error.required"> Required </span>
-    <span class="error" ng-show="theForm.password.$error.minlength"> Too short </span>
-    <span class="error" ng-show="theForm.password.$error.maxlength"> Too long </span>
-    <br>
+<form class="form__group" name="theForm" id="change_email" ng-submit="submit()">
+    <h1 class="form__title">Change your Email </h1>
+    <p class="form__spacer">Current Email : <strong>{{origEmail}}</strong> </p>
+    <div class="form__pair">
+        <label class="form__label" for="change_email_addr" >Change Email To:</label>
+        <input class="form__textBox" id="change_email_addr"  type="text" name="email" ng-model="email" autocomplete="off" ng-trim="false" ng-minlength="4" ng-maxlength="128" ng-pattern="emailPattern" required>
+        <div class="form__errorBox">
+            <span class="form__errorTxt" ng-show="theForm.email.$error.required"> Required. </span>
+            <span class="form__errorTxt" ng-show="theForm.email.$error.minlength"> Too short. </span>
+            <span class="form__errorTxt" ng-show="theForm.email.$error.maxlength"> Too long. </span>
+            <span class="form__errorTxt" ng-show="theForm.email.$error.pattern"> Invalid email. </span>
+        </div>
+    </div>
+    <div class="form__pair form__spacer">
+        <label class="form__label" for="change_email_password" >Current Password:</label>
+        <input class="form__textBox" id="change_email_password" type="password" name="password" ng-model="password" autocomplete="off" required ng-minlength="1" ng-maxlength="128" ng-trim="false">
+        <div class="form__errorBox">
+            <span class="form__errorTxt" ng-show="theForm.password.$error.required"> Required. </span>
+            <span class="form__errorTxt" ng-show="theForm.password.$error.minlength"> Too short. </span>
+            <span class="form__errorTxt" ng-show="theForm.password.$error.maxlength"> Too long. </span>
+        </div>
+    </div>
     <input type="submit" value="Change Email" 
+        class="form__submitBtn"
         ng-disabled="((!theForm.$valid) || (email === origEmail))">
     <div>
         <span>{{lastStatus}}</span>
