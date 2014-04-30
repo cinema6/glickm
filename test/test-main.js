@@ -85,6 +85,9 @@
                 auth: {
                     deps: ['app']
                 },
+                account: {
+                    deps: ['app']
+                },
                 content: {
                     deps: ['app']
                 },

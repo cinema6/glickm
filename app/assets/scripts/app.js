@@ -51,7 +51,10 @@
                 }
             })
             .when('/account',{
-                controller   : 'AccountCtrl',
+                controller   : ['tracker',
+                                function(tracker){
+                                    tracker.pageview('/account','Account Manager');
+                                }],
                 controllerAs : 'AcctCtrl',
                 templateUrl  : c6UrlMakerProvider.makeUrl('views/account.html')
             })
