@@ -8,3 +8,5 @@
 * fix flashing settings gear
 * changed user.username to user.email
 * added change email and password page
+* [FIX]: Account settings styles updated
+* [FIX]: Nav dropdown style bugs fixed
