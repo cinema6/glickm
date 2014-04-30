@@ -34,7 +34,7 @@
     });
 
     var libUrl = function(url) {
-            return 'http://lib.cinema6.com/' + url;
+            return '//lib.cinema6.com/' + url;
         },
         appScripts = (function() {
             if (c6.kIsBuild) {
