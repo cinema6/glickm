@@ -7,20 +7,20 @@
         function($log,$scope,auth,tracker){
         $log = $log.context('LoginCtrl');
         $log.info('instantiated, scope=%1',$scope.$id);
-        $scope.username = '';
+        $scope.email = '';
         $scope.password = '';
         $scope.loginError    = '';
 
         $scope.login = function(){
-            $log.info('logging in %1', $scope.username);
+            $log.info('logging in %1', $scope.email);
 
-            if ( (!$scope.username) || (!$scope.password) ||
-                 ($scope.username.match(/^\s*$/)) || ($scope.password.match(/^\s*$/)) ){
-                $scope.loginError = 'Username and password required.';
+            if ( (!$scope.email) || (!$scope.password) ||
+                 ($scope.email.match(/^\s*$/)) || ($scope.password.match(/^\s*$/)) ){
+                $scope.loginError = 'Email and password required.';
                 return;
             }
 
-            auth.login($scope.username,$scope.password)
+            auth.login($scope.email,$scope.password)
             .then(function(data){
                 $log.info('success:',data);
                 $scope.$emit('loginSuccess',data);

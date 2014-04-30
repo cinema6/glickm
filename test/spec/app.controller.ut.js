@@ -137,7 +137,17 @@
                         expect(auth.checkStatus).toHaveBeenCalled();
                     });
 
-                    it('success should update user and move to experience',function(){
+                    it('success should update user and move to entryPath if set',function(){
+                        var newUser = { id : 'new'};
+                        AppCtrl.entryPath = '/foo';
+                        spyOn(AppCtrl,'updateUser');
+                        auth.checkStatus.deferred.resolve(newUser);
+                        $scope.$apply();
+                        expect(AppCtrl.updateUser).toHaveBeenCalledWith(newUser);
+                        expect($location.path).toHaveBeenCalledWith('/foo');
+                    });
+
+                    it('success should update user and move to /apps if no entryPath',function(){
                         var newUser = { id : 'new'};
                         spyOn(AppCtrl,'updateUser');
                         auth.checkStatus.deferred.resolve(newUser);
@@ -253,22 +263,22 @@
                 describe('user with no applications', function(){
                     beforeEach(function(){
                         mockUser = {
-                            id           : 'howard1',
-                            username     : 'u2'
+                            id        : 'howard1',
+                            email     : 'howard1@u2.com'
                         };
                     });
 
                     it('will set lastError and redirect to error page if missing',function(){
                         AppCtrl.updateUser(mockUser);
                         expect(lastError.set)
-                            .toHaveBeenCalledWith('No applications for user: u2',500 );
+                            .toHaveBeenCalledWith('No applications for user: howard1@u2.com',500 );
                     });
                     
                     it('will set lastError and redirect to error page if empty',function(){
                         mockUser.applications = [];
                         AppCtrl.updateUser(mockUser);
                         expect(lastError.set)
-                            .toHaveBeenCalledWith('No applications for user: u2',500 );
+                            .toHaveBeenCalledWith('No applications for user: howard1@u2.com',500 );
                     });
                 });
             });
@@ -362,7 +372,40 @@
                     expect($location.path).toHaveBeenCalledWith('/apps');
                 });
             });
-            
+
+            describe('$scope.$on(emailChange)',function(){
+                var mockEvent, emailChange;
+                beforeEach(function(){
+                    mockUser = {
+                        id : 'user',
+                        email : 'henri',
+                        applications : [ 'app1' ]
+                    };
+                    mockEvent = {
+                        preventDefault : jasmine.createSpy('event.preventDefault')
+                    };
+
+                    createAppCtrl();
+
+                    spyOn(AppCtrl,'updateUser');
+
+                    emailChange = $scope._on['emailChange'];
+                });
+                
+                it('should have a listener',function(){
+                    expect(emailChange).toBeDefined();
+                });
+
+                it('should trigger a user update',function(){
+                    $scope.user = mockUser;
+                    emailChange(mockEvent,'howard');
+                    expect(AppCtrl.updateUser).toHaveBeenCalledWith({
+                        id : 'user',
+                        email : 'howard',
+                        applications : [ 'app1' ]
+                    });
+                });
+            });
         });
     });
 }());

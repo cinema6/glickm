@@ -50,6 +50,14 @@
                     experience  :  getExperience
                 }
             })
+            .when('/account',{
+                controller   : ['tracker',
+                                function(tracker){
+                                    tracker.pageview('/account','Account Manager');
+                                }],
+                controllerAs : 'AcctCtrl',
+                templateUrl  : c6UrlMakerProvider.makeUrl('views/account.html')
+            })
             .when('/login',{
                 controller   : 'LoginCtrl',
                 controllerAs : 'LoginCtrl',
@@ -61,7 +69,7 @@
                 templateUrl  : c6UrlMakerProvider.makeUrl('views/error.html')
             })
             .when('/',{
-                redirectTo   : '/login'
+                redirectTo   : '/apps'
             })
             .otherwise({
                 redirectTo   : '/error'
@@ -77,16 +85,16 @@
                         lastError) {
 
             var self = this;
+            self.entryPath = $location.path();
             $log = $log.context('AppCtrl');
-            $log.info('instantiated, scope=%1',$scope.$id);
-
+            $log.info('instantiated, scope=%1, entry=%2',$scope.$id, self.entryPath);
             $scope.AppCtrl = this;
-
             /**
              * Controller methods
              */
 
             self.goto = function(path){
+                $log.info('goto request:',path);
                 if ((path !== '/error') && (lastError.getCount())) {
                     $location.path('/error');
                     return;
@@ -102,7 +110,7 @@
                     if (rec.applications.length >= 1){
                         rec.currentApp = rec.applications[0];
                     } else {
-                        lastError.set('No applications for user: ' + rec.username,500);
+                        lastError.set('No applications for user: ' + rec.email,500);
                     }
                     if (!skipStore){
                         c6LocalStorage.set('user',rec);
@@ -137,7 +145,7 @@
                 .then(function(user){
                     $log.info('auth check passed: ',user);
                     self.updateUser(user);
-                    self.goto('/apps');
+                    self.goto(self.entryPath || '/apps');
                 },
                 function(err){
                     $log.info('auth check failed: ',err);
@@ -159,6 +167,12 @@
                     });
                     return;
                 }
+            });
+
+            $scope.$on('emailChange',function(evt,newAddr){
+                var user = angular.copy($scope.user);
+                user.email = newAddr;
+                self.updateUser(user);
             });
 
             $scope.$on('loginSuccess',function(evt,user){

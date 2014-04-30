@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>Glickm</title>
+        <title>Cinema6 Dashboard</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -35,7 +35,7 @@
                 <div ng-class="{'userPane__group--show':user}" 
                     class="userPane__group clearfix" ng-show="user" >
                     <div class="userPane__display">
-                        <a href="#" class="userPane__userName" title="{{user.username}}" ng-bind="user.username"></a>
+                        <a href="#/account" class="userPane__userName" title="{{user.email}}" ng-bind="user.email | limitTo : 28"></a>
                     </div>
                     <nav class="userNav__group" >
                         <button  type="button" 
@@ -45,7 +45,8 @@
                         
                         <ul class="userNav__child">
                             <li class="userNav__item">
-                                <button title="Account Settings" class="userNav__btn">Account Settings</button>
+                            <!--                                <button title="Account Settings" class="userNav__btn">Account Settings</button> -->
+                                <a href="#/account" class="userNav__btn" title="Account Settings">Account Settings</a>
                             </li>
                             <li class="userNav__item">
                                 <button ng-click="AppCtrl.logout()" title="Log Out" class="userNav__btn">Log Out</button>

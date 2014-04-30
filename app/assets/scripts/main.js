@@ -44,6 +44,7 @@
             } else {
                 return [
                     'scripts/app',
+                    'scripts/account',
                     'scripts/auth',
                     'scripts/content',
                     'scripts/error',
