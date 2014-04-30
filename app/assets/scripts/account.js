@@ -58,6 +58,7 @@
             scope.lastStatus    = null;
             scope.lastCode      = 0;
             scope.password = [null,null,null];
+            scope.passwordPattern  = /^\S.*\S$/;
         
             scope.submit = function(){
                 scope.lastStatus = null;

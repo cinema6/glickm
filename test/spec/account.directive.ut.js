@@ -184,6 +184,132 @@
 
                 });
             });
+
+            describe('change-password',function(){
+                beforeEach(function(){
+                    createDirective('change-password','howard@cinema6.com');
+                });
+
+                describe('form.$valid',function(){
+                    it('is true if email and password are valid',function(){
+                        $isolate.password[0] = 'abcdefghijkl';
+                        $isolate.password[1] = 'abcdefghijkl';
+                        $isolate.password[2] = 'abcdefghijkl';
+                        $isolate.$digest();
+                        expect($isolate.theForm.$valid).toEqual(true);
+                    });
+                    
+                    it('is false if original password not set',function(){
+                        $isolate.password[0] = null;
+                        $isolate.password[1] = 'abcdefghijkl';
+                        $isolate.password[2] = 'abcdefghijkl';
+                        $isolate.$digest();
+                        expect($isolate.theForm.$valid).toEqual(false);
+                        expect($isolate.theForm.password0.$error.required).toEqual(true);
+                    });
+                    
+                    it('is false if new password not set',function(){
+                        $isolate.password[0] = 'abcdefghijkl';
+                        $isolate.password[1] = null;
+                        $isolate.password[2] = null;
+                        $isolate.$digest();
+                        expect($isolate.theForm.$valid).toEqual(false);
+                        expect($isolate.theForm.password1.$error.required).toEqual(true);
+                        expect($isolate.theForm.password2.$error.required).toEqual(true);
+                    });
+                    
+                    it('is false if new password is too small',function(){
+                        $isolate.password[0] = 'abcdefghijkl';
+                        $isolate.password[1] = 'abc';
+                        $isolate.password[2] = 'abc';
+                        $isolate.$digest();
+                        expect($isolate.theForm.$valid).toEqual(false);
+                        expect($isolate.theForm.password1.$error.minlength).toEqual(true);
+                    });
+                    
+                    it('is false if password has leading spaces',function(){
+                        $isolate.password[0] = 'abcdefghijkl';
+                        $isolate.password[1] = ' abcdefghijkl';
+                        $isolate.password[2] = ' abcdefghijkl';
+                        $isolate.$digest();
+                        expect($isolate.theForm.$valid).toEqual(false);
+                        expect($isolate.theForm.password1.$error.pattern).toEqual(true);
+                    });
+                    
+                    it('is false if password has trailing spaces',function(){
+                        $isolate.password[0] = 'abcdefghijkl';
+                        $isolate.password[1] = 'abcdefghijkl ';
+                        $isolate.password[2] = 'abcdefghijkl ';
+                        $isolate.$digest();
+                        expect($isolate.theForm.$valid).toEqual(false);
+                        expect($isolate.theForm.password1.$error.pattern).toEqual(true);
+                    });
+                    
+                    it('is true if password has spaces in it',function(){
+                        $isolate.password[0] = 'abcdefghijkl';
+                        $isolate.password[1] = 'abcde fghijkl';
+                        $isolate.password[2] = 'abcde fghijkl';
+                        $isolate.$digest();
+                        expect($isolate.theForm.$valid).toEqual(true);
+                    });
+                    
+                    describe('ng-disabled set correctly',function(){
+                        beforeEach(function(){
+                            findSubmit();
+                        });
+                        it('ng-disabled turned off if everything is good',function(){
+                            expect($submit.prop('disabled')).toEqual(true);
+                            $isolate.password[0] = 'abcdefghijkl';
+                            $isolate.password[1] = 'abcde fghijkl';
+                            $isolate.password[2] = 'abcde fghijkl';
+                            $isolate.$digest();
+                            expect($submit.prop('disabled')).toEqual(false);
+                        });
+                        
+                        it('ng-disabled kept on if $valid = true, but passwords do not match',function(){
+                            expect($submit.prop('disabled')).toEqual(true);
+                            $isolate.password[0] = 'abcdefghijkl';
+                            $isolate.password[1] = 'abcde fghijkl1';
+                            $isolate.password[2] = 'abcde fghijkl2';
+                            $isolate.$digest();
+                            expect($submit.prop('disabled')).toEqual(true);
+                        });
+                    });
+
+                    
+                }); 
+                
+                describe('$scope.submit()',function(){
+                    it('successful submit sets lastStatus',function(){
+                        $isolate.email = 'howard@cinema6.com';
+                        $isolate.password[0] = 'password';
+                        $isolate.password[1] = 'new-password';
+                        ctrl.changePassword.andReturn($q.when('hurray'));
+                        expect($isolate.lastStatus).toBeNull();
+                        $isolate.submit();
+                        $isolate.$digest();
+                        expect(ctrl.changePassword)
+                            .toHaveBeenCalledWith('howard@cinema6.com','password','new-password');
+                        expect($isolate.lastStatus).toEqual('Password has been changed.');
+                    });
+
+                    it('failed submit sets lastStatus',function(){
+                        $isolate.email = 'howard@cinema6.com';
+                        $isolate.password[0] = 'password';
+                        $isolate.password[1] = 'new-password';
+                        ctrl.changePassword.andReturn($q.reject('booo'));
+                        expect($isolate.lastStatus).toBeNull();
+                        $isolate.submit();
+                        $isolate.$digest();
+                        expect(ctrl.changePassword)
+                            .toHaveBeenCalledWith('howard@cinema6.com','password','new-password');
+                        expect($isolate.lastStatus).toEqual('Password change failed: booo');
+                    });
+
+                });
+
+
+            });
         });
 
     });

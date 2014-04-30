@@ -51,9 +51,8 @@
                 }
             })
             .when('/account',{
-                controller   : ['tracker','$scope',
-                                function(tracker,$scope){
-                                    $scope.currentView = 'email';
+                controller   : ['tracker',
+                                function(tracker){
                                     tracker.pageview('/account','Account Manager');
                                 }],
                 controllerAs : 'AcctCtrl',

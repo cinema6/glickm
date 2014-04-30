@@ -1,16 +1,17 @@
-<div style="margin-top:20%">
-    This is the account controller.
-    <ul>
+<div style="margin-top:20%" ng-init="currentView = 'email'" >
+    <ul style="display: inline-block;">
         <li ng-click="currentView='email'"><span>Change Email</span></li>
         <li ng-click="currentView='password'"><span>Change Password</span></li>
     </ul>
-    <ul>
-        <li ng-if="currentView === 'email'">
+    <ul style="margin-left:40px; display:inline-block;">
+        <li ng-if="currentView === ('email')">
             <change-email    email="{{user.email}}"></change-email>
         </li>
         <li ng-if="currentView === 'password'">
             <change-password email="{{user.email}}"></change-password>
         </li>
     </ul>
-    <a href="#/"> Done </a>
+    <div>
+        <a href="#/"> Done </a>
+    </div>
 </div>
