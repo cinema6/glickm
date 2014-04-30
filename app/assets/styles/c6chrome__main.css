@@ -27,19 +27,6 @@
     label {
         cursor:pointer;
     }
-    youtube-player {
-        display: block;
-        width: 420px; height: 315px;
-    }
-
-    vimeo-player {
-        display: block;
-        width: 420px; height: 315px;
-    }
-
-    embed-code {
-        display: block;
-    }
 
 /*  ==========================================================================
     c6-copy classes : general type & color styles
@@ -107,6 +94,102 @@
         border:0;
         position:absolute;
         width:100%; height:100%;
+    }
+
+/*  ==========================================================================
+    generic page styles
+    ========================================================================== */
+    .breadcrumbNav {
+        margin:5em 0 1em 0;
+    }
+    .pageTitle {
+        font-size:3em; font-weight:100;
+        margin:0;
+    }
+    .sidebar__group {
+        float:left; width:20%;
+    }
+        .sidebar__nav {
+            margin:1em 0 0 0;
+        }
+            .sideNav__item {
+                display: block;
+                cursor: pointer;
+                border-radius:3px; padding:0.5em; margin:0 0 0.25em 0;
+                -webkit-transition: background 0.5s; transition: background 0.5s;
+                line-height: 1.2;
+            }
+                .sideNav__item:hover {
+                    background:#eff9ff;
+                }
+                .sideNav__item--active,
+                .sideNav__item--active:hover {
+                    background:#fff;
+                }
+    .mainContent__group {
+        float:right; width:78%;
+    }
+    @media screen and (max-width:42em) {
+        /* 672px */
+        .breadcrumbNav {
+            margin:5.5em 0 0 0;
+        }
+    }
+
+
+/*  ==========================================================================
+    generic form styles
+    ========================================================================== */
+    .form__group {
+        margin:0;
+    }
+    .form__spacer {
+        margin-bottom:1em;
+    }
+    .form__title {
+        font-weight:700;
+    }
+        .form__label {
+            width:10em;
+            display: inline-block;
+        }
+        .form__textBox {
+            width:14em;
+            padding:0.25em; border:2px solid #b0b0b0;
+            -webkit-border-radius: 0.25em; border-radius: 0.25em;
+            font-size:1em;
+            background:#f4f4f4;
+            margin:0 0 0.5em;
+            -webkit-transition:all 0.5s; transition:all 0.5s;
+        }
+            .form__textBox:focus {
+                border:2px solid #4a9cd1;
+                background:#eff9ff;
+            }
+        .form__errorBox {
+            display:inline-block;
+            color:#d61212; font-size:0.875em;
+            margin:0 0 0 0.5em;
+        }
+        .form__submitBtn {
+            margin:0 0 0 10.25rem; padding:0.6875rem 1.5rem 0.625rem 1.5rem; 
+            border:0; border-radius:0.25em;
+            font-size:1.125em; color:#fff; font-weight:700; line-height: 1;
+            background:#4a9cd1;
+            cursor:pointer;
+            -webkit-transition: background 0.5s; transition: background 0.5s;
+        }
+            .form__submitBtn:hover {
+                background:#13a2ff;
+            }
+    @media screen and (max-width:44em) {
+        /* 704px */
+        .form__label {
+            display: block;
+        }
+        .form__submitBtn {
+            margin:0;
+        }
     }
 
 /*  ==========================================================================
@@ -188,19 +271,16 @@
         ========================================================================== */
         .userNav__group {
             float:left; position:relative;
-            margin:1.125em 0 0; padding-left:0.75em;
+            margin:1.125em 0 0; padding:0 0 0.5em 0.75em;
         }
-            .userNav__group:hover {
-                padding:0 0 0.5em 0.75em;
+            .userNav__group:hover .userPane__settings {
+                transform:rotate(90deg);
+                -ms-transform:rotate(90deg); /* IE 9 */
+                -webkit-transform:rotate(90deg); /* Opera, Chrome, and Safari */
             }
-                .userNav__group:hover .userPane__settings {
-                    transform:rotate(90deg);
-                    -ms-transform:rotate(90deg); /* IE 9 */
-                    -webkit-transform:rotate(90deg); /* Opera, Chrome, and Safari */
-                }
-                .userNav__group:hover .userNav__child {
-                    display:block;
-                }
+            .userNav__group:hover .userNav__child {
+                display:block;
+            }
             .userNav__child {
                 display:none;
                 position:absolute; right:0; top:100%;
@@ -213,14 +293,21 @@
                 }
                 .userNav__btn {
                     background:white;
+                    display: block;
                     margin:0; padding:0.75rem 0.5rem; border:0;
                     -webkit-transition: all 0.5s; transition: all 0.5s;
-                    width:9rem; 
-                    font-size:0.875rem; line-height:1;
+                    width:9rem;
+                    font-size:0.875rem; line-height:1; color:#646464;
                     cursor:pointer;
+                    text-align: center; font-weight:300;
+                    -webkit-box-sizing: content-box;
+                    -moz-box-sizing: content-box;
+                    box-sizing: content-box;
                 }
                     .userNav__btn:hover {
                         background:#eff9ff;
+                        border:0;
+                        color:#13a2ff;
                     }
         @media screen and (max-width:42em) {
             .userPane__display {
@@ -274,57 +361,40 @@
             color:#d61212;
         }
         .login__submitBtn {
-            margin:0 0 0 6.25rem; padding:0.6875rem 1.5rem 0.625rem 1.5rem; 
-            border:0; border-radius:0.25em;
-            font-size:1.125em; color:#fff; font-weight:700; line-height: 1;
-            background:#4a9cd1;
-            cursor:pointer;
-            -webkit-transition: background 0.5s; transition: background 0.5s;
+            margin:0 0 0 6.25rem;
         }
-            .login__submitBtn:hover {
-                background:#13a2ff;
-            }
 
 
 /*  ==========================================================================
-    error styles
+    error page styles
     ========================================================================== */
-    .error__group {
-        margin:5em 0 0 0;
+    .error__copy {
+        float:left; width:32%;
     }
-        .error__return {
-            margin:0 0 1em 0;
+        .error__title {
+            margin:0;
+            color:#d51212;
         }
-        .error__copy {
-            float:left; width:32%;
+    .error__videoBox {
+        float:right; width:66%;
+    }
+        .error__videoBox p {
+            margin:0.5em 0;
+            font-size:0.875em;
         }
-            .error__title {
-                margin:0;
-                font-size:3em; font-weight:100; color:#d51212;
-            }
-        .error__videoBox {
-            float:right; width:66%;
+    .error__player {
+        width:100%; height:0;
+        position:relative;
+        padding:0 0 74.71% 0;
+        background:url('../img/thumbs-up.gif') 50% 50% / cover no-repeat;
+    }
+        .error__iframe {
+            position: absolute;
+            width:100%; height:100%;
         }
-            .error__videoBox p {
-                margin:0.5em 0;
-                font-size:0.875em;
-            }
-        .error__player {
-            width:100%; height:0;
-            position:relative;
-            padding:0 0 74.71% 0;
-            background:url('../img/thumbs-up.gif') 50% 50% / cover no-repeat;
-        }
-            .error__iframe {
-                position: absolute;
-                width:100%; height:100%;
-            }
     @media screen and (max-width:42em) {
         .error__copy, .error__videoBox {
             width:100%;
-        }
-        .error__group {
-            margin:5.5em 0 0 0;
         }
     }
 
