@@ -245,12 +245,12 @@
                         expect($isolate.theForm.password1.$error.pattern).toEqual(true);
                     });
                     
-                    it('is true if password has spaces in it',function(){
+                    it('is false if password has spaces in it',function(){
                         $isolate.password[0] = 'abcdefghijkl';
                         $isolate.password[1] = 'abcde fghijkl';
                         $isolate.password[2] = 'abcde fghijkl';
                         $isolate.$digest();
-                        expect($isolate.theForm.$valid).toEqual(true);
+                        expect($isolate.theForm.$valid).toEqual(false);
                     });
                     
                     describe('ng-disabled set correctly',function(){
@@ -260,8 +260,8 @@
                         it('ng-disabled turned off if everything is good',function(){
                             expect($submit.prop('disabled')).toEqual(true);
                             $isolate.password[0] = 'abcdefghijkl';
-                            $isolate.password[1] = 'abcde fghijkl';
-                            $isolate.password[2] = 'abcde fghijkl';
+                            $isolate.password[1] = 'abcdefghijkl';
+                            $isolate.password[2] = 'abcdefghijkl';
                             $isolate.$digest();
                             expect($submit.prop('disabled')).toEqual(false);
                         });

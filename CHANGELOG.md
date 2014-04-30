@@ -10,3 +10,4 @@
 * added change email and password page
 * [FIX]: Account settings styles updated
 * [FIX]: Nav dropdown style bugs fixed
+* [FIX]: Password change validators
