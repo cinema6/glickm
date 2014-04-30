@@ -1,4 +1,4 @@
-<div class="container" ng-init="currentView = 'email'" >
+<div class="container" ng-init="currentView = 'password'" >
     <div class="breadcrumbNav">&lsaquo; <a href="#/" title="Dashboard">Back to the Dashboard</a></div>
     <h1 class="pageTitle">Account Settings</h1>
     <div class="clearfix">
@@ -7,9 +7,11 @@
                 <ul>
                     <li ng-click="currentView='password'"
                         class="sideNav__item"
+                        ng-class="{'sideNav__item--active' : currentView === 'password'}"
                         >Change Password</li>
                     <li ng-click="currentView='email'" 
-                        class="sideNav__item sideNav__item--active"
+                        class="sideNav__item"
+                        ng-class="{'sideNav__item--active' : currentView === 'email'}"
                         >Change Email</li>
                 </ul>
             </nav>
