@@ -6,10 +6,10 @@
     .service('auth',['c6UrlMaker','$http','$q','$timeout',
         function(c6UrlMaker,$http,$q,$timeout){
 
-        this.login = function(username,password){
+        this.login = function(email,password){
             var deferred = $q.defer(), deferredTimeout = $q.defer(), cancelTimeout,
                 body = {
-                    username : username,
+                    email    : email,
                     password : password
                 };
 

@@ -62,7 +62,7 @@
                     var mockUser = { user : { id : 'x' } };
                     auth.login.andReturn($q.when(mockUser));
                     $scope.$emit = jasmine.createSpy('$scope.$emit');
-                    $scope.username = 'howard';
+                    $scope.email = 'howard';
                     $scope.password = 'foo';
                     $scope.login();
                     $scope.$digest();
@@ -73,7 +73,7 @@
 
                 it('will set loginError property with error if it fails',function(){
                     auth.login.andReturn($q.reject('Failed to work'));
-                    $scope.username = 'howard';
+                    $scope.email = 'howard';
                     $scope.password = 'foo';
                     $scope.login();
                     $scope.$digest();
@@ -81,44 +81,44 @@
                     expect($scope.loginError).toEqual('Failed to work');
                 });
 
-                it('does nothing if username is blank',function(){
+                it('does nothing if email is blank',function(){
                     auth.login.andReturn($q.when({}));
-                    $scope.username = '';
+                    $scope.email = '';
                     $scope.password = 'abc';
                     $scope.login();
                     $scope.$digest();
                     expect(auth.login).not.toHaveBeenCalled();
-                    expect($scope.loginError).toEqual('Username and password required.');
+                    expect($scope.loginError).toEqual('Email and password required.');
                 });
                 
-                it('does nothing if username is blank with spaces',function(){
+                it('does nothing if email is blank with spaces',function(){
                     auth.login.andReturn($q.when({}));
-                    $scope.username = '   ';
+                    $scope.email = '   ';
                     $scope.password = 'abc';
                     $scope.login();
                     $scope.$digest();
                     expect(auth.login).not.toHaveBeenCalled();
-                    expect($scope.loginError).toEqual('Username and password required.');
+                    expect($scope.loginError).toEqual('Email and password required.');
                 });
                 
                 it('does nothing if password is blank',function(){
                     auth.login.andReturn($q.when({}));
-                    $scope.username = 'xxyx';
+                    $scope.email = 'xxyx';
                     $scope.password = '';
                     $scope.login();
                     $scope.$digest();
                     expect(auth.login).not.toHaveBeenCalled();
-                    expect($scope.loginError).toEqual('Username and password required.');
+                    expect($scope.loginError).toEqual('Email and password required.');
                 });
                 
                 it('does nothing if password is blank with spaces',function(){
                     auth.login.andReturn($q.when({}));
-                    $scope.username = 'xxyx';
+                    $scope.email = 'xxyx';
                     $scope.password = ' ';
                     $scope.login();
                     $scope.$digest();
                     expect(auth.login).not.toHaveBeenCalled();
-                    expect($scope.loginError).toEqual('Username and password required.');
+                    expect($scope.loginError).toEqual('Email and password required.');
                 });
             });
         });

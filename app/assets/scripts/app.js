@@ -51,8 +51,9 @@
                 }
             })
             .when('/account',{
-                controller   : ['tracker',
-                                function(tracker){
+                controller   : ['tracker','$scope',
+                                function(tracker,$scope){
+                                    $scope.currentView = 'email';
                                     tracker.pageview('/account','Account Manager');
                                 }],
                 controllerAs : 'AcctCtrl',
@@ -110,7 +111,7 @@
                     if (rec.applications.length >= 1){
                         rec.currentApp = rec.applications[0];
                     } else {
-                        lastError.set('No applications for user: ' + rec.username,500);
+                        lastError.set('No applications for user: ' + rec.email,500);
                     }
                     if (!skipStore){
                         c6LocalStorage.set('user',rec);
@@ -169,9 +170,9 @@
                 }
             });
 
-            $scope.$on('userNameChange',function(evt,newName){
+            $scope.$on('emailChange',function(evt,newAddr){
                 var user = angular.copy($scope.user);
-                user.username = newName;
+                user.email = newAddr;
                 self.updateUser(user);
             });
 

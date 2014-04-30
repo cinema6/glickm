@@ -21,7 +21,7 @@
 
                 account = {
                     changePassword : jasmine.createSpy('account.changePassword'),
-                    changeUsername : jasmine.createSpy('account.changeUsername')
+                    changeEmail : jasmine.createSpy('account.changeEmail')
                 };
                
                 module('c6.glickm');
@@ -44,26 +44,26 @@
                     };
                 });
             });
-            describe('changeUsername',function(){
+            describe('changeEmail',function(){
                 beforeEach(function(){
-                    successSpy = jasmine.createSpy('changeUsername.success');
-                    failureSpy = jasmine.createSpy('changeUsername.failure');
+                    successSpy = jasmine.createSpy('changeEmail.success');
+                    failureSpy = jasmine.createSpy('changeEmail.failure');
                     createController();
                 });
                 it('will resolve a promise if success',function(){
-                    account.changeUsername.andReturn($q.when('Success'));
-                    ctrl.changeUsername('how','pass','how2')
+                    account.changeEmail.andReturn($q.when('Success'));
+                    ctrl.changeEmail('how','pass','how2')
                         .then(successSpy,failureSpy);
                     $scope.$digest();
-                    expect(account.changeUsername).toHaveBeenCalledWith('how','pass','how2');
+                    expect(account.changeEmail).toHaveBeenCalledWith('how','pass','how2');
                     expect(successSpy).toHaveBeenCalledWith('Success');
                 });
                 it('will reject a promise if fails',function(){
-                    account.changeUsername.andReturn($q.reject('Failed!'));
-                    ctrl.changeUsername('how','pass','how2')
+                    account.changeEmail.andReturn($q.reject('Failed!'));
+                    ctrl.changeEmail('how','pass','how2')
                         .then(successSpy,failureSpy);
                     $scope.$digest();
-                    expect(account.changeUsername).toHaveBeenCalledWith('how','pass','how2');
+                    expect(account.changeEmail).toHaveBeenCalledWith('how','pass','how2');
                     expect(failureSpy).toHaveBeenCalledWith('Failed!');
                 });
             });

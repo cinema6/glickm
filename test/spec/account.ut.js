@@ -28,30 +28,30 @@
                 
             });
 
-            describe('changeUsername method', function(){
+            describe('changeEmail method', function(){
                 
                 beforeEach(function(){
-                    successSpy = jasmine.createSpy('changeUsername.success');
-                    failureSpy = jasmine.createSpy('changeUsername.failure');
+                    successSpy = jasmine.createSpy('changeEmail.success');
+                    failureSpy = jasmine.createSpy('changeEmail.failure');
                     spyOn($timeout,'cancel');
-                    c6UrlMaker.andReturn('/api/account/user/username'); 
+                    c6UrlMaker.andReturn('/api/account/user/email'); 
                 });
                 
                 it('will resolve promise if successfull',function(){
-                    $httpBackend.expectPOST('/api/account/user/username')
-                        .respond(200,'Successfully changed username');
-                    account.changeUsername('userX','foobar','usery')
+                    $httpBackend.expectPOST('/api/account/user/email')
+                        .respond(200,'Successfully changed email');
+                    account.changeEmail('userX','foobar','usery')
                         .then(successSpy,failureSpy);
                     $httpBackend.flush();
-                    expect(successSpy).toHaveBeenCalledWith('Successfully changed username');
+                    expect(successSpy).toHaveBeenCalledWith('Successfully changed email');
                     expect(failureSpy).not.toHaveBeenCalled();
                     expect($timeout.cancel).toHaveBeenCalled();
                 });
 
                 it('will reject promise if not successful',function(){
-                    $httpBackend.expectPOST('/api/account/user/username')
+                    $httpBackend.expectPOST('/api/account/user/email')
                         .respond(400,'Unable to find user.');
-                    account.changeUsername('userX','foobar','xx')
+                    account.changeEmail('userX','foobar','xx')
                         .then(successSpy,failureSpy);
                     $httpBackend.flush();
                     expect(successSpy).not.toHaveBeenCalled();
@@ -60,9 +60,9 @@
                 });
 
                 it('will reject promise if times out',function(){
-                    $httpBackend.expectPOST('/api/account/user/username')
+                    $httpBackend.expectPOST('/api/account/user/email')
                         .respond(200,{});
-                    account.changeUsername('userX','foobar','x')
+                    account.changeEmail('userX','foobar','x')
                         .then(successSpy,failureSpy);
                     $timeout.flush(60000);
                     expect(successSpy).not.toHaveBeenCalled();

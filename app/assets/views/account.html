@@ -1,6 +1,16 @@
 <div style="margin-top:20%">
     This is the account controller.
-    <change-username username="{{user.username}}"></change-username>
-    <change-password username="{{user.username}}"></change-password>
+    <ul>
+        <li ng-click="currentView='email'"><span>Change Email</span></li>
+        <li ng-click="currentView='password'"><span>Change Password</span></li>
+    </ul>
+    <ul>
+        <li ng-if="currentView === 'email'">
+            <change-email    email="{{user.email}}"></change-email>
+        </li>
+        <li ng-if="currentView === 'password'">
+            <change-password email="{{user.email}}"></change-password>
+        </li>
+    </ul>
     <a href="#/"> Done </a>
 </div>

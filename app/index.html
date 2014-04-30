@@ -35,7 +35,7 @@
                 <div ng-class="{'userPane__group--show':user}" 
                     class="userPane__group clearfix" ng-show="user" >
                     <div class="userPane__display">
-                        <a href="#/account" class="userPane__userName" title="{{user.username}}" ng-bind="user.username"></a>
+                        <a href="#/account" class="userPane__userName" title="{{user.email}}" ng-bind="user.email | limitTo : 28"></a>
                     </div>
                     <nav class="userNav__group" >
                         <button  type="button" 

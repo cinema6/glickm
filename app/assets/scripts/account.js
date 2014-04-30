@@ -8,69 +8,77 @@
         $log.info('instantiated, scope=%1',$scope.$id);
         var self = this;
 
-        self.changeUsername = function(origUsername,password,newUsername){
-            $log.info('changeUsername:',origUsername,newUsername);
-            return account.changeUsername(origUsername,password,newUsername);
+        self.changeEmail = function(origEmail,password,newEmail){
+            $log.info('changeEmail:',origEmail,newEmail);
+            return account.changeEmail(origEmail,password,newEmail);
         };
 
-        self.changePassword = function(username,origPassword,newPassword){
-            $log.info('changePassword:',username);
-            return account.changePassword(username,origPassword,newPassword);
+        self.changePassword = function(email,origPassword,newPassword){
+            $log.info('changePassword:',email);
+            return account.changePassword(email,origPassword,newPassword);
         };
     }])
-    .directive('changeUsername',['$log','c6UrlMaker',function($log,c6UrlMaker){
+    .directive('changeEmail',['$log','c6UrlMaker',function($log,c6UrlMaker){
         function fnLink(scope,element,attrs,ctrl){
-            var origUsername = scope.username;
-            scope.password = '';
+            scope.origEmail     = attrs.email;
+            scope.email         = null;
+            scope.password      = '';
+            scope.lastStatus    = null;
+            scope.lastCode      = 0;
+            scope.emailPattern  = /^\w+.*\.\w\w\w?$/;
+
             scope.submit = function(){
-                ctrl.changeUsername(origUsername,scope.password,scope.username)
+                scope.lastStatus = null;
+                scope.lastCode   = 0;
+                scope.email = scope.email.replace(/\s+$/,'');
+                ctrl.changeEmail(scope.origEmail,scope.password,scope.email)
                 .then(function(){
-                    $log.info('changed username for:',scope.username);
-                    scope.$emit('userNameChange',scope.username,origUsername);
+                    $log.info('changed email for:',scope.email);
+                    scope.lastStatus = 'User name has been changed.';
+                    scope.$emit('emailChange',scope.email,scope.origEmail);
                 })
                 .catch(function(err){
-                    $log.warn('failed changed username for:',scope.username,err);
+                    $log.warn('failed changed email for:',scope.email,err);
+                    scope.lastStatusCode = 1;
+                    scope.lastStatus = 'User name change failed: ' + err;
                 });
-            };
-
-            scope.invalid = function(){
-                return ((scope.password === null) || (origUsername === scope.username));
             };
         }
         return {
             controller : 'AcctChangeCtrl',
             link : fnLink,
             scope : {
-                username : '@'
             },
             restrict : 'E',
-            templateUrl : c6UrlMaker('views/change_username.html')
+            templateUrl : c6UrlMaker('views/change_email.html')
         };
     }])
     .directive('changePassword',['$log','c6UrlMaker',function($log,c6UrlMaker){
         function fnLink(scope,element,attrs,ctrl){
+            scope.lastStatus    = null;
+            scope.lastCode      = 0;
             scope.password = [null,null,null];
+        
             scope.submit = function(){
-                ctrl.changePassword(scope.username,scope.password[0],scope.password[1])
+                scope.lastStatus = null;
+                scope.lastCode = 0;
+                ctrl.changePassword(scope.email,scope.password[0],scope.password[1])
                 .then(function(){
-                    $log.info('changed password for:',scope.username);
+                    $log.info('changed password for:',scope.email);
+                    scope.lastStatus = 'Password has been changed.';
                 })
                 .catch(function(err){
-                    $log.warn('failed changed password for:',scope.username,err);
+                    $log.warn('failed changed password for:',scope.email,err);
+                    scope.lastStatus = 'Password change failed: ' + err;
+                    scope.lastCode = 1;
                 });
-            };
-            scope.invalid = function(){
-                return  (((scope.password[0] === null) ||
-                         (scope.password[1] === null) ||
-                         (scope.password[2] === null) ) ||
-                        (scope.password[1] !== scope.password[2])) ;
             };
         }
         return {
             controller : 'AcctChangeCtrl',
             link : fnLink,
             scope : {
-                username : '@'
+                email : '@'
             },
             restrict : 'E',
             templateUrl : c6UrlMaker('views/change_password.html')
@@ -79,17 +87,17 @@
     .service('account',['c6UrlMaker','$http','$q','$timeout',
         function(c6UrlMaker,$http,$q,$timeout){
 
-        this.changeUsername = function(username,password,newUsername){
+        this.changeEmail = function(email,password,newEmail){
             var deferred = $q.defer(), deferredTimeout = $q.defer(), cancelTimeout,
                 body = {
-                    username    : username,
+                    email    : email,
                     password    : password,
-                    newUsername : newUsername,
+                    newEmail    : newEmail,
                 };
 
             $http({
                 method       : 'POST',
-                url          : c6UrlMaker('account/user/username','api'),
+                url          : c6UrlMaker('account/user/email','api'),
                 data         : body,
                 timeout      : deferredTimeout.promise
             })
@@ -113,10 +121,10 @@
             return deferred.promise;
         };
 
-        this.changePassword = function(username,password,newPassword) {
+        this.changePassword = function(email,password,newPassword) {
             var deferred = $q.defer(), deferredTimeout = $q.defer(), cancelTimeout,
                 body = {
-                    username    : username,
+                    email       : email,
                     password    : password,
                     newPassword : newPassword
                 };

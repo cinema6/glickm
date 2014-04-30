@@ -263,22 +263,22 @@
                 describe('user with no applications', function(){
                     beforeEach(function(){
                         mockUser = {
-                            id           : 'howard1',
-                            username     : 'u2'
+                            id        : 'howard1',
+                            email     : 'howard1@u2.com'
                         };
                     });
 
                     it('will set lastError and redirect to error page if missing',function(){
                         AppCtrl.updateUser(mockUser);
                         expect(lastError.set)
-                            .toHaveBeenCalledWith('No applications for user: u2',500 );
+                            .toHaveBeenCalledWith('No applications for user: howard1@u2.com',500 );
                     });
                     
                     it('will set lastError and redirect to error page if empty',function(){
                         mockUser.applications = [];
                         AppCtrl.updateUser(mockUser);
                         expect(lastError.set)
-                            .toHaveBeenCalledWith('No applications for user: u2',500 );
+                            .toHaveBeenCalledWith('No applications for user: howard1@u2.com',500 );
                     });
                 });
             });
@@ -373,12 +373,12 @@
                 });
             });
 
-            describe('$scope.$on(userNameChange)',function(){
-                var mockEvent, userNameChange;
+            describe('$scope.$on(emailChange)',function(){
+                var mockEvent, emailChange;
                 beforeEach(function(){
                     mockUser = {
                         id : 'user',
-                        username : 'henri',
+                        email : 'henri',
                         applications : [ 'app1' ]
                     };
                     mockEvent = {
@@ -389,19 +389,19 @@
 
                     spyOn(AppCtrl,'updateUser');
 
-                    userNameChange = $scope._on['userNameChange'];
+                    emailChange = $scope._on['emailChange'];
                 });
                 
                 it('should have a listener',function(){
-                    expect(userNameChange).toBeDefined();
+                    expect(emailChange).toBeDefined();
                 });
 
                 it('should trigger a user update',function(){
                     $scope.user = mockUser;
-                    userNameChange(mockEvent,'howard');
+                    emailChange(mockEvent,'howard');
                     expect(AppCtrl.updateUser).toHaveBeenCalledWith({
                         id : 'user',
-                        username : 'howard',
+                        email : 'howard',
                         applications : [ 'app1' ]
                     });
                 });
