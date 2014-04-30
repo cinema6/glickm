@@ -23,7 +23,14 @@
             var origUsername = scope.username;
             scope.password = '';
             scope.submit = function(){
-                ctrl.changeUsername(origUsername,scope.username,scope.password);
+                ctrl.changeUsername(origUsername,scope.password,scope.username)
+                .then(function(){
+                    $log.info('changed username for:',scope.username);
+                    scope.$emit('userNameChange',scope.username,origUsername);
+                })
+                .catch(function(err){
+                    $log.warn('failed changed username for:',scope.username,err);
+                });
             };
 
             scope.invalid = function(){
@@ -44,7 +51,13 @@
         function fnLink(scope,element,attrs,ctrl){
             scope.password = [null,null,null];
             scope.submit = function(){
-                ctrl.changePassword(scope.username,scope.password);
+                ctrl.changePassword(scope.username,scope.password[0],scope.password[1])
+                .then(function(){
+                    $log.info('changed password for:',scope.username);
+                })
+                .catch(function(err){
+                    $log.warn('failed changed password for:',scope.username,err);
+                });
             };
             scope.invalid = function(){
                 return  (((scope.password[0] === null) ||

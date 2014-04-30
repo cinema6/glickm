@@ -169,6 +169,12 @@
                 }
             });
 
+            $scope.$on('userNameChange',function(evt,newName){
+                var user = angular.copy($scope.user);
+                user.username = newName;
+                self.updateUser(user);
+            });
+
             $scope.$on('loginSuccess',function(evt,user){
                 $log.info('Login succeeded, new user:',user);
                 self.updateUser(user);

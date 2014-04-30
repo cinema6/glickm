@@ -372,7 +372,40 @@
                     expect($location.path).toHaveBeenCalledWith('/apps');
                 });
             });
-            
+
+            describe('$scope.$on(userNameChange)',function(){
+                var mockEvent, userNameChange;
+                beforeEach(function(){
+                    mockUser = {
+                        id : 'user',
+                        username : 'henri',
+                        applications : [ 'app1' ]
+                    };
+                    mockEvent = {
+                        preventDefault : jasmine.createSpy('event.preventDefault')
+                    };
+
+                    createAppCtrl();
+
+                    spyOn(AppCtrl,'updateUser');
+
+                    userNameChange = $scope._on['userNameChange'];
+                });
+                
+                it('should have a listener',function(){
+                    expect(userNameChange).toBeDefined();
+                });
+
+                it('should trigger a user update',function(){
+                    $scope.user = mockUser;
+                    userNameChange(mockEvent,'howard');
+                    expect(AppCtrl.updateUser).toHaveBeenCalledWith({
+                        id : 'user',
+                        username : 'howard',
+                        applications : [ 'app1' ]
+                    });
+                });
+            });
         });
     });
 }());
