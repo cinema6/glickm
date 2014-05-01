@@ -15,7 +15,11 @@
         $scope.experience = experience;
 
         $scope.$on('iframeReady',function(event,contentWindow){
-            self.registerExperience(experience,contentWindow);
+            var session = self.registerExperience(experience,contentWindow);
+
+            session.on('stateChange', function broadcastResize() {
+                $scope.$broadcast('resizeExperience');
+            });
         });
 
         $scope.$on('$destroy',function(){
@@ -63,14 +67,21 @@
 
         tracker.pageview('/' + experience.uri, (experience.title || experience.uri));
     }])
-    .directive('c6Experience',['$log','$timeout','c6UrlMaker','c6Defines',
-        function($log,$timeout,c6UrlMaker,c6Defines){
+    .directive('c6Experience',['$log','$timeout','c6UrlMaker','c6Defines','$window',
+        function($log,$timeout,c6UrlMaker,c6Defines,$window){
         $log = $log.context('c6Experience');
         function fnLink(scope,element){
             var $iframe, params = [], url = c6UrlMaker(
                 scope.experience.appUri + '/' +
                 (c6Defines.kEnv === 'dev' ? scope.experience.appUriPrefix : ''),
-                'exp');
+                'exp'),
+                $$window = angular.element($window);
+
+            function resizeFrame() {
+                var contentHeight = $iframe.contents().find('body').outerHeight();
+
+                $iframe.height(contentHeight);
+            }
 
             $log.info('experience url:',url);
             if (c6Defines.kEnv !== 'production'){
@@ -93,6 +104,13 @@
                 });
             });
             element.append($iframe);
+
+            $$window.on('resize', resizeFrame);
+            scope.$on('resizeExperience', resizeFrame);
+
+            element.on('$destroy', function() {
+                $$window.off('resize', resizeFrame);
+            });
         }
         return {
             link     : fnLink,

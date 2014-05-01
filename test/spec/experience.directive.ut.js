@@ -11,8 +11,13 @@
                 c6Defines,
                 $timeout,
                 $iframe,
+                $frameDoc,
+                $frameBody,
+                $window,
                 experience,
                 createDirective;
+
+            var jqLite = angular.element;
         
             beforeEach(function() {
                 c6Defines = { kTracker : { config : {} } };
@@ -23,6 +28,20 @@
                     uri             : 'uri1',
                     id              : 'e1'
                 };
+
+                $frameBody = [];
+                $frameBody.outerHeight = jasmine.createSpy('$iframe $body height()')
+                    .andReturn(0);
+
+                $frameDoc = [];
+                $frameDoc.find = jasmine.createSpy('$iframe.contents().find()')
+                    .andCallFake(function(matcher) {
+                        if (matcher === 'body') {
+                            return $frameBody;
+                        }
+
+                        return [];
+                    });
 
                 createDirective = function(){
                     module('c6.glickm', ['$provide', function($provide) {
@@ -51,6 +70,7 @@
                         $rootScope = $injector.get('$rootScope');
                         $compile = $injector.get('$compile');
                         $timeout = $injector.get('$timeout');
+                        $window = $injector.get('$window');
                         $scope = $rootScope.$new();
                     });
 
@@ -61,15 +81,25 @@
                         }
                     });
                     $iframe.off = jasmine.createSpy('$iframe.off');
+                    $iframe.contents = function() {
+                        return $frameDoc;
+                    };
+                    $iframe.height = jasmine.createSpy('$iframe.height()');
 
                     $scope.experience = experience;
 
-                    spyOn(angular,'element').andReturn($iframe);
+                    spyOn(angular,'element').andCallFake(function(value) {
+                        if (angular.isString(value)) { return $iframe; }
+
+                        return jqLite.apply(null, arguments);
+                    });
 
                     $scope.$apply(function() {
                         $exp = $compile('<c6-experience></c6-experience>')($scope);
                     });
                     $('body').append($exp);
+
+                    return $exp;
                 };
             });
 
@@ -139,6 +169,51 @@
                     $iframe[0].contentWindow);
             });
 
+            describe('when the resizeExperience event is $broadcast', function() {
+                beforeEach(function() {
+                    createDirective();
+                    $scope.$broadcast('resizeExperience');
+                });
+
+                it('should set the iframe\'s height to be the height of its body', function() {
+                    expect($iframe.height).toHaveBeenCalledWith(0);
+
+                    $frameBody.outerHeight.andReturn(348);
+                    $scope.$broadcast('resizeExperience');
+                    expect($iframe.height).toHaveBeenCalledWith(348);
+                });
+            });
+
+            describe('when the $window is resized', function() {
+                var $$window;
+
+                beforeEach(function() {
+                    createDirective();
+                    $$window = jqLite($window);
+
+                    $$window.trigger('resize');
+                });
+
+                it('should set the iframe\'s height to be the height of its body', function() {
+                    expect($iframe.height).toHaveBeenCalledWith(0);
+
+                    $frameBody.outerHeight.andReturn(683);
+                    $$window.trigger('resize');
+                    expect($iframe.height).toHaveBeenCalledWith(683);
+                });
+            });
+
+            describe('when the element is removed', function() {
+                beforeEach(function() {
+                    createDirective();
+                    $exp.remove();
+                    jqLite($window).trigger('resize');
+                });
+
+                it('should remove its resize listener', function() {
+                    expect($iframe.height).not.toHaveBeenCalled();
+                });
+            });
         });
     });
 
