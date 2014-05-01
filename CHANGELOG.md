@@ -11,3 +11,4 @@
 * [FIX]: Account settings styles updated
 * [FIX]: Nav dropdown style bugs fixed
 * [FIX]: Password change validators
+* [FEATURE]: The experience iframe is now resized to be the height of its contents
