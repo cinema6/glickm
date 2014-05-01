@@ -7,6 +7,7 @@
                 $scope,
                 $log,
                 c6BrowserInfo,
+                c6EventEmitter,
                 postMessage,
                 session,
                 experience,
@@ -40,6 +41,7 @@
                     $log        = $injector.get('$log');
                     $rootScope  = $injector.get('$rootScope');
                     $scope      = $rootScope.$new();
+                    c6EventEmitter = $injector.get('c6EventEmitter');
                     
                     $log.context = function(){ return $log; }
 
@@ -81,8 +83,12 @@
             });
 
             describe('$scope.$on(iframeReady)',function(){
-                var iframeReady;
+                var iframeReady,
+                    session;
+
                 beforeEach(function(){
+                    session = c6EventEmitter({});
+
                     spyOn($scope,'$on').andCallFake(function(e,h){
                         if (e === 'iframeReady'){
                             iframeReady = h;
@@ -91,7 +97,8 @@
                      
                     createController();
 
-                    spyOn(ExpCtrl,'registerExperience');
+                    spyOn(ExpCtrl,'registerExperience')
+                        .andReturn(session);
                 });
 
                 it('should be listening',function(){
@@ -102,6 +109,14 @@
                     var win = {};
                     iframeReady({},win);
                     expect(ExpCtrl.registerExperience).toHaveBeenCalledWith(experience,win);
+                });
+
+                it('should $broadcast the resizeExperience event when the session\'s state changes', function() {
+                    spyOn($scope, '$broadcast');
+                    iframeReady({}, {});
+                    session.emit('stateChange');
+
+                    expect($scope.$broadcast).toHaveBeenCalledWith('resizeExperience');
                 });
             });
             
@@ -139,11 +154,8 @@
             describe('registerExperience',function(){
                 var contentWindow, onceReady, onceHandshake;
                 beforeEach(function(){
-                    session = {
-                        once  : jasmine.createSpy('session.once'),
-                        _once : {}
-                    };
-                    session.once.andCallFake(function(e,h){
+                    session = c6EventEmitter({});
+                    spyOn(session, 'once').andCallFake(function(e,h){
                         if (e === 'ready'){
                             onceReady = h;
                         }
