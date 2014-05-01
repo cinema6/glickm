@@ -4,7 +4,7 @@
     body {
         font-family: 'museo-sans', Arial, Helvetica, sans-serif; 
         font-size: 100%; font-weight:300; line-height: 1.5;
-        background:#eee; margin:0; color:#646464;
+        background:#262626; margin:0; color:#646464;
     }
     ::-moz-selection {
         background: #e900a4; text-shadow: none; color:#fff;
@@ -90,6 +90,9 @@
         background-position:0 -2.8125em; display:block;
         width:1.5em; height:1.5em;
     }
+    .ui__viewHolder {
+        background:#eee;
+    }
     .ui__viewFrame {
         display:block;
         border:0;
@@ -98,8 +101,11 @@
 /*  ==========================================================================
     generic page styles
     ========================================================================== */
+    .page__group--padded {
+        margin-bottom:8em;
+    }
     .breadcrumbNav {
-        margin:5em 0 1em 0;
+        margin:1em 0;
     }
     .pageTitle {
         font-size:3em; font-weight:100;
@@ -123,7 +129,8 @@
                 }
                 .sideNav__item--active,
                 .sideNav__item--active:hover {
-                    background:#fff;
+                    background:#b0b0b0;
+                    color:#fff; font-weight:700;
                 }
     .mainContent__group {
         float:right; width:78%;
@@ -195,9 +202,8 @@
     masthead navigation
     ========================================================================== */
     .mast__group {
-        min-height:3.75em; width:100%;
+        min-height:3.75em;
         background:#282b2c; color:#fff;
-        position:absolute; z-index:1; top:0;
     }
         .mainNav {
             float:left;
@@ -321,8 +327,7 @@
     login styles
     ========================================================================== */
     .login__group {
-        position:absolute; top:50%; left:50%;
-        margin:-6.875em 0 0 -12.1875em;
+        margin:7em 0 9em;
     }
         .login__title {
             font-size:0.875em; font-weight:300; text-align: center;
@@ -333,7 +338,7 @@
             border:3px solid #ccc;
             -webkit-border-radius: 5px; border-radius: 5px;
             width: 21em; display: block;
-            padding: 1.5em;
+            padding: 1.5em; margin:0 auto;
             background:white;
         }
             .login__label {
@@ -406,5 +411,4 @@
         padding:0.875rem 0 0.8125rem 0;
         color:#7d7d7d; text-align: center; font-size:0.75em;
         background:#262626;
-        width:100%;
     }
