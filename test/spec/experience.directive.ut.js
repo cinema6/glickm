@@ -14,6 +14,8 @@
                 $frameDoc,
                 $frameBody,
                 $window,
+                $document,
+                chrome,
                 experience,
                 createDirective;
 
@@ -21,6 +23,17 @@
         
             beforeEach(function() {
                 c6Defines = { kTracker : { config : {} } };
+
+                chrome = [
+                    jqLite('<div class="chrome" style="height: 25px; margin: 5px 0; padding: 2px;"></div>'),
+                    jqLite('<div class="chrome" style="height: 40px;"></div>')
+                ];
+
+                chrome.forEach(function(piece) {
+                    var $piece = jqLite(piece);
+
+                    $piece.appendTo('body');
+                });
                 
                 experience = {
                     appUri          : 'appUri1',
@@ -28,20 +41,6 @@
                     uri             : 'uri1',
                     id              : 'e1'
                 };
-
-                $frameBody = [];
-                $frameBody.outerHeight = jasmine.createSpy('$iframe $body height()')
-                    .andReturn(0);
-
-                $frameDoc = [];
-                $frameDoc.find = jasmine.createSpy('$iframe.contents().find()')
-                    .andCallFake(function(matcher) {
-                        if (matcher === 'body') {
-                            return $frameBody;
-                        }
-
-                        return [];
-                    });
 
                 createDirective = function(){
                     module('c6.glickm', ['$provide', function($provide) {
@@ -58,7 +57,7 @@
                         });
 
                         $provide.constant('c6Defines',c6Defines);
-                       
+
                         c6UrlMaker = jasmine.createSpy('c6UrlMaker').andReturn('/test');
                         $provide.provider('c6UrlMaker', function(){
                             this.$get     = function(){ return c6UrlMaker; };
@@ -89,10 +88,29 @@
                     $scope.experience = experience;
 
                     spyOn(angular,'element').andCallFake(function(value) {
+                        var actual = jqLite.apply(null, arguments);
+
+                        function Selector() {}
+                        Selector.prototype = actual;
+
                         if (angular.isString(value)) { return $iframe; }
 
-                        return jqLite.apply(null, arguments);
+                        return new Selector();
                     });
+
+                    $frameBody = [];
+                    $frameBody.outerHeight = jasmine.createSpy('$iframe $body height()')
+                        .andReturn($window.innerHeight + 100);
+
+                    $frameDoc = [];
+                    $frameDoc.find = jasmine.createSpy('$iframe.contents().find()')
+                        .andCallFake(function(matcher) {
+                            if (matcher === 'body') {
+                                return $frameBody;
+                            }
+
+                            return [];
+                        });
 
                     $scope.$apply(function() {
                         $exp = $compile('<c6-experience></c6-experience>')($scope);
@@ -101,6 +119,14 @@
 
                     return $exp;
                 };
+            });
+
+            afterEach(function() {
+                chrome.forEach(function(piece) {
+                    var $piece = jqLite(piece);
+
+                    $piece.remove();
+                });
             });
 
             it('should form a url with appUri/appUriPrefix if c6Defines.kEnv == dev',function(){
@@ -170,17 +196,25 @@
             });
 
             describe('when the resizeExperience event is $broadcast', function() {
+                var $$window;
+
                 beforeEach(function() {
+                    $$window = jqLite($window);
+
                     createDirective();
                     $scope.$broadcast('resizeExperience');
                 });
 
                 it('should set the iframe\'s height to be the height of its body', function() {
-                    expect($iframe.height).toHaveBeenCalledWith(0);
-
-                    $frameBody.outerHeight.andReturn(348);
+                    $frameBody.outerHeight.andReturn($$window.height() + 500);
                     $scope.$broadcast('resizeExperience');
-                    expect($iframe.height).toHaveBeenCalledWith(348);
+                    expect($iframe.height).toHaveBeenCalledWith($$window.height() + 500);
+                });
+
+                it('should not allow the iframe to be smaller than the window height - the height of the chrome', function() {
+                    $frameBody.outerHeight.andReturn($$window.height() - 1000);
+                    $scope.$broadcast('resizeExperience');
+                    expect($iframe.height).toHaveBeenCalledWith($$window.height() - 79);
                 });
             });
 
@@ -195,11 +229,15 @@
                 });
 
                 it('should set the iframe\'s height to be the height of its body', function() {
-                    expect($iframe.height).toHaveBeenCalledWith(0);
-
-                    $frameBody.outerHeight.andReturn(683);
+                    $frameBody.outerHeight.andReturn($window.innerHeight + 500);
                     $$window.trigger('resize');
-                    expect($iframe.height).toHaveBeenCalledWith(683);
+                    expect($iframe.height).toHaveBeenCalledWith($window.innerHeight + 500);
+                });
+
+                it('should not allow the iframe to be smaller than the window height - the height of the chrome', function() {
+                    $frameBody.outerHeight.andReturn($$window.height() - 1000);
+                    $$window.trigger('resize');
+                    expect($iframe.height).toHaveBeenCalledWith($$window.height() - 79);
                 });
             });
 

@@ -2,6 +2,8 @@
     /* jshint -W106 */
     'use strict';
 
+    var jqLite = angular.element;
+
     angular.module('c6.glickm')
     .controller('ExperienceCtrl',['$log','$scope',
             'c6BrowserInfo','postMessage','experience', 'tracker',
@@ -67,8 +69,8 @@
 
         tracker.pageview('/' + experience.uri, (experience.title || experience.uri));
     }])
-    .directive('c6Experience',['$log','$timeout','c6UrlMaker','c6Defines','$window',
-        function($log,$timeout,c6UrlMaker,c6Defines,$window){
+    .directive('c6Experience',['$log','$timeout','c6UrlMaker','c6Defines','$window','$document',
+        function($log,$timeout,c6UrlMaker,c6Defines,$window,$document){
         $log = $log.context('c6Experience');
         function fnLink(scope,element){
             var $iframe, params = [], url = c6UrlMaker(
@@ -77,10 +79,21 @@
                 'exp'),
                 $$window = angular.element($window);
 
-            function resizeFrame() {
-                var contentHeight = $iframe.contents().find('body').outerHeight();
+            function toArray(arraylike) {
+                return Array.prototype.slice.call(arraylike);
+            }
 
-                $iframe.height(contentHeight);
+            function resizeFrame() {
+                var contentHeight = $iframe.contents().find('body').outerHeight(true),
+                    $chrome = $document.find('.chrome'),
+                    offset = toArray($chrome).reduce(function(total, next) {
+                        var $next = jqLite(next);
+
+                        return total + $next.outerHeight(true);
+                    }, 0),
+                    min = $$window.height() - offset;
+
+                $iframe.height(Math.max(contentHeight, min));
             }
 
             $log.info('experience url:',url);
