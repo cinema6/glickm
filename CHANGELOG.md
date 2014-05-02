@@ -1,6 +1,6 @@
 # glickm ChangeLog
 
-## alpha1 (April 30, 2014; 5:06PM EST)
+## alpha1 (May 2, 2014; 4:25PM EST)
 
 * first alpha release of glickm
 * putting glickm in its own bucket
