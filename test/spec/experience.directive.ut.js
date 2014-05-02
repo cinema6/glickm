@@ -100,7 +100,7 @@
 
                     $frameBody = [];
                     $frameBody.outerHeight = jasmine.createSpy('$iframe $body height()')
-                        .andReturn($window.innerHeight + 100);
+                        .andReturn(0);
 
                     $frameDoc = [];
                     $frameDoc.find = jasmine.createSpy('$iframe.contents().find()')
@@ -195,6 +195,13 @@
                     $iframe[0].contentWindow);
             });
 
+            it('should size the iframe to fill the window', function() {
+                var $$window = jqLite($window);
+
+                createDirective();
+                expect($iframe.height).toHaveBeenCalledWith($$window.height() - 79);
+            });
+
             describe('when the resizeExperience event is $broadcast', function() {
                 var $$window;
 
@@ -249,7 +256,7 @@
                 });
 
                 it('should remove its resize listener', function() {
-                    expect($iframe.height).not.toHaveBeenCalled();
+                    expect($iframe.height.callCount).toBe(1);
                 });
             });
         });
