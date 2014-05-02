@@ -15,3 +15,5 @@
 * [FEATURE]: The experience iframe now uses the height of the window to
   take up the maximum amount of available space
 * [FIX]: Styles for pages, headers and footers, rewritten to work with new iframe height feature.
+* [FEATURE]: The experience frame is now resized when its DOM is
+  modified, not just on state changes

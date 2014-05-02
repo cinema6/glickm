@@ -111,10 +111,10 @@
                     expect(ExpCtrl.registerExperience).toHaveBeenCalledWith(experience,win);
                 });
 
-                it('should $broadcast the resizeExperience event when the session\'s state changes', function() {
+                it('should $broadcast the resizeExperience event when the session\'s app\'s DOM is modified', function() {
                     spyOn($scope, '$broadcast');
                     iframeReady({}, {});
-                    session.emit('stateChange');
+                    session.emit('domModified');
 
                     expect($scope.$broadcast).toHaveBeenCalledWith('resizeExperience');
                 });

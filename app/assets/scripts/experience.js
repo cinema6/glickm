@@ -19,7 +19,7 @@
         $scope.$on('iframeReady',function(event,contentWindow){
             var session = self.registerExperience(experience,contentWindow);
 
-            session.on('stateChange', function broadcastResize() {
+            session.on('domModified', function broadcastResize() {
                 $scope.$broadcast('resizeExperience');
             });
         });
@@ -117,6 +117,8 @@
                 });
             });
             element.append($iframe);
+
+            resizeFrame();
 
             $$window.on('resize', resizeFrame);
             scope.$on('resizeExperience', resizeFrame);
