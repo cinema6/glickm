@@ -91,7 +91,7 @@
         width:1.5em; height:1.5em;
     }
     .ui__viewHolder {
-        background:#eee;
+        background:#eee; 
     }
     .ui__viewFrame {
         display:block;
@@ -102,6 +102,9 @@
 /*  ==========================================================================
     generic page styles
     ========================================================================== */
+    .bg--light {
+        background:#eee;
+    }
     .page__group--padded {
         margin-bottom:8em;
     }
@@ -328,7 +331,8 @@
     login styles
     ========================================================================== */
     .login__group {
-        margin:7em 0 9em;
+        position:absolute; top:50%; left:50%;
+        margin:-7.5em 0 0 -12.1875em;
     }
         .login__title {
             font-size:0.875em; font-weight:300; text-align: center;
