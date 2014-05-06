@@ -114,13 +114,13 @@
     ========================================================================== */
     .viewLoader__group {
         height:3px; background:#13a2ff;
-        position:absolute;
+        position:absolute; top:0;
         -webkit-transition:width 0s; transition:width 0s;
-        margin:-1px 0 0 0;
+        margin:0;
         width:0;
     }
         .viewLoader--start .viewLoader__group {
-            -webkit-transition-duration:10s; transition-duration:10s;
+            -webkit-transition-duration:5s; transition-duration:5s;
             width:80%;
         }
         .viewLoader--end .viewLoader__group {
@@ -128,16 +128,22 @@
             width:100%;
         }
     .viewLoader__msg {
-        color:#949494; 
+        color:#4a9cd1; background:#fff;
+        border-radius:60px; border:0.125em solid #4a9cd1;
         font-size:1em; text-align: center;
-        width:100%; display:none;
-        position:absolute; top:50%;
-        margin:-0.5em 0 0 0;
+        width:14em; opacity: 1; display: none;
+        position:absolute; top:50%; left:50%;
+        margin:-1em 0 0 -7.375em; padding:0.5em 0;
+        -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
     }
         .viewLoader--start .viewLoader__msg,
         .viewLoader--end .viewLoader__msg {
-            display:block;
+            display: block;
         }
+        .viewLoader--end .viewLoader__msg {
+            opacity: 0;
+        }
+        
 
 
 
