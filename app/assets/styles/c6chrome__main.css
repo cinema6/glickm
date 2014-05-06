@@ -134,7 +134,7 @@
         width:14em; opacity: 1; display: none;
         position:absolute; top:50%; left:50%;
         margin:-1em 0 0 -7.375em; padding:0.5em 0;
-        -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
+        -webkit-transition:opacity 0.3s; transition:opacity 0.3s;
     }
         .viewLoader--start .viewLoader__msg,
         .viewLoader--end .viewLoader__msg {
