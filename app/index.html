@@ -19,13 +19,76 @@
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         </script>
+        <style>
+            .preloader__group {
+                width:14em;
+                text-align: center; color:#4a9cd1;
+                position:absolute; left:50%; top:50%;
+                margin:-3.5em 0 0 -7em;
+            }
+                .preloader__group--disabled {
+                    display:none;
+                }
+                .preloader {
+                    position:relative;
+                    width:3em; height:3em;
+                    margin:1em auto;
+                }
+                .preloader__ring {
+                    position:absolute;
+                    width:3em; height:3em;
+                    border:3px solid #fff;
+                    border-radius:6em; 
+                }
+                .preloader__orbit {
+                    position:absolute; left:0; top:0;
+                    width:48px; height:48px;
+                    width:3em; height:3em;
+                    -webkit-animation-name:doSpinner;
+                    -webkit-animation-duration:1.5s;
+                    -webkit-animation-iteration-count:infinite;
+                    -webkit-animation-timing-function:linear;
+                    animation-name:doSpinner;
+                    animation-duration:1.5s;
+                    animation-iteration-count:infinite;
+                    animation-timing-function:linear;
+                }
+                    .preloader__ball {
+                        position:absolute; left:0; top:0;
+                        width:0.75em; height:0.75em;
+                        background:#fff;
+                        border-radius:6em;
+                    }
+
+                @-webkit-keyframes doSpinner {
+                    0%{
+                        -webkit-transform:rotate(0deg)
+                    }
+                    100%{
+                        -webkit-transform:rotate(360deg)
+                    }
+                }
+                @keyframes doSpinner {
+                    0%{
+                        transform:rotate(0deg)
+                    }
+                    100% {
+                        transform:rotate(360deg)
+                    }
+                }
+        </style>
     </head>
-    <body>
-        <div class="pageLoader__group" >
-            <div class="pageLoader">
-                <div class="pageLoader__icon">&nbsp;</div>
-                <p>Loading... Please wait.</p>
+    <body class="body">
+        <div class="preloader__group preloader__group--disabled">
+            <div class="preloader">
+                <div class="preloader__ring">
+                    <div class="preloader__orbit">
+                        <div class="preloader__ball">&nbsp;
+                        </div>
+                    </div>
+                </div>
             </div>
+            Loading&hellip; Please wait.
         </div>
         <div class="mast__group" ng-class="{'chrome' : user}">
             <header class="mast container clearfix">
@@ -65,6 +128,7 @@
                 </div>
             </header>
         </div>
+        <div class="viewLoader__group">&nbsp;</div>
         
         <div class="ui__viewHolder clearfix">
             <ng-view></ng-view>
