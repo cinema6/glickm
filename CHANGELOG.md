@@ -19,3 +19,5 @@
   modified, not just on state changes
 * [FIX]: login box vertically centered
 * [FIX]: c6 logo added to login box
+* [FEATURE]: page loading screen added
+* [FEATURE]: new preloaders and viewloaders added

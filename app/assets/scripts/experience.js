@@ -12,6 +12,7 @@
         $log.info('instantiated with:', experience);
         var self = this;
 
+        this.loaded  = false;
         this.session = null;
 
         $scope.experience = experience;
@@ -20,6 +21,11 @@
             var session = self.registerExperience(experience,contentWindow);
 
             session.on('domModified', function broadcastResize() {
+                if (!self.loaded){
+                    $log.info('DOM MODIFIED, END EXP LOAD');
+                    $scope.$emit('endExpLoad');
+                    self.loaded = true;
+                }
                 $scope.$broadcast('resizeExperience');
             });
         });

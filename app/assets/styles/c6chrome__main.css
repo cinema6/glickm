@@ -4,7 +4,11 @@
     body {
         font-family: 'museo-sans', Arial, Helvetica, sans-serif; 
         font-size: 100%; font-weight:300; line-height: 1.5;
-        background:#262626; margin:0; color:#646464;
+        background:#262626; color:#646464;
+        margin:0;
+    }
+    html, body {
+        height:100%;
     }
     ::-moz-selection {
         background: #e900a4; text-shadow: none; color:#fff;
@@ -93,11 +97,56 @@
     .ui__viewHolder {
         background:#eee; 
     }
+        .viewLoader--start .ui__viewHolder {
+            min-height:75%;
+        }
     .ui__viewFrame {
         display:block;
         border:0;
         overflow:hidden;
     }
+    .body .chrome {
+        display: block;
+    }
+
+/*  ==========================================================================
+    viewLoader styles
+    ========================================================================== */
+    .viewLoader__group {
+        height:3px; background:#13a2ff;
+        position:absolute; top:0;
+        -webkit-transition:width 0s; transition:width 0s;
+        margin:0;
+        width:0;
+    }
+        .viewLoader--start .viewLoader__group {
+            -webkit-transition-duration:5s; transition-duration:5s;
+            width:80%;
+        }
+        .viewLoader--end .viewLoader__group {
+            -webkit-transition-duration:5s; transition-duration:0.5s;
+            width:100%;
+        }
+    .viewLoader__msg {
+        color:#4a9cd1; background:#fff;
+        border-radius:60px; border:0.125em solid #4a9cd1;
+        font-size:1em; text-align: center;
+        width:14em; opacity: 1; display: none;
+        position:absolute; top:50%; left:50%;
+        margin:-1em 0 0 -7.375em; padding:0.5em 0;
+        -webkit-transition:opacity 0.3s; transition:opacity 0.3s;
+    }
+        .viewLoader--start .viewLoader__msg,
+        .viewLoader--end .viewLoader__msg {
+            display: block;
+        }
+        .viewLoader--end .viewLoader__msg {
+            opacity: 0;
+        }
+        
+
+
+
 
 /*  ==========================================================================
     generic page styles
@@ -118,10 +167,10 @@
         margin-bottom:8em;
     }
     .breadcrumbNav {
-        margin:1em 0;
+        margin:1em 0 0 0;
     }
     .pageTitle {
-        font-size:3em; font-weight:100;
+        color:#565656; font-weight:100; font-size:1.875em; 
         margin:0;
     }
     .sidebar__group {
@@ -147,12 +196,6 @@
                 }
     .mainContent__group {
         float:right; width:78%;
-    }
-    @media screen and (max-width:42em) {
-        /* 672px */
-        .breadcrumbNav {
-            margin:5.5em 0 0 0;
-        }
     }
 
 
@@ -211,12 +254,14 @@
         }
     }
 
+
 /*  ==========================================================================
     masthead navigation
     ========================================================================== */
     .mast__group {
         min-height:3.75em;
         background:#282b2c; color:#fff;
+        display: none;
     }
         .mainNav {
             float:left;
@@ -295,7 +340,7 @@
             }
             .userNav__child {
                 display:none;
-                position:absolute; right:0; top:100%;
+                position:absolute; right:0; top:100%; z-index:100;
                 
                 -webkit-box-shadow: 3px 3px 5px 0 rgba(0,0,0,0.5);
                 box-shadow: 3px 3px 5px 0 rgba(0,0,0,0.5);
@@ -376,7 +421,7 @@
         .login__error {
             text-align: left;
             font-size:0.875em; font-weight:700;
-            margin:0 0 1rem 6.25rem;
+            margin:0 0 1rem 6.75rem;
             color:#d61212;
         }
         .login__submitBtn {
@@ -426,4 +471,5 @@
         padding:0.875rem 0 0.8125rem 0;
         color:#7d7d7d; text-align: center; font-size:0.75em;
         background:#262626;
+        display: none;
     }

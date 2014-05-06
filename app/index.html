@@ -19,9 +19,86 @@
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         </script>
+        <style>
+            .preloader__group {
+                width:14em;
+                text-align: center; color:#4a9cd1;
+                position:absolute; left:50%; top:50%;
+                margin:-3.5em 0 0 -7em;
+                -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
+                -webkit-transition-delay:0.5s; transition-delay:0.5s;
+                opacity:0;
+            }
+                .preloader__group--end {
+                    opacity:0;
+                }
+                .preloader__group--disabled {
+                    display:none;
+                }
+                .preloader {
+                    position:relative;
+                    width:3em; height:3em;
+                    margin:1em auto;
+                }
+                .preloader__ring {
+                    position:absolute;
+                    width:3em; height:3em;
+                    border:3px solid #fff;
+                    border-radius:6em; 
+                }
+                .preloader__orbit {
+                    position:absolute; left:0; top:0;
+                    width:48px; height:48px;
+                    width:3em; height:3em;
+                    -webkit-animation-name:doSpinner;
+                    -webkit-animation-duration:1.5s;
+                    -webkit-animation-iteration-count:infinite;
+                    -webkit-animation-timing-function:linear;
+                    animation-name:doSpinner;
+                    animation-duration:1.5s;
+                    animation-iteration-count:infinite;
+                    animation-timing-function:linear;
+                }
+                    .preloader__ball {
+                        position:absolute; left:0; top:0;
+                        width:0.75em; height:0.75em;
+                        background:#fff;
+                        border-radius:6em;
+                    }
+
+                @-webkit-keyframes doSpinner {
+                    0%{
+                        -webkit-transform:rotate(0deg)
+                    }
+                    100%{
+                        -webkit-transform:rotate(360deg)
+                    }
+                }
+                @keyframes doSpinner {
+                    0%{
+                        transform:rotate(0deg)
+                    }
+                    100% {
+                        transform:rotate(360deg)
+                    }
+                }
+        </style>
     </head>
-    <body>
-        <div class="mast__group chrome" ng-show="user">
+    <body class="body"
+          ng-class="{'viewLoader--start':AppCtrl.expStart,'viewLoader--end':AppCtrl.expEnd}">
+        <div class="preloader__group" ng-class="{'preloader__group--disabled':AppCtrl.ready}" 
+            id="c6preloader">
+            <div class="preloader">
+                <div class="preloader__ring">
+                    <div class="preloader__orbit">
+                        <div class="preloader__ball">&nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
+            Loading&hellip; Please wait.
+        </div>
+        <div class="mast__group" ng-class="{'chrome' : user}">
             <header class="mast container clearfix">
                 <nav class="mainNav">
                     <ul class="mainNav__list clearfix">
@@ -59,17 +136,25 @@
                 </div>
             </header>
         </div>
+        <div class="viewLoader__group" >&nbsp;</div>
+        <div class="viewLoader__msg">Loading&hellip; Please wait.</div>
         
         <div class="ui__viewHolder clearfix">
-            <ng-view></ng-view>
+            <ng-view class="view-animate"></ng-view>
         </div>
         
-        <div class="footer__group chrome" ng-show="user">
+        <div class="footer__group" ng-class="{'chrome' : user}">
             <footer class="footer__main container">
                 &copy; Copyright 2014 Cinema6. All Rights Reserved.
             </footer>
         </div>
 
         <script data-main="assets/scripts/main" src="//lib.cinema6.com/require/2.1.5/require.min.js"> </script>
+        <script>
+            window.onload   = function() {
+                var c6preloader     = document.getElementById('c6preloader');
+                c6preloader.style.opacity   = 1;
+            };
+        </script>
     </body>
 </html>
