@@ -119,7 +119,7 @@
         width:100%; height:100%;
         background:#262626;
         text-align: center; color:#949494;
-        position:fixed; z-index:-10; top:0%;
+        position:fixed; z-index:1000; top:0%;
         -webkit-transition: top 0.5s; transition: top 0.5s;
     }
         .pageLoader {
