@@ -119,9 +119,12 @@
         width:100%; height:100%;
         background:#262626;
         text-align: center; color:#949494;
-        position:fixed; z-index:1000; top:0%;
+        position:fixed; z-index:1000; top:-100%;
         -webkit-transition: top 0.5s; transition: top 0.5s;
     }
+        .pageLoader__group--active {
+            top:0%;
+        }
         .pageLoader {
             width:12.5em; height:6.5;
             position: absolute; top:50%; left:50%; 
