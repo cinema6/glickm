@@ -66,7 +66,7 @@
         visibility: hidden;
     }
     .sprite--alpha {
-        background:url('../img/sprite--alpha@2x.png') 0 0 / 25rem 25rem no-repeat;
+        background:url('../img/sprite--alpha@2x.png') 0 0 / 25rem 6.25rem no-repeat;
         border:0; margin:0; padding:0; overflow: hidden;
         font-size:1rem; line-height: 1;
     }
@@ -91,7 +91,7 @@
         width:1.5em; height:1.5em;
     }
     .ui__viewHolder {
-        background:#eee;
+        background:#eee; 
     }
     .ui__viewFrame {
         display:block;
@@ -102,6 +102,18 @@
 /*  ==========================================================================
     generic page styles
     ========================================================================== */
+    .c6__brand {
+        width:11.5em; height:2.75em; display: block;
+        font-size:1em;
+        background-position:0 0;
+        border:0; padding:0;
+    }
+        .c6__brand--dark {
+            background-position: -11.5625em 0
+        }
+    .bg--light {
+        background:#eee;
+    }
     .page__group--padded {
         margin-bottom:8em;
     }
@@ -222,12 +234,6 @@
             .mainNav__c6BrandItem {
                 padding:0.4375em 0 0 0; margin-right:3em;
             }
-                .mainNav__c6Brand {
-                    width:11em; height:2.75em; display: block;
-                    font-size:1em;
-                    background-position:0 0;
-                    border:0; padding:0;
-                }
         .mast__titleBox {
             position: relative;
         }
@@ -328,8 +334,12 @@
     login styles
     ========================================================================== */
     .login__group {
-        margin:7em 0 9em;
+        position:absolute; top:50%; left:50%;
+        margin:-8.625em 0 0 -12.1875em;
     }
+        .login__group .c6__brand {
+            margin:0 auto 1em auto;
+        }
         .login__title {
             font-size:0.875em; font-weight:300; text-align: center;
             color:#949494;
@@ -343,8 +353,9 @@
             background:white;
         }
             .login__label {
-                width:6rem; display: inline-block;
+                width:6.5rem; display: inline-block;
                 font-size:0.875em;
+                padding:0; border:0; margin:0;
             }
             .login__input {
                 width:14em;
@@ -354,6 +365,9 @@
                 background:#f4f4f4;
                 margin:0 0 0.5em;
                 -webkit-transition:all 0.5s; transition:all 0.5s;
+                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+                box-sizing: border-box;         /* Opera/IE 8+ */
             }
                 .login__input:focus {
                     border:2px solid #4a9cd1;
@@ -366,7 +380,7 @@
             color:#d61212;
         }
         .login__submitBtn {
-            margin:0 0 0 6.25rem;
+            margin:0 0 0 6.75rem;
         }
 
 

@@ -17,3 +17,5 @@
 * [FIX]: Styles for pages, headers and footers, rewritten to work with new iframe height feature.
 * [FEATURE]: The experience frame is now resized when its DOM is
   modified, not just on state changes
+* [FIX]: login box vertically centered
+* [FIX]: c6 logo added to login box
