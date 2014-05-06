@@ -36,10 +36,11 @@
         }])
         .config(['$routeProvider','c6UrlMakerProvider',
         function($routeProvider,c6UrlMakerProvider){
-            var getExperience = function(appData,content){
+            var getExperience = function(appData,content,$rootScope){
+                $rootScope.$broadcast('startExpLoad');
                 return content.getExperience(appData.app);
             };
-            getExperience.$inject = ['appData','content'];
+            getExperience.$inject = ['appData','content','$rootScope'];
 
             $routeProvider
             .when('/apps',{
@@ -93,6 +94,10 @@
              * Controller methods
              */
 
+            self.ready      = false;
+            self.expStart   = false;
+            self.expDone    = false;
+
             self.goto = function(path){
                 $log.info('goto request:',path);
                 if ((path !== '/error') && (lastError.getCount())) {
@@ -134,6 +139,7 @@
                 });
             };
 
+
             /**
              * Setup
              */
@@ -144,6 +150,7 @@
                 auth.checkStatus()
                 .then(function(user){
                     $log.info('auth check passed: ',user);
+                    self.ready = true;
                     self.updateUser(user);
                     self.goto(self.entryPath || '/apps');
                 },
@@ -169,6 +176,22 @@
                 }
             });
 
+            $scope.$on('$viewContentLoaded',function(){
+                self.ready = true;
+            });
+
+            $scope.$on('startExpLoad',function(){
+                self.expStart = true;
+            });
+
+            $scope.$on('endExpLoad',function(){
+                self.expEnd = true;
+                $timeout(function(){
+                    self.expStart   = false;
+                    self.expEnd     = false;
+                },500);
+            });
+
             $scope.$on('emailChange',function(evt,newAddr){
                 var user = angular.copy($scope.user);
                 user.email = newAddr;
@@ -187,5 +210,21 @@
              */
             $log.info('Initialize tracker with:',c6Defines.kTracker);
             tracker.create(c6Defines.kTracker.accountId,c6Defines.kTracker.config);
-        }]);
+        }])
+        .animation('.view-animate', function() {
+            return {
+                enter: function($element, done) {
+                    $element.css('opacity',0);
+                    $element
+                        .animate({
+                            opacity: '1'
+                        },{
+                            duration: 1000,
+                            easing: 'linear',
+                            complete: done
+                        });
+
+                }
+            };
+        });
 }(window));

@@ -33,6 +33,26 @@
 
         tracker.pageview('/login','Cinema6 Portal');
 
-    }]);
+    }])
+    .animation('.login__group', function() {
+        return {
+            beforeAddClass: function($element, className, done) {
+                if (className  !== 'ng-hide'){
+                    return;
+                }
+                $element.css('opacity',1);
+                $element.animate(
+                    {
+                        opacity: 0
+                    },
+                    {
+                        duration: 250,
+                        easing: 'linear',
+                        complete: done
+                    }
+                );
+            }
+        };
+    });
 }());
 

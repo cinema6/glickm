@@ -84,8 +84,10 @@
                 }
         </style>
     </head>
-    <body class="body">
-        <div class="preloader__group" id="c6preloader">
+    <body class="body"
+          ng-class="{'viewLoader--start':AppCtrl.expStart,'viewLoader--end':AppCtrl.expEnd}">
+        <div class="preloader__group" ng-class="{'preloader__group--disabled':AppCtrl.ready}" 
+            id="c6preloader">
             <div class="preloader">
                 <div class="preloader__ring">
                     <div class="preloader__orbit">
@@ -134,11 +136,11 @@
                 </div>
             </header>
         </div>
-        <div class="viewLoader__group">&nbsp;</div>
+        <div class="viewLoader__group" >&nbsp;</div>
         <div class="viewLoader__msg">Loading&hellip; Please wait.</div>
         
         <div class="ui__viewHolder clearfix">
-            <ng-view></ng-view>
+            <ng-view class="view-animate"></ng-view>
         </div>
         
         <div class="footer__group" ng-class="{'chrome' : user}">
