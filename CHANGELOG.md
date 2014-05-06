@@ -1,5 +1,13 @@
 # glickm ChangeLog
 
+## beta1 (May 6, 2014)
+* [FEATURE]: page loading screen added
+* [FEATURE]: new preloaders and viewloaders added
+* [FIX]: login box vertically centered
+* [FIX]: c6 logo added to login box
+* [FIX]: updated cache-ctl max timeouts
+
+
 ## alpha1 (May 2, 2014; 4:25PM EST)
 
 * first alpha release of glickm
@@ -17,7 +25,3 @@
 * [FIX]: Styles for pages, headers and footers, rewritten to work with new iframe height feature.
 * [FEATURE]: The experience frame is now resized when its DOM is
   modified, not just on state changes
-* [FIX]: login box vertically centered
-* [FIX]: c6 logo added to login box
-* [FEATURE]: page loading screen added
-* [FEATURE]: new preloaders and viewloaders added
