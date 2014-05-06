@@ -226,12 +226,21 @@
         }
     }
 
+
+/*  ==========================================================================
+    chrome
+    ========================================================================== */
+    .chrome {
+        display: block !important;
+    }
+
 /*  ==========================================================================
     masthead navigation
     ========================================================================== */
     .mast__group {
         min-height:3.75em;
         background:#282b2c; color:#fff;
+        display: none;
     }
         .mainNav {
             float:left;
@@ -441,4 +450,5 @@
         padding:0.875rem 0 0.8125rem 0;
         color:#7d7d7d; text-align: center; font-size:0.75em;
         background:#262626;
+        display: none;
     }

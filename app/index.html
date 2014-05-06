@@ -21,13 +21,13 @@
         </script>
     </head>
     <body>
-        <div class="pageLoader__group">
+        <div class="pageLoader__group" >
             <div class="pageLoader">
                 <div class="pageLoader__icon">&nbsp;</div>
                 <p>Loading... Please wait.</p>
             </div>
         </div>
-        <div class="mast__group chrome" ng-show="user">
+        <div class="mast__group" ng-class="{'chrome' : user}">
             <header class="mast container clearfix">
                 <nav class="mainNav">
                     <ul class="mainNav__list clearfix">
@@ -70,7 +70,7 @@
             <ng-view></ng-view>
         </div>
         
-        <div class="footer__group chrome" ng-show="user">
+        <div class="footer__group" ng-class="{'chrome' : user}">
             <footer class="footer__main container">
                 &copy; Copyright 2014 Cinema6. All Rights Reserved.
             </footer>
