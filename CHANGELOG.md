@@ -18,3 +18,4 @@
 * [FEATURE]: The experience frame is now resized when its DOM is
   modified, not just on state changes
 * [FIX]: login box vertically centered
+* [FIX]: c6 logo added to login box

@@ -21,12 +21,12 @@
         </script>
     </head>
     <body>
-        <div class="mast__group chrome">
+        <div class="mast__group chrome" ng-show="user">
             <header class="mast container clearfix">
                 <nav class="mainNav">
                     <ul class="mainNav__list clearfix">
                         <li class="mainNav__item mainNav__c6BrandItem">
-                            <div class="mainNav__c6Brand sprite--alpha">
+                            <div class="c6__brand sprite--alpha">
                                 <span class="ir">Cinema6</span>
                             </div>
                         </li>
@@ -64,7 +64,7 @@
             <ng-view></ng-view>
         </div>
         
-        <div class="footer__group chrome">
+        <div class="footer__group chrome" ng-show="user">
             <footer class="footer__main container">
                 &copy; Copyright 2014 Cinema6. All Rights Reserved.
             </footer>
