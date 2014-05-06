@@ -25,7 +25,13 @@
                 text-align: center; color:#4a9cd1;
                 position:absolute; left:50%; top:50%;
                 margin:-3.5em 0 0 -7em;
+                -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
+                -webkit-transition-delay:0.5s; transition-delay:0.5s;
+                opacity:0;
             }
+                .preloader__group--end {
+                    opacity:0;
+                }
                 .preloader__group--disabled {
                     display:none;
                 }
@@ -79,7 +85,7 @@
         </style>
     </head>
     <body class="body">
-        <div class="preloader__group">
+        <div class="preloader__group" id="c6preloader">
             <div class="preloader">
                 <div class="preloader__ring">
                     <div class="preloader__orbit">
@@ -141,5 +147,11 @@
         </div>
 
         <script data-main="assets/scripts/main" src="//lib.cinema6.com/require/2.1.5/require.min.js"> </script>
+        <script>
+            window.onload   = function() {
+                var c6preloader     = document.getElementById('c6preloader');
+                c6preloader.style.opacity   = 1;
+            };
+        </script>
     </body>
 </html>
