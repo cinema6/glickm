@@ -341,6 +341,20 @@
                     expect(mockEvent.preventDefault).toHaveBeenCalled();
                     expect($location.path).toHaveBeenCalledWith('/login');
                 });
+                
+                it('url === /login with $scope.users set',function(){
+                    $scope.user = mockUser;
+                    $locationChangeStart(mockEvent,'/login',null);
+                    $timeout.flush();
+                    expect(mockEvent.preventDefault).toHaveBeenCalled();
+                    expect($location.path).toHaveBeenCalledWith('/apps');
+                });
+
+                it('url === /login with $scope.users not set',function(){
+                    $scope.user = null;
+                    $locationChangeStart(mockEvent,'/login',null);
+                    expect(mockEvent.preventDefault).not.toHaveBeenCalled();
+                });
 
             });
             

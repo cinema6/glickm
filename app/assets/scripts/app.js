@@ -62,7 +62,7 @@
             .when('/login',{
                 controller   : 'LoginCtrl',
                 controllerAs : 'LoginCtrl',
-                templateUrl  : c6UrlMakerProvider.makeUrl('views/login.html')
+                templateUrl  : c6UrlMakerProvider.makeUrl('views/login.html'),
             })
             .when('/error',{
                 controller   : 'ErrorCtrl',
@@ -171,6 +171,14 @@
                     evt.preventDefault();
                     $timeout(function(){
                         self.goto('/login');
+                    });
+                    return;
+                }
+
+                if (isLogin && $scope.user){
+                    evt.preventDefault();
+                    $timeout(function(){
+                        self.goto('/apps');
                     });
                     return;
                 }
