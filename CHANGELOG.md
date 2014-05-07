@@ -5,6 +5,7 @@
   * [FIX]: Compare old password to new when changing.
   * [FIX]: Clear password fields after submitting change.
   * [FIX]: Update current email on change email form after change.
+  * [FIX]: Cannot go back to login when logged in.
 * *[Beta1.rc2]*
   * [FIX]: Set focus to logon prompt
 * *[/Beta1.rc2]*
