@@ -208,6 +208,7 @@
                         expect($isolate.theForm.password0.$error.required).toEqual(true);
                     });
                     
+                    
                     it('is false if new password not set',function(){
                         $isolate.password[0] = 'abcdefghijkl';
                         $isolate.password[1] = null;
@@ -260,8 +261,8 @@
                         it('ng-disabled turned off if everything is good',function(){
                             expect($submit.prop('disabled')).toEqual(true);
                             $isolate.password[0] = 'abcdefghijkl';
-                            $isolate.password[1] = 'abcdefghijkl';
-                            $isolate.password[2] = 'abcdefghijkl';
+                            $isolate.password[1] = 'abcdefghijklmn';
+                            $isolate.password[2] = 'abcdefghijklmn';
                             $isolate.$digest();
                             expect($submit.prop('disabled')).toEqual(false);
                         });
@@ -271,6 +272,15 @@
                             $isolate.password[0] = 'abcdefghijkl';
                             $isolate.password[1] = 'abcde fghijkl1';
                             $isolate.password[2] = 'abcde fghijkl2';
+                            $isolate.$digest();
+                            expect($submit.prop('disabled')).toEqual(true);
+                        });
+                        
+                        it('ng-disabled kept on if $valid = true, but cur == new',function(){
+                            expect($submit.prop('disabled')).toEqual(true);
+                            $isolate.password[0] = 'abcde fghijkl1';
+                            $isolate.password[1] = 'abcde fghijkl1';
+                            $isolate.password[2] = 'abcde fghijkl1';
                             $isolate.$digest();
                             expect($submit.prop('disabled')).toEqual(true);
                         });

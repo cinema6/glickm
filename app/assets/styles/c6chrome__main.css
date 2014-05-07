@@ -244,6 +244,9 @@
             .form__submitBtn:hover {
                 background:#13a2ff;
             }
+        input[disabled="disabled"] {
+            opacity: 0.5;
+        }
     @media screen and (max-width:44em) {
         /* 704px */
         .form__label {

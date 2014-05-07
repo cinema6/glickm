@@ -27,6 +27,10 @@
             scope.lastCode      = 0;
             scope.emailPattern  = /^\w+.*\.\w\w\w?$/;
 
+            attrs.$observe('email',function(newVal){
+                scope.origEmail = newVal;
+            });
+
             scope.submit = function(){
                 scope.lastStatus = null;
                 scope.lastCode   = 0;
@@ -67,11 +71,13 @@
                 .then(function(){
                     $log.info('changed password for:',scope.email);
                     scope.lastStatus = 'Password has been changed.';
+                    scope.password = [null,null,null];
                 })
                 .catch(function(err){
                     $log.warn('failed changed password for:',scope.email,err);
                     scope.lastStatus = 'Password change failed: ' + err;
                     scope.lastCode = 1;
+                    scope.password = [null,null,null];
                 });
             };
         }

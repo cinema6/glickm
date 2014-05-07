@@ -1,11 +1,21 @@
 # glickm ChangeLog
 
 ## beta1 (May 7, 2014)
-* [FEATURE]: page loading screen added
-* [FEATURE]: new preloaders and viewloaders added
-* [FIX]: login box vertically centered
-* [FIX]: c6 logo added to login box
-* [FIX]: updated cache-ctl max timeouts
+* *[Beta1.rc3]*
+  * [FIX]: Compare old password to new when changing.
+  * [FIX]: Clear password fields after submitting change.
+  * [FIX]: Update current email on change email form after change.
+* *[Beta1.rc2]*
+  * [FIX]: Set focus to logon prompt
+* *[/Beta1.rc2]*
+* *[Beta1.rc1]*
+  * [FEATURE]: page loading screen added
+  * [FEATURE]: new preloaders and viewloaders added
+  * [FIX]: login box vertically centered
+  * [FIX]: c6 logo added to login box
+  * [FIX]: updated cache-ctl max timeouts
+
+* *[/Beta1.rc1]*
 
 
 ## alpha1 (May 2, 2014; 4:25PM EST)
