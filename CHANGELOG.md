@@ -36,3 +36,5 @@
 * [FIX]: Styles for pages, headers and footers, rewritten to work with new iframe height feature.
 * [FEATURE]: The experience frame is now resized when its DOM is
   modified, not just on state changes
+* [FIX]: firefox form input box shadow default styles removed
+* [FIX]: min page height view classes added

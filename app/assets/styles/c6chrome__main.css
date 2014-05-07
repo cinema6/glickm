@@ -22,6 +22,9 @@
     input, textarea {
         font-family: 'museo-sans', Arial, Helvetica, sans-serif;
     }
+        input:required {
+            box-shadow: none;
+        }
     textarea {
         resize: vertical;
     }
@@ -97,8 +100,8 @@
     .ui__viewHolder {
         background:#eee; 
     }
-        .viewLoader--start .ui__viewHolder {
-            min-height:75%;
+        .ui__viewHolder--extend {
+            min-height:80%;
         }
     .ui__viewFrame {
         display:block;
@@ -164,7 +167,7 @@
         background:#eee;
     }
     .page__group--padded {
-        margin-bottom:8em;
+        margin-bottom:6em;
     }
     .breadcrumbNav {
         margin:1em 0 0 0;
@@ -245,8 +248,11 @@
                 background:#13a2ff;
             }
         input[disabled="disabled"] {
-            opacity: 0.5;
+            opacity: 0.5; cursor:default;
         }
+            input[disabled="disabled"]:hover {
+                background:#4a9cd1;
+            }
     @media screen and (max-width:44em) {
         /* 704px */
         .form__label {
