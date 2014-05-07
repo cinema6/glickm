@@ -1,6 +1,6 @@
 # glickm ChangeLog
 
-## beta1 (May 6, 2014)
+## beta1 (May 7, 2014)
 * [FEATURE]: page loading screen added
 * [FEATURE]: new preloaders and viewloaders added
 * [FIX]: login box vertically centered
