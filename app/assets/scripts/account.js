@@ -67,11 +67,13 @@
                 .then(function(){
                     $log.info('changed password for:',scope.email);
                     scope.lastStatus = 'Password has been changed.';
+                    scope.password = [null,null,null];
                 })
                 .catch(function(err){
                     $log.warn('failed changed password for:',scope.email,err);
                     scope.lastStatus = 'Password change failed: ' + err;
                     scope.lastCode = 1;
+                    scope.password = [null,null,null];
                 });
             };
         }
