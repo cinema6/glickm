@@ -221,9 +221,17 @@
                         },{
                             duration: 1000,
                             easing: 'linear',
-                            complete: done
+                            complete: function(){
+                                var inputs = $element.find('input'), $input;
+                                if (inputs.length){
+                                    $input = angular.element(inputs[0]);
+                                    if ($input.focus){
+                                        $input.focus();
+                                    }
+                                }
+                                done();
+                            }
                         });
-
                 }
             };
         });
