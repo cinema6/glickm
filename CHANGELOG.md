@@ -1,6 +1,6 @@
 # glickm ChangeLog
 
-## beta1 (May 7, 2014)
+## beta1 (May 8, 2014)
 * *[Beta1.rc3]*
   * [FIX]: Compare old password to new when changing.
   * [FIX]: Clear password fields after submitting change.
@@ -8,6 +8,7 @@
   * [FIX]: Cannot go back to login when logged in.
   * [FIX]: firefox form input box shadow default styles removed
   * [FIX]: min page height view classes added
+* *[/Beta1.rc3]*
 * *[Beta1.rc2]*
   * [FIX]: Set focus to logon prompt
 * *[/Beta1.rc2]*
