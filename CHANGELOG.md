@@ -6,6 +6,8 @@
   * [FIX]: Clear password fields after submitting change.
   * [FIX]: Update current email on change email form after change.
   * [FIX]: Cannot go back to login when logged in.
+  * [FIX]: firefox form input box shadow default styles removed
+  * [FIX]: min page height view classes added
 * *[Beta1.rc2]*
   * [FIX]: Set focus to logon prompt
 * *[/Beta1.rc2]*
@@ -36,5 +38,3 @@
 * [FIX]: Styles for pages, headers and footers, rewritten to work with new iframe height feature.
 * [FEATURE]: The experience frame is now resized when its DOM is
   modified, not just on state changes
-* [FIX]: firefox form input box shadow default styles removed
-* [FIX]: min page height view classes added
