@@ -1,5 +1,9 @@
 # glickm ChangeLog
 
+* *[Beta2.rc1]*
+  * [FEATURE]: Glickm will now respond to app events requesting the
+    available screen space
+
 ## beta1 (May 8, 2014)
 * *[Beta1.rc3]*
   * [FIX]: Compare old password to new when changing.
