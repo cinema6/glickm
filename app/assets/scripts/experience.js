@@ -108,18 +108,15 @@
 
             function sendAvailableSpace(event, respond) {
                 var $chrome = $document.find('.chrome'),
+                    availableHeight = $$window.height(),
                     offset = toArray($chrome).reduce(function(total, next) {
                         var $next = jqLite(next),
                             rect = next.getBoundingClientRect(),
-                            pxFromBottom = $$window.height() - rect.bottom,
-                            pxFromTop = rect.top - parseFloat($next.css('marginTop'));
+                            marginTop = parseFloat($next.css('marginTop')),
+                            marginBottom = parseFloat($next.css('marginBottom')),
+                            marginHeight = marginTop + marginBottom;
 
-                        function ifNegative(num) {
-                            return Math.min(0, num);
-                        }
-
-                        return total +
-                            ($next.outerHeight(true) + ifNegative(pxFromBottom) + ifNegative(pxFromTop));
+                        return total + Math.min(availableHeight, rect.bottom) - Math.min(rect.top - marginHeight, availableHeight);
                     }, 0);
 
                 $timeout(function() {

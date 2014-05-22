@@ -158,7 +158,7 @@
                 });
 
                 it('should not include any pixels of the chrome that is not on the screen', function() {
-                    var $header = chrome[0], $footer = chrome[1];
+                    var $footer = chrome[1];
 
                     $footer.css({
                         position: 'fixed',
@@ -168,14 +168,6 @@
 
                     makeRequest();
                     expect(cb).toHaveBeenCalledWith({ width: 800, height: 541 });
-
-                    $header.css({
-                        position: 'relative',
-                        top: '-10px'
-                    });
-
-                    makeRequest();
-                    expect(cb).toHaveBeenCalledWith({ width: 800, height: 551 });
                 });
             });
 
