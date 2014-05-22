@@ -20,14 +20,18 @@
         $scope.$on('iframeReady',function(event,contentWindow){
             var session = self.registerExperience(experience,contentWindow);
 
-            session.on('domModified', function broadcastResize() {
-                if (!self.loaded){
-                    $log.info('DOM MODIFIED, END EXP LOAD');
-                    $scope.$emit('endExpLoad');
-                    self.loaded = true;
-                }
-                $scope.$broadcast('resizeExperience');
-            });
+            session
+                .on('domModified', function broadcastResize() {
+                    if (!self.loaded){
+                        $log.info('DOM MODIFIED, END EXP LOAD');
+                        $scope.$emit('endExpLoad');
+                        self.loaded = true;
+                    }
+                    $scope.$broadcast('resizeExperience');
+                })
+                .on('availableSpace', function broadcastRequest(data, respond) {
+                    $scope.$broadcast('requestAvailableSpace', respond);
+                });
         });
 
         $scope.$on('$destroy',function(){
@@ -102,6 +106,24 @@
                 $iframe.height(Math.max(contentHeight, min));
             }
 
+            function sendAvailableSpace(event, respond) {
+                var $chrome = $document.find('.chrome'),
+                    availableHeight = $$window.height(),
+                    offset = toArray($chrome).reduce(function(total, next) {
+                        var $next = jqLite(next),
+                            rect = next.getBoundingClientRect(),
+                            marginTop = parseFloat($next.css('marginTop')),
+                            marginBottom = parseFloat($next.css('marginBottom')),
+                            marginHeight = marginTop + marginBottom;
+
+                        return total + Math.min(availableHeight, rect.bottom) - Math.min(rect.top - marginHeight, availableHeight);
+                    }, 0);
+
+                $timeout(function() {
+                    respond({ width: $$window.width(), height: $$window.height() - offset });
+                });
+            }
+
             $log.info('experience url:',url);
             if (c6Defines.kEnv !== 'production'){
                 params.push('kEnv=' + c6Defines.kEnv);
@@ -128,6 +150,7 @@
 
             $$window.on('resize', resizeFrame);
             scope.$on('resizeExperience', resizeFrame);
+            scope.$on('requestAvailableSpace', sendAvailableSpace);
 
             element.on('$destroy', function() {
                 $$window.off('resize', resizeFrame);

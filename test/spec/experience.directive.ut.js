@@ -1,6 +1,9 @@
 (function(){
+    'use strict';
 
     define(['experience','templates' ], function() {
+        var jqLite = angular.element;
+
         describe('c6-experience',function(){
             var $rootScope,
                 $scope,
@@ -19,20 +22,27 @@
                 experience,
                 createDirective;
 
-            var jqLite = angular.element;
+            var $testWindow,
+                $testDoc;
         
             beforeEach(function() {
+                $testWindow = jqLite('<iframe src="about:blank" style="width: 800px; height: 600px;"></iframe>');
+                $('body').append($testWindow);
+                $testDoc = $testWindow.contents();
+                $testDoc.find('body').css('margin', '0px');
+                $window = $testWindow.prop('contentWindow');
+
                 c6Defines = { kTracker : { config : {} } };
 
                 chrome = [
-                    jqLite('<div class="chrome" style="height: 25px; margin: 5px 0; padding: 2px;"></div>'),
-                    jqLite('<div class="chrome" style="height: 40px;"></div>')
+                    jqLite('<div class="chrome header" style="height: 25px; margin: 5px 0; padding: 2px;"></div>'),
+                    jqLite('<div class="chrome footer" style="height: 40px;"></div>')
                 ];
 
                 chrome.forEach(function(piece) {
                     var $piece = jqLite(piece);
 
-                    $piece.appendTo('body');
+                    $piece.appendTo($testDoc.find('body'));
                 });
                 
                 experience = {
@@ -41,6 +51,11 @@
                     uri             : 'uri1',
                     id              : 'e1'
                 };
+
+                module('ng', function($provide) {
+                    $provide.value('$window', $testWindow[0].contentWindow);
+                    $provide.value('$document', $testDoc);
+                });
 
                 createDirective = function(){
                     module('c6.glickm', ['$provide', function($provide) {
@@ -69,7 +84,6 @@
                         $rootScope = $injector.get('$rootScope');
                         $compile = $injector.get('$compile');
                         $timeout = $injector.get('$timeout');
-                        $window = $injector.get('$window');
                         $scope = $rootScope.$new();
                     });
 
@@ -122,10 +136,38 @@
             });
 
             afterEach(function() {
-                chrome.forEach(function(piece) {
-                    var $piece = jqLite(piece);
+                $testWindow.remove();
+            });
 
-                    $piece.remove();
+            describe('when requestAvailableSpace is $broadcast', function() {
+                var cb;
+
+                function makeRequest() {
+                    $rootScope.$broadcast('requestAvailableSpace', cb);
+                    $timeout.flush();
+                }
+
+                beforeEach(function() {
+                    cb = jasmine.createSpy('respond()');
+                    $testDoc.find('.header').after(createDirective());
+                });
+
+                it('should respond with the available screen real estate, not including any chrome on the screen', function() {
+                    makeRequest();
+                    expect(cb).toHaveBeenCalledWith({ width: 800, height: 521 });
+                });
+
+                it('should not include any pixels of the chrome that is not on the screen', function() {
+                    var $footer = chrome[1];
+
+                    $footer.css({
+                        position: 'fixed',
+                        width: '100%',
+                        bottom: '-20px'
+                    });
+
+                    makeRequest();
+                    expect(cb).toHaveBeenCalledWith({ width: 800, height: 541 });
                 });
             });
 

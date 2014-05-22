@@ -118,6 +118,16 @@
 
                     expect($scope.$broadcast).toHaveBeenCalledWith('resizeExperience');
                 });
+
+                it('should $broadcast the requestAvailableSpace event when the app wants to know the available space', function() {
+                    var respond = function() {};
+
+                    spyOn($scope, '$broadcast');
+                    iframeReady({}, {});
+                    session.emit('availableSpace', null, respond);
+
+                    expect($scope.$broadcast).toHaveBeenCalledWith('requestAvailableSpace', respond);
+                });
             });
             
             describe('$scope.$on($destroy)',function(){
