@@ -109,6 +109,10 @@
 
             self.updateUser = function(rec, skipStore){
                 if (rec){
+                    // TODO: REMOVE THIS HACK WHEN THERE IS AN ORG SERVICE THAT FETCHES THE ACTUAL
+                    // ORG!
+                    rec.org = { id: rec.org };
+
                     if (rec.applications === undefined){
                         rec.applications = [];
                     }

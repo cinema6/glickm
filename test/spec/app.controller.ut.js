@@ -229,7 +229,8 @@
                     beforeEach(function(){
                         mockUser = {
                             id           : 'howard1',
-                            applications : [ 'e1' ]
+                            applications : [ 'e1' ],
+                            org: 'o-73d6f13f75b11d'
                         };
                     });
 
@@ -258,6 +259,12 @@
                         expect(appData.app).toEqual('e1');
                     });
 
+                    it('will convert the org into an object', function() {
+                        AppCtrl.updateUser(mockUser);
+                        expect($scope.user.org).toEqual({
+                            id: 'o-73d6f13f75b11d'
+                        });
+                    });
                 });
 
                 describe('user with no applications', function(){
