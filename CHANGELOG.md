@@ -1,8 +1,11 @@
 # glickm ChangeLog
 
+## beta2 (May 27, 2014)
 * *[Beta2.rc1]*
   * [FEATURE]: Glickm will now respond to app events requesting the
     available screen space
+  * User.org is now an object rather than a string ID
+* *[/Beta2.rc1]*
 
 ## beta1 (May 8, 2014)
 * *[Beta1.rc3]*
