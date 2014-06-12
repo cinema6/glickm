@@ -7,11 +7,16 @@
                 $scope,
                 $log,
                 $q,
+                account,
                 auth,
                 tracker,
                 LoginCtrl;
 
             beforeEach(function() {
+
+                account = {
+                    getOrg      : jasmine.createSpy('account.getOrg')
+                };
 
                 auth = {
                     login  : jasmine.createSpy('auth.login')
@@ -39,11 +44,15 @@
                     $rootScope  = $injector.get('$rootScope');
                     $scope      = $rootScope.$new();
                    
+                    account.getOrg.deferred = $q.defer();
+                    account.getOrg.andReturn(account.getOrg.deferred.promise);
+
                     $log.context = function(){ return $log; }
 
                     LoginCtrl = $controller('LoginCtrl', {
                         $scope  : $scope,
                         $log    : $log,
+                        account : account,
                         auth    : auth,
                         tracker : tracker
                     });
@@ -59,16 +68,19 @@
 
             describe('login method',function(){
                 it('will emit loginSuccess upon success',function(){
-                    var mockUser = { user : { id : 'x' } };
+                    var mockUser = { id : 'u1', org: 'o1'  },
+                        mockOrg  = { id : 'o1' };
                     auth.login.andReturn($q.when(mockUser));
+                    account.getOrg.andReturn($q.when(mockOrg));
                     $scope.$emit = jasmine.createSpy('$scope.$emit');
                     $scope.email = 'howard';
                     $scope.password = 'foo';
                     $scope.login();
                     $scope.$digest();
                     expect(auth.login).toHaveBeenCalledWith('howard','foo');
+                    expect(account.getOrg).toHaveBeenCalledWith('o1');
                     expect($scope.$emit).toHaveBeenCalledWith('loginSuccess',
-                        { user : mockUser.user });
+                        { id : 'u1', org : { id : 'o1' } });
                 });
 
                 it('will set loginError property with error if it fails',function(){
@@ -79,6 +91,19 @@
                     $scope.$digest();
                     expect(auth.login).toHaveBeenCalledWith('howard','foo');
                     expect($scope.loginError).toEqual('Failed to work');
+                });
+
+                it('will set loginError if login succeeds but cant find org',function(){
+                    var mockUser = { id : 'u1', org: 'o1'  };
+                    auth.login.andReturn($q.when(mockUser));
+                    account.getOrg.andReturn($q.reject('Failed to work'));
+                    $scope.email = 'howard';
+                    $scope.password = 'foo';
+                    $scope.login();
+                    $scope.$digest();
+                    expect(auth.login).toHaveBeenCalledWith('howard','foo');
+                    expect(account.getOrg).toHaveBeenCalledWith('o1');
+                    expect($scope.loginError).toEqual('There is a problem with your account, please contact customer service.');
                 });
 
                 it('does nothing if email is blank',function(){

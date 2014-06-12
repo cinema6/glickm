@@ -161,6 +161,35 @@
 
             return deferred.promise;
         };
+        
+        this.getOrg = function(orgId){
+            var deferred = $q.defer(), deferredTimeout = $q.defer(), cancelTimeout,
+                url = c6UrlMaker('account/org/' + orgId,'api');
+
+            $http({
+                method       : 'GET',
+                url          : url,
+                timeout      : deferredTimeout.promise
+            })
+            .success(function(data){
+                $timeout.cancel(cancelTimeout);
+                deferred.resolve(data);
+            })
+            .error(function(data){
+                if (!data){
+                    data = 'Unable to locate failed';
+                }
+                $timeout.cancel(cancelTimeout);
+                deferred.reject(data);
+            });
+
+            cancelTimeout = $timeout(function(){
+                deferredTimeout.resolve();
+                deferred.reject('Request timed out.');
+            },10000);
+
+            return deferred.promise;
+        };
 
     }]);
 }());

@@ -111,8 +111,45 @@
                 });
                 
             });
-        });
 
+            describe('getOrg', function(){
+                beforeEach(function(){
+                    successSpy = jasmine.createSpy('getOrg.success');
+                    failureSpy = jasmine.createSpy('getOrg.failure');
+                    c6UrlMaker.andReturn('/api/account/org/o-1'); 
+                    spyOn($timeout,'cancel');
+                });
+
+                it('will resolve promise if successfull',function(){
+                    var mockOrg = { id: 'o-1' };
+                    $httpBackend.expectGET('/api/account/org/o-1')
+                        .respond(200,mockOrg);
+                    account.getOrg('o-1').then(successSpy,failureSpy);
+                    $httpBackend.flush();
+                    expect(successSpy).toHaveBeenCalledWith(mockOrg);
+                    expect(failureSpy).not.toHaveBeenCalled();
+                    expect($timeout.cancel).toHaveBeenCalled();
+                });
+                
+                it('will reject promise if not successful',function(){
+                    $httpBackend.expectGET('/api/account/org/o-1')
+                        .respond(404,'Unable to find org.');
+                    account.getOrg('o-1').then(successSpy,failureSpy);
+                    $httpBackend.flush();
+                    expect(successSpy).not.toHaveBeenCalled();
+                    expect(failureSpy).toHaveBeenCalledWith('Unable to find org.');
+                    expect($timeout.cancel).toHaveBeenCalled();
+                });
+                
+                it('will reject promise if times out',function(){
+                    $httpBackend.expectGET('/api/account/org/o-1')
+                        .respond(200,'');
+                    account.getOrg('o-1').then(successSpy,failureSpy);
+                    $timeout.flush(60000);
+                    expect(successSpy).not.toHaveBeenCalled();
+                    expect(failureSpy).toHaveBeenCalledWith('Request timed out.');
+                });
+            });
+        });
     });
 }());
-

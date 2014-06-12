@@ -12,6 +12,7 @@
                 AppCtrl,
                 appData,
                 auth,
+                account,
                 lastError,
                 c6Defines,
                 createAppCtrl,
@@ -23,6 +24,10 @@
                 appData = {
                     user : null,
                     app  : null
+                };
+
+                account = {
+                    getOrg      : jasmine.createSpy('account.getOrg')
                 };
 
                 auth = {
@@ -67,7 +72,10 @@
                     $q         = $injector.get('$q');
                     $rootScope = $injector.get('$rootScope');
                     $timeout   = $injector.get('$timeout');
-                  
+                 
+                    account.getOrg.deferred = $q.defer();
+                    account.getOrg.andReturn(account.getOrg.deferred.promise);
+
                     auth.checkStatus.deferred = $q.defer();
                     auth.checkStatus.andReturn(auth.checkStatus.deferred.promise);
                     auth.logout.deferred = $q.defer();
@@ -89,6 +97,7 @@
                             $log           : $log,
                             $scope         : $scope,
                             appData        : appData,
+                            account        : account,
                             auth           : auth,
                             c6Defines      : c6Defines,
                             c6LocalStorage : localStorage,
@@ -138,19 +147,21 @@
                     });
 
                     it('success should update user and move to entryPath if set',function(){
-                        var newUser = { id : 'new'};
+                        var newUser = { id : 'new', org : 'o1'}, org = { id: 'o1' };
                         AppCtrl.entryPath = '/foo';
                         spyOn(AppCtrl,'updateUser');
                         auth.checkStatus.deferred.resolve(newUser);
+                        account.getOrg.deferred.resolve(org);
                         $scope.$apply();
                         expect(AppCtrl.updateUser).toHaveBeenCalledWith(newUser);
                         expect($location.path).toHaveBeenCalledWith('/foo');
                     });
 
                     it('success should update user and move to /apps if no entryPath',function(){
-                        var newUser = { id : 'new'};
+                        var newUser = { id : 'new', org : 'o1'}, org = { id: 'o1' };
                         spyOn(AppCtrl,'updateUser');
                         auth.checkStatus.deferred.resolve(newUser);
+                        account.getOrg.deferred.resolve(org);
                         $scope.$apply();
                         expect(AppCtrl.updateUser).toHaveBeenCalledWith(newUser);
                         expect($location.path).toHaveBeenCalledWith('/apps');
@@ -159,6 +170,16 @@
                     it('failure should update user to null and move to login',function(){
                         spyOn(AppCtrl,'updateUser');
                         auth.checkStatus.deferred.reject({});
+                        $scope.$apply();
+                        expect(AppCtrl.updateUser).toHaveBeenCalledWith(null);
+                        expect($location.path).toHaveBeenCalledWith('/login');
+                    });
+                    
+                    it('failure to get org should update user to null and move to login',function(){
+                        var newUser = { id : 'new', org : 'o1'};
+                        spyOn(AppCtrl,'updateUser');
+                        auth.checkStatus.deferred.resolve(newUser);
+                        account.getOrg.deferred.reject({});
                         $scope.$apply();
                         expect(AppCtrl.updateUser).toHaveBeenCalledWith(null);
                         expect($location.path).toHaveBeenCalledWith('/login');
@@ -230,7 +251,7 @@
                         mockUser = {
                             id           : 'howard1',
                             applications : [ 'e1' ],
-                            org: 'o-73d6f13f75b11d'
+                            org: { id : 'o-73d6f13f75b11d' }
                         };
                     });
 
