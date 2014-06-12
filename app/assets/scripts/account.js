@@ -164,7 +164,7 @@
         
         this.getOrg = function(orgId){
             var deferred = $q.defer(), deferredTimeout = $q.defer(), cancelTimeout,
-                url = c6UrlMaker('accounts/org/' + orgId,'api');
+                url = c6UrlMaker('account/org/' + orgId,'api');
 
             $http({
                 method       : 'GET',

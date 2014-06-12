@@ -4,6 +4,7 @@
     "status"        : "active",
     "created"       : "2014-04-30T19:09:19.018Z",
     "lastUpdated"   : "2014-04-30T19:14:22.308Z",
+    "branding"      : "khaki",
     "waterfalls"    : {
         "video"     : ["c6"],
         "display"   : ["c6"]
