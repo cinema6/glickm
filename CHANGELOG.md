@@ -1,5 +1,13 @@
 # glickm ChangeLog
 
+## beta3 (June 11, 2014)
+* *[Beta3.rc1]*
+  * Real org is now provided as a property on the user
+    * **The Org Service will need to be deployed before this can be
+      released**
+* *[/Beta3.rc1]*
+
+
 ## beta2 (May 27, 2014)
 * *[Beta2.rc1]*
   * [FEATURE]: Glickm will now respond to app events requesting the
