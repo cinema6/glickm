@@ -79,10 +79,10 @@
         .value('appData',{ user : null, app : null})
         .controller('AppController',
             [   '$scope', '$log', '$location', '$timeout',
-                'c6Defines','c6LocalStorage', 'auth', 'content', 'appData', 'tracker',
+                'c6Defines','c6LocalStorage', 'auth', 'account', 'appData', 'tracker',
                 'lastError',
             function (  $scope ,  $log , $location,  $timeout,
-                        c6Defines,c6LocalStorage, auth, content, appData, tracker,
+                        c6Defines,c6LocalStorage, auth, account, appData, tracker,
                         lastError) {
 
             var self = this;
@@ -109,10 +109,6 @@
 
             self.updateUser = function(rec, skipStore){
                 if (rec){
-                    // TODO: REMOVE THIS HACK WHEN THERE IS AN ORG SERVICE THAT FETCHES THE ACTUAL
-                    // ORG!
-                    rec.org = { id: rec.org };
-
                     if (rec.applications === undefined){
                         rec.applications = [];
                     }
@@ -154,11 +150,16 @@
                 auth.checkStatus()
                 .then(function(user){
                     $log.info('auth check passed: ',user);
-                    self.ready = true;
-                    self.updateUser(user);
-                    self.goto(self.entryPath || '/apps');
-                },
-                function(err){
+                    return account.getOrg(user.org)
+                        .then(function(org){
+                            $log.info('found user org: ',org);
+                            user.org = org;
+                            self.ready = true;
+                            self.updateUser(user);
+                            self.goto(self.entryPath || '/apps');
+                        });
+                })
+                .then(null, function(err){
                     $log.info('auth check failed: ',err);
                     self.updateUser(null);
                     self.goto('/login');

@@ -8,6 +8,12 @@
         .proxy('assets/mocks/experiences/e-51ae37625cb57f.json');
 
     /*
+     * Org Endpoints
+     */
+    httpMocks.whenGET('/api/accounts/org/e2e-org')
+        .proxy('assets/mocks/accounts/org/e2e-org.json');
+
+    /*
      * Auth Endpoints
      */
     httpMocks.whenGET('/api/auth/status')
